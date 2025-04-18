@@ -1,10 +1,19 @@
-"use client"
+"use client";
 
-import { TextReveal } from "@/components/ui/text-reveal"
-import { ShineBorder } from "@/components/ui/shine-border"
-import { GlowingEffect } from "@/components/ui/glowing-effect"
-import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid"
-import { Clock, BarChart, PieChart, Bell, Shield, Zap, Search, TrendingUp } from "lucide-react"
+import { TextReveal } from "@/components/ui/text-reveal";
+import { ShineBorder } from "@/components/ui/shine-border";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import {
+  Clock,
+  BarChart,
+  PieChart,
+  Bell,
+  Shield,
+  Zap,
+  Search,
+  TrendingUp,
+} from "lucide-react";
 
 export default function WhyUs() {
   return (
@@ -13,8 +22,8 @@ export default function WhyUs() {
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
           <p className="text-muted-foreground">
-            Our platform combines real-time data, advanced simulations, and automated pricing to give you a competitive
-            edge.
+            Our platform combines real-time data, advanced simulations, and
+            automated pricing to give you a competitive edge.
           </p>
         </div>
 
@@ -22,9 +31,13 @@ export default function WhyUs() {
           {/* REAL-TIME PRICING */}
           <div>
             <div className="max-w-3xl mx-auto text-center mb-10">
-              <TextReveal text="Real-Time Pricing Intelligence" className="text-2xl md:text-3xl font-bold mb-4" />
+              <TextReveal
+                text="Real-Time Pricing Intelligence"
+                className="text-2xl md:text-3xl font-bold mb-4"
+              />
               <p className="text-muted-foreground">
-                Monitor your competitors' pricing strategies in real-time and identify market opportunities.
+                Monitor your competitors' pricing strategies in real-time and
+                identify market opportunities.
               </p>
             </div>
 
@@ -38,20 +51,46 @@ export default function WhyUs() {
                 <div className="mt-4 h-40 bg-muted rounded-lg p-4">
                   <div className="flex justify-between items-center mb-2">
                     <h4 className="text-sm font-medium">Live Price Ticker</h4>
-                    <span className="text-xs text-muted-foreground">Updated 2 min ago</span>
+                    <span className="text-xs text-muted-foreground">
+                      Updated 2 min ago
+                    </span>
                   </div>
                   <div className="space-y-2">
                     {[
-                      { product: "Premium Headphones", yours: "$129.99", competitor: "$139.99", diff: "-7.1%" },
-                      { product: "Wireless Speaker", yours: "$89.99", competitor: "$79.99", diff: "+12.5%" },
-                      { product: "Smart Watch", yours: "$199.99", competitor: "$219.99", diff: "-9.1%" },
+                      {
+                        product: "Premium Headphones",
+                        yours: "$129.99",
+                        competitor: "$139.99",
+                        diff: "-7.1%",
+                      },
+                      {
+                        product: "Wireless Speaker",
+                        yours: "$89.99",
+                        competitor: "$79.99",
+                        diff: "+12.5%",
+                      },
+                      {
+                        product: "Smart Watch",
+                        yours: "$199.99",
+                        competitor: "$219.99",
+                        diff: "-9.1%",
+                      },
                     ].map((item, i) => (
-                      <div key={i} className="flex justify-between items-center text-xs p-1 rounded bg-background">
+                      <div
+                        key={i}
+                        className="flex justify-between items-center text-xs p-1 rounded bg-background"
+                      >
                         <span>{item.product}</span>
                         <div className="flex items-center gap-4">
                           <span>You: {item.yours}</span>
                           <span>Comp: {item.competitor}</span>
-                          <span className={`${item.diff.startsWith("+") ? "text-red-500" : "text-green-500"}`}>
+                          <span
+                            className={`${
+                              item.diff.startsWith("+")
+                                ? "text-red-500"
+                                : "text-green-500"
+                            }`}
+                          >
                             {item.diff}
                           </span>
                         </div>
@@ -85,8 +124,64 @@ export default function WhyUs() {
                 icon={<Zap className="h-6 w-6 text-accent" />}
               >
                 <div className="mt-4 h-40 bg-muted rounded-lg p-4 flex flex-wrap items-center justify-center gap-2">
-                  {["Amazon", "Shopify", "eBay", "Walmart", "Etsy", "WooCommerce"].map((platform) => (
-                    <div key={platform} className="px-3 py-1 bg-background rounded-full text-xs">
+                  {[
+                    "Amazon",
+                    "Shopify",
+                    "eBay",
+                    "Walmart",
+                    "Etsy",
+                    "WooCommerce",
+                  ].map((platform) => (
+                    <div
+                      key={platform}
+                      className="px-3 py-1 bg-background rounded-full text-xs"
+                    >
+                      {platform}
+                    </div>
+                  ))}
+                </div>
+              </BentoGridItem>
+              <BentoGridItem
+                title="Marketplace Integration"
+                description="Connect with all major e-commerce platforms for seamless price synchronization."
+                icon={<Zap className="h-6 w-6 text-accent" />}
+              >
+                <div className="mt-4 h-40 bg-muted rounded-lg p-4 flex flex-wrap items-center justify-center gap-2">
+                  {[
+                    "Amazon",
+                    "Shopify",
+                    "eBay",
+                    "Walmart",
+                    "Etsy",
+                    "WooCommerce",
+                  ].map((platform) => (
+                    <div
+                      key={platform}
+                      className="px-3 py-1 bg-background rounded-full text-xs"
+                    >
+                      {platform}
+                    </div>
+                  ))}
+                </div>
+              </BentoGridItem>
+              <BentoGridItem
+                title="Marketplace Integration"
+                description="Connect with all major e-commerce platforms for seamless price synchronization."
+                icon={<Zap className="h-6 w-6 text-accent" />}
+              >
+                <div className="mt-4 h-40 bg-muted rounded-lg p-4 flex flex-wrap items-center justify-center gap-2">
+                  {[
+                    "Amazon",
+                    "Shopify",
+                    "eBay",
+                    "Walmart",
+                    "Etsy",
+                    "WooCommerce",
+                  ].map((platform) => (
+                    <div
+                      key={platform}
+                      className="px-3 py-1 bg-background rounded-full text-xs"
+                    >
                       {platform}
                     </div>
                   ))}
@@ -98,9 +193,13 @@ export default function WhyUs() {
           {/* SIMULATION SANDBOX */}
           <div>
             <div className="max-w-3xl mx-auto text-center mb-10">
-              <TextReveal text="Simulation Sandbox" className="text-2xl md:text-3xl font-bold mb-4" />
+              <TextReveal
+                text="Simulation Sandbox"
+                className="text-2xl md:text-3xl font-bold mb-4"
+              />
               <p className="text-muted-foreground">
-                Test different pricing strategies and see their projected impact before implementing them.
+                Test different pricing strategies and see their projected impact
+                before implementing them.
               </p>
             </div>
 
@@ -112,12 +211,21 @@ export default function WhyUs() {
                     Interactive Pricing Tool
                   </h3>
                   <p className="text-muted-foreground mb-6">
-                    Adjust prices and instantly see the projected impact on revenue, profit, and market share.
+                    Adjust prices and instantly see the projected impact on
+                    revenue, profit, and market share.
                   </p>
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-sm mb-2">Price Adjustment</label>
-                      <input type="range" min="-20" max="20" defaultValue="5" className="w-full" />
+                      <label className="block text-sm mb-2">
+                        Price Adjustment
+                      </label>
+                      <input
+                        type="range"
+                        min="-20"
+                        max="20"
+                        defaultValue="5"
+                        className="w-full"
+                      />
                       <div className="flex justify-between text-xs mt-1">
                         <span>-20%</span>
                         <span>0%</span>
@@ -127,20 +235,36 @@ export default function WhyUs() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-muted p-3 rounded-lg">
-                        <p className="text-xs text-muted-foreground">Revenue Impact</p>
-                        <p className="text-xl font-bold text-green-500">+12.3%</p>
+                        <p className="text-xs text-muted-foreground">
+                          Revenue Impact
+                        </p>
+                        <p className="text-xl font-bold text-green-500">
+                          +12.3%
+                        </p>
                       </div>
                       <div className="bg-muted p-3 rounded-lg">
-                        <p className="text-xs text-muted-foreground">Profit Impact</p>
-                        <p className="text-xl font-bold text-green-500">+18.7%</p>
+                        <p className="text-xs text-muted-foreground">
+                          Profit Impact
+                        </p>
+                        <p className="text-xl font-bold text-green-500">
+                          +18.7%
+                        </p>
                       </div>
                       <div className="bg-muted p-3 rounded-lg">
-                        <p className="text-xs text-muted-foreground">Sales Volume</p>
-                        <p className="text-xl font-bold text-amber-500">-3.2%</p>
+                        <p className="text-xs text-muted-foreground">
+                          Sales Volume
+                        </p>
+                        <p className="text-xl font-bold text-amber-500">
+                          -3.2%
+                        </p>
                       </div>
                       <div className="bg-muted p-3 rounded-lg">
-                        <p className="text-xs text-muted-foreground">Market Share</p>
-                        <p className="text-xl font-bold text-amber-500">-1.5%</p>
+                        <p className="text-xs text-muted-foreground">
+                          Market Share
+                        </p>
+                        <p className="text-xl font-bold text-amber-500">
+                          -1.5%
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -153,14 +277,19 @@ export default function WhyUs() {
                   Time-Saving Calculator
                 </h3>
                 <p className="text-muted-foreground mb-6">
-                  Quantify the time and resources saved by automating your pricing strategy.
+                  Quantify the time and resources saved by automating your
+                  pricing strategy.
                 </p>
                 <div className="space-y-6">
                   <div className="bg-muted p-4 rounded-lg">
-                    <h4 className="text-sm font-medium mb-2">Manual vs. Automated Pricing</h4>
+                    <h4 className="text-sm font-medium mb-2">
+                      Manual vs. Automated Pricing
+                    </h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-xs text-muted-foreground mb-1">Manual Process</p>
+                        <p className="text-xs text-muted-foreground mb-1">
+                          Manual Process
+                        </p>
                         <ul className="text-xs space-y-1">
                           <li>• 40+ hours/month</li>
                           <li>• Delayed responses</li>
@@ -169,12 +298,20 @@ export default function WhyUs() {
                         </ul>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground mb-1">With PriceIQ</p>
+                        <p className="text-xs text-muted-foreground mb-1">
+                          With PriceIQ
+                        </p>
                         <ul className="text-xs space-y-1">
                           <li className="text-green-500">• 2 hours/month</li>
-                          <li className="text-green-500">• Real-time updates</li>
-                          <li className="text-green-500">• Consistent accuracy</li>
-                          <li className="text-green-500">• Data-driven decisions</li>
+                          <li className="text-green-500">
+                            • Real-time updates
+                          </li>
+                          <li className="text-green-500">
+                            • Consistent accuracy
+                          </li>
+                          <li className="text-green-500">
+                            • Data-driven decisions
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -185,12 +322,18 @@ export default function WhyUs() {
                     <div className="flex items-center justify-center">
                       <div className="text-center">
                         <p className="text-3xl font-bold text-primary">456</p>
-                        <p className="text-xs text-muted-foreground">Hours Saved Per Year</p>
+                        <p className="text-xs text-muted-foreground">
+                          Hours Saved Per Year
+                        </p>
                       </div>
                       <div className="mx-6 text-muted-foreground">+</div>
                       <div className="text-center">
-                        <p className="text-3xl font-bold text-secondary">$27,360</p>
-                        <p className="text-xs text-muted-foreground">Cost Savings</p>
+                        <p className="text-3xl font-bold text-secondary">
+                          $27,360
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Cost Savings
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -202,9 +345,13 @@ export default function WhyUs() {
           {/* CUSTOM DASHBOARDS */}
           <div>
             <div className="max-w-3xl mx-auto text-center mb-10">
-              <TextReveal text="Custom Dashboards" className="text-2xl md:text-3xl font-bold mb-4" />
+              <TextReveal
+                text="Custom Dashboards"
+                className="text-2xl md:text-3xl font-bold mb-4"
+              />
               <p className="text-muted-foreground">
-                Visualize your pricing data and market position with customizable dashboards.
+                Visualize your pricing data and market position with
+                customizable dashboards.
               </p>
             </div>
 
@@ -217,22 +364,30 @@ export default function WhyUs() {
               >
                 <div className="mt-4 grid grid-cols-2 gap-2 h-40">
                   <div className="bg-muted rounded-lg p-3">
-                    <h4 className="text-xs font-medium mb-2">Revenue Breakdown</h4>
+                    <h4 className="text-xs font-medium mb-2">
+                      Revenue Breakdown
+                    </h4>
                     <div className="h-[calc(100%-1.5rem)] flex items-center justify-center">
                       <div className="w-20 h-20 rounded-full border-8 border-primary relative">
                         <div
                           className="absolute inset-0 border-8 border-secondary rounded-full"
-                          style={{ clipPath: "polygon(0 0, 100% 0, 100% 50%, 0 50%)" }}
+                          style={{
+                            clipPath: "polygon(0 0, 100% 0, 100% 50%, 0 50%)",
+                          }}
                         ></div>
                         <div
                           className="absolute inset-0 border-8 border-accent rounded-full"
-                          style={{ clipPath: "polygon(0 0, 30% 0, 30% 100%, 0 100%)" }}
+                          style={{
+                            clipPath: "polygon(0 0, 30% 0, 30% 100%, 0 100%)",
+                          }}
                         ></div>
                       </div>
                     </div>
                   </div>
                   <div className="bg-muted rounded-lg p-3">
-                    <h4 className="text-xs font-medium mb-2">Price Competitiveness</h4>
+                    <h4 className="text-xs font-medium mb-2">
+                      Price Competitiveness
+                    </h4>
                     <div className="h-[calc(100%-1.5rem)] flex items-center justify-center">
                       <div className="w-full h-16">
                         <div className="h-2 w-full bg-muted-foreground/20 rounded-full mb-2">
@@ -258,15 +413,31 @@ export default function WhyUs() {
                 <div className="mt-4 h-40 bg-muted rounded-lg p-3 overflow-y-auto">
                   <div className="space-y-2">
                     {[
-                      { time: "10:23 AM", message: "Competitor A dropped prices by 5% on electronics" },
+                      {
+                        time: "10:23 AM",
+                        message:
+                          "Competitor A dropped prices by 5% on electronics",
+                      },
                       {
                         time: "09:15 AM",
-                        message: "Your product 'Premium Headphones' is now priced 10% higher than market average",
+                        message:
+                          "Your product 'Premium Headphones' is now priced 10% higher than market average",
                       },
-                      { time: "Yesterday", message: "Seasonal pricing rule activated for summer collection" },
-                      { time: "Yesterday", message: "Competitor B increased prices across all categories" },
+                      {
+                        time: "Yesterday",
+                        message:
+                          "Seasonal pricing rule activated for summer collection",
+                      },
+                      {
+                        time: "Yesterday",
+                        message:
+                          "Competitor B increased prices across all categories",
+                      },
                     ].map((alert, i) => (
-                      <div key={i} className="text-xs p-2 bg-background rounded-lg">
+                      <div
+                        key={i}
+                        className="text-xs p-2 bg-background rounded-lg"
+                      >
                         <p className="font-medium">{alert.time}</p>
                         <p className="text-muted-foreground">{alert.message}</p>
                       </div>
@@ -285,7 +456,41 @@ export default function WhyUs() {
                     <Shield className="h-12 w-12 mx-auto text-accent mb-2" />
                     <p className="text-sm font-medium">Revenue Protected</p>
                     <p className="text-xl font-bold">$127,890</p>
-                    <p className="text-xs text-muted-foreground">Last 30 days</p>
+                    <p className="text-xs text-muted-foreground">
+                      Last 30 days
+                    </p>
+                  </div>
+                </div>
+              </BentoGridItem>
+              <BentoGridItem
+                title="Revenue Protection"
+                description="Identify and prevent revenue leakage with proactive pricing alerts and recommendations."
+                icon={<Shield className="h-6 w-6 text-accent" />}
+              >
+                <div className="mt-4 h-40 bg-muted rounded-lg p-3 flex items-center justify-center">
+                  <div className="text-center">
+                    <Shield className="h-12 w-12 mx-auto text-accent mb-2" />
+                    <p className="text-sm font-medium">Revenue Protected</p>
+                    <p className="text-xl font-bold">$127,890</p>
+                    <p className="text-xs text-muted-foreground">
+                      Last 30 days
+                    </p>
+                  </div>
+                </div>
+              </BentoGridItem>
+              <BentoGridItem
+                title="Revenue Protection"
+                description="Identify and prevent revenue leakage with proactive pricing alerts and recommendations."
+                icon={<Shield className="h-6 w-6 text-accent" />}
+              >
+                <div className="mt-4 h-40 bg-muted rounded-lg p-3 flex items-center justify-center">
+                  <div className="text-center">
+                    <Shield className="h-12 w-12 mx-auto text-accent mb-2" />
+                    <p className="text-sm font-medium">Revenue Protected</p>
+                    <p className="text-xl font-bold">$127,890</p>
+                    <p className="text-xs text-muted-foreground">
+                      Last 30 days
+                    </p>
                   </div>
                 </div>
               </BentoGridItem>
@@ -294,5 +499,5 @@ export default function WhyUs() {
         </div>
       </div>
     </section>
-  )
+  );
 }

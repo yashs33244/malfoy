@@ -114,12 +114,12 @@ export default function Home() {
         transition={{ duration: 0.5 }}
       >
         <Hero />
-        <EarlyAccessForm />
         <ProductShowcase />
         <WhyUs />
         <PricingSection />
         <FaqSection />
         <CallToAction />
+        <EarlyAccessForm />
         <Footer />
       </motion.main>
     </>

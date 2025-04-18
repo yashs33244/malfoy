@@ -104,7 +104,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         marginTop: visible ? "10px" : "16px",
       }}
       transition={{
-        type: "spring",
+        type: "tween",
         stiffness: 200,
         damping: 30,
       }}
@@ -154,7 +154,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
                 transform: "translateZ(0)",
               }}
               transition={{
-                type: "spring",
+                type: "tween",
                 stiffness: 300,
                 damping: 30,
               }}
@@ -182,7 +182,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
         marginTop: visible ? "10px" : "16px",
       }}
       transition={{
-        type: "spring",
+        type: "tween",
         stiffness: 200,
         damping: 30,
       }}

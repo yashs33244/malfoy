@@ -67,6 +67,8 @@
   .theme {
     --animate-aurora: aurora 8s ease-in-out infinite alternate;
     --animate-gradient: gradient 8s linear infinite;
+    --animate-background-position-spin: background-position-spin 3000ms infinite alternate;
+    --animate-orbit: orbit calc(var(--duration)*1s) linear infinite;
   }
 }
 
@@ -261,4 +263,42 @@
       transform: rotate(-5deg) scale(0.9);
     }
   }
+  @keyframes background-position-spin {
+  0% {
+    backgroundPosition: top center;
+    }
+  100% {
+    backgroundPosition: bottom center;
+    }
+  }
+  @keyframes orbit {
+  0% {
+    transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+    }
+  100% {
+    transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
+    }
+  }
+  @keyframes orbit {
+  0% {
+    transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+    }
+  100% {
+    transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
+    }
+  }
+}
+
+/* OrbitingCircles animations */
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateX(var(--radius)) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(var(--radius)) rotate(-360deg);
+  }
+}
+
+.animate-orbit {
+  animation: orbit var(--duration, 20s) linear infinite;
 }
