@@ -1,22 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function SmoothCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const cursorRef = useRef<HTMLDivElement>(null);
   const [hidden, setHidden] = useState(true);
   const [clicked, setClicked] = useState(false);
   const [linkHovered, setLinkHovered] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const mousePosition = useRef({ x: 0, y: 0 });
+  const cursorPosition = useRef({ x: 0, y: 0 });
+  const animationFrameId = useRef<number | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
     setIsTouchDevice(navigator.maxTouchPoints > 0);
 
-    const updatePosition = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+    const updateMousePosition = (e: MouseEvent) => {
+      mousePosition.current = { x: e.clientX, y: e.clientY };
       setHidden(false);
+    };
+
+    // Animation loop for smooth cursor movement
+    const animateCursor = () => {
+      if (cursorRef.current) {
+        // Smoothly interpolate between current cursor position and mouse position
+        const dx = mousePosition.current.x - cursorPosition.current.x;
+        const dy = mousePosition.current.y - cursorPosition.current.y;
+
+        // Apply easing (0.2 means it will move 20% of the remaining distance each frame)
+        cursorPosition.current.x += dx * 0.2;
+        cursorPosition.current.y += dy * 0.2;
+
+        // Apply the transform instead of changing left/top properties
+        cursorRef.current.style.transform = `translate3d(${cursorPosition.current.x}px, ${cursorPosition.current.y}px, 0)`;
+      }
+
+      animationFrameId.current = requestAnimationFrame(animateCursor);
     };
 
     const handleMouseDown = () => setClicked(true);
@@ -47,7 +68,9 @@ export function SmoothCursor() {
     const handleMouseLeave = () => setHidden(true);
     const handleMouseEnter = () => setHidden(false);
 
-    document.addEventListener("mousemove", updatePosition);
+    document.addEventListener("mousemove", updateMousePosition, {
+      passive: true,
+    });
     document.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
     document.addEventListener("mouseleave", handleMouseLeave);
@@ -58,8 +81,11 @@ export function SmoothCursor() {
       el.addEventListener("mouseleave", handleMouseLeaveLink as EventListener);
     });
 
+    // Start the animation loop
+    animationFrameId.current = requestAnimationFrame(animateCursor);
+
     return () => {
-      document.removeEventListener("mousemove", updatePosition);
+      document.removeEventListener("mousemove", updateMousePosition);
       document.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mouseleave", handleMouseLeave);
@@ -75,6 +101,11 @@ export function SmoothCursor() {
           handleMouseLeaveLink as EventListener
         );
       });
+
+      // Cancel animation frame on cleanup
+      if (animationFrameId.current !== null) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
     };
   }, []);
 
@@ -83,12 +114,15 @@ export function SmoothCursor() {
 
   return (
     <div
+      ref={cursorRef}
       className={`fixed z-[999] pointer-events-none transition-opacity duration-300 ${
         hidden ? "opacity-0" : "opacity-100"
       }`}
       style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
+        left: 0,
+        top: 0,
+        transform: "translate3d(0px, 0px, 0)",
+        willChange: "transform",
       }}
     >
       <div
