@@ -18,19 +18,36 @@ import {
 import { TextReveal } from "@/components/magicui/text-reveal";
 import {
   LineChart,
+  RadarChart,
+  RadialChart,
   chartColors,
-  generateMarketData,
-} from "@/components/ui/charts";
+} from "@/components/ui/shadcn-charts";
 import PriceComparisonChart from "./PriceComparisonChart";
 import MarketPositioningMap from "./MarketPositioningMap";
 import CompetitorTimeline from "./CompetitorTimeline";
 
+// Helper function to generate market data
+const generateMarketData = (
+  basePrice: number,
+  range: number = 10,
+  pointCount: number = 10
+) => {
+  return Array.from({ length: pointCount }).map((_, i) => {
+    const date = new Date();
+    date.setDate(date.getDate() - (pointCount - i - 1) * 3);
+    return {
+      date: date.toISOString().split("T")[0],
+      price: basePrice + Math.random() * range - range / 2,
+    };
+  });
+};
+
 // Define custom colors for each line in graphs
 const customColors = {
-  yourStore: "#4F46E5", // primary indigo
-  competitorA: "#2DD4BF", // teal
-  competitorB: "#F97316", // orange
-  competitorC: "#EC4899", // pink
+  yourStore: chartColors.primary,
+  competitorA: chartColors.tertiary,
+  competitorB: chartColors.quaternary,
+  competitorC: chartColors.secondary,
 };
 
 interface CompetitiveIntelligenceProps {

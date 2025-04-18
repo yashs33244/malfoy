@@ -6,7 +6,6 @@ import {
   AnimatePresence,
   useScroll,
   useMotionValueEvent,
-  useSpring,
 } from "motion/react";
 
 import React, { useRef, useState } from "react";
@@ -19,7 +18,6 @@ interface NavbarProps {
 interface NavBodyProps {
   children: React.ReactNode;
   className?: string;
-  visible?: boolean;
 }
 
 interface NavItemsProps {
@@ -34,7 +32,6 @@ interface NavItemsProps {
 interface MobileNavProps {
   children: React.ReactNode;
   className?: string;
-  visible?: boolean;
 }
 
 interface MobileNavHeaderProps {
@@ -52,74 +49,69 @@ interface MobileNavMenuProps {
 export const Navbar = ({ children, className }: NavbarProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
-  const [visible, setVisible] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const prevScrollY = useRef(0);
 
-  // Create a smoother scroll response with spring physics
-  const smoothScrollY = useSpring(scrollY, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
+  // Track scroll position to control navbar width
   useMotionValueEvent(scrollY, "change", (latest) => {
-    if (latest > 100) {
-      setVisible(true);
-    } else {
-      setVisible(false);
+    // Detect even the smallest scroll direction change
+    const scrollingDown = latest > prevScrollY.current;
+    const scrollingUp = latest < prevScrollY.current;
+
+    // Immediate response to scroll direction
+    if (scrollingDown) {
+      setIsScrolled(true); // 60% width
+    } else if (scrollingUp) {
+      setIsScrolled(false); // 80% width
     }
+
+    // Save current position for next comparison
+    prevScrollY.current = latest;
   });
 
   return (
     <motion.div
       ref={ref}
-      className={cn("fixed inset-x-0 top-0 z-40 w-full", className)}
-      style={{
-        transform: "translate3d(0, 0, 0)",
-        willChange: "transform",
-      }}
-    >
-      {React.Children.map(children, (child) =>
-        React.isValidElement(child)
-          ? React.cloneElement(
-              child as React.ReactElement<{ visible?: boolean }>,
-              { visible }
-            )
-          : child
+      className={cn(
+        "fixed inset-x-0 top-0 z-40 w-full flex justify-center",
+        className
       )}
+    >
+      <motion.div
+        className="w-full"
+        animate={{
+          width: isScrolled ? "60%" : "80%",
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 40,
+          duration: 0.1,
+        }}
+      >
+        {children}
+      </motion.div>
     </motion.div>
   );
 };
 
-export const NavBody = ({ children, className, visible }: NavBodyProps) => {
+export const NavBody = ({ children, className }: NavBodyProps) => {
   return (
     <motion.div
-      animate={{
-        backdropFilter: visible ? "blur(10px)" : "blur(5px)",
-        boxShadow: visible
-          ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
-          : "0 8px 16px rgba(0, 0, 0, 0.05)",
-        width: visible ? "60%" : "80%",
-        padding: visible ? "4px 16px" : "8px 24px",
-        borderRadius: "9999px",
-        marginTop: visible ? "10px" : "16px",
-      }}
-      transition={{
-        type: "tween",
-        stiffness: 200,
-        damping: 30,
-      }}
       style={{
-        minWidth: visible ? "auto" : "80%",
-        willChange: "transform, backdrop-filter, width, padding",
-        transform: "translateZ(0)",
+        width: "100%",
+        padding: "8px 24px",
+        borderRadius: "9999px",
+        marginTop: "16px",
       }}
       className={cn(
-        "relative z-[60] mx-auto flex w-full max-w-7xl flex-row items-center justify-between self-start bg-transparent rounded-full lg:flex",
-        visible
-          ? "bg-white/90 dark:bg-neutral-950/90"
-          : "bg-white/80 dark:bg-neutral-950/80",
+        "relative z-[60] flex flex-row items-center justify-between self-start rounded-full lg:flex bg-white/30 dark:bg-neutral-950/30 backdrop-blur-xl",
         className
       )}
+      animate={{
+        boxShadow:
+          "0 0 24px rgba(34, 42, 53, 0.15), 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(34, 42, 53, 0.08), 0 0 8px rgba(34, 42, 53, 0.12), 0 16px 68px rgba(47, 48, 55, 0.1), 0 1px 0 rgba(255, 255, 255, 0.15) inset",
+      }}
     >
       {children}
     </motion.div>
@@ -133,7 +125,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
+        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 lg:flex lg:space-x-2",
         className
       )}
     >
@@ -149,14 +141,10 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
             <motion.div
               layoutId="hovered"
               className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
-              style={{
-                willChange: "transform, opacity",
-                transform: "translateZ(0)",
-              }}
               transition={{
-                type: "tween",
+                type: "spring",
                 stiffness: 300,
-                damping: 30,
+                damping: 100,
               }}
             />
           )}
@@ -167,36 +155,23 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   );
 };
 
-export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
+export const MobileNav = ({ children, className }: MobileNavProps) => {
   return (
     <motion.div
-      animate={{
-        backdropFilter: visible ? "blur(10px)" : "blur(5px)",
-        boxShadow: visible
-          ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
-          : "0 8px 16px rgba(0, 0, 0, 0.05)",
-        width: visible ? "60%" : "80%",
-        paddingRight: visible ? "12px" : "16px",
-        paddingLeft: visible ? "12px" : "16px",
-        borderRadius: "9999px",
-        marginTop: visible ? "10px" : "16px",
-      }}
-      transition={{
-        type: "tween",
-        stiffness: 200,
-        damping: 30,
-      }}
       style={{
-        willChange: "transform, backdrop-filter, width, padding",
-        transform: "translate3d(0, 0, 0)",
+        width: "100%",
+        padding: "12px 16px",
+        borderRadius: "9999px",
+        marginTop: "16px",
       }}
       className={cn(
-        "relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between bg-transparent px-0 py-2 lg:hidden rounded-full",
-        visible
-          ? "bg-white/90 dark:bg-neutral-950/90"
-          : "bg-white/80 dark:bg-neutral-950/80",
+        "relative z-50 flex flex-col items-center justify-between py-2 lg:hidden rounded-full bg-white/30 dark:bg-neutral-950/30 backdrop-blur-xl",
         className
       )}
+      animate={{
+        boxShadow:
+          "0 0 24px rgba(34, 42, 53, 0.15), 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(34, 42, 53, 0.08), 0 0 8px rgba(34, 42, 53, 0.12), 0 16px 68px rgba(47, 48, 55, 0.1), 0 1px 0 rgba(255, 255, 255, 0.15) inset",
+      }}
     >
       {children}
     </motion.div>
@@ -226,24 +201,25 @@ export const MobileNavMenu = ({
   onClose,
 }: MobileNavMenuProps) => {
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       {isOpen && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{
-            duration: 0.2,
-            ease: "easeOut",
-          }}
-          style={{
-            willChange: "transform, opacity",
-            transform: "translate3d(0, 0, 0)",
+            duration: 0.1,
+            ease: "easeInOut",
           }}
           className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-neutral-950",
+            "absolute inset-x-0 mx-auto top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white/30 backdrop-blur-xl px-4 py-8 dark:bg-neutral-950/30",
             className
           )}
+          style={{
+            width: "100%",
+            boxShadow:
+              "0 0 24px rgba(34, 42, 53, 0.15), 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(34, 42, 53, 0.08), 0 0 8px rgba(34, 42, 53, 0.12), 0 16px 68px rgba(47, 48, 55, 0.1), 0 1px 0 rgba(255, 255, 255, 0.15) inset",
+          }}
         >
           {children}
         </motion.div>
@@ -273,12 +249,12 @@ export const NavbarLogo = () => {
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
     >
       <img
-        src="https://assets.aceternity.com/logo-dark.png"
+        src="https://ysingla.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fe12b42ac-4e54-476f-a4f5-7d6bdb1e61e2%2F714beba9-2afc-440e-b1c8-8d95f9c03bda%2Fproductnerd_a_modern_logo_for_a_company_called_greenmind_that_2b7c439c-f8f7-48bc-8446-0d129b699a3f_2-removebg-preview.png?table=block&id=1cfe6255-f338-81c4-9a65-c21f3b88d852&spaceId=e6b92090-480d-4e79-a4a6-82eca60a06b3&width=250&userId=&cache=v2"
         alt="logo"
         width={30}
         height={30}
       />
-      <span className="font-medium text-black dark:text-white">Startup</span>
+      <span className="font-bold text-black dark:text-white ">Malfoy</span>
     </a>
   );
 };
@@ -301,7 +277,7 @@ export const NavbarButton = ({
   | React.ComponentPropsWithoutRef<"button">
 )) => {
   const baseStyles =
-    "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
+    "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer inline-block text-center";
 
   const variantStyles = {
     primary:

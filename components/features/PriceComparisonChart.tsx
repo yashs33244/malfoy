@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { LineChart, generateMarketData } from "@/components/ui/charts";
 import { Bell } from "lucide-react";
+import { LineChart, chartColors } from "@/components/ui/shadcn-charts";
 
 // Define custom colors for each line in graphs
 const customColors = {
-  yourStore: "#4F46E5", // primary indigo
-  competitorA: "#2DD4BF", // teal
-  competitorB: "#F97316", // orange
-  competitorC: "#EC4899", // pink
+  yourStore: chartColors.primary,
+  competitorA: chartColors.tertiary,
+  competitorB: chartColors.quaternary,
+  competitorC: chartColors.secondary,
 };
 
 interface CompetitorData {
@@ -24,6 +24,28 @@ interface PriceComparisonChartProps {
   className?: string;
 }
 
+// Function to generate chart data in the format needed for shadcn charts
+const generateChartData = (
+  days: number,
+  baseValue: number,
+  volatility: number
+) => {
+  const data = [];
+  let currentValue = baseValue;
+
+  for (let i = 0; i < days; i++) {
+    const change = (Math.random() - 0.5) * volatility;
+    currentValue = Math.max(50, currentValue + change);
+
+    data.push({
+      name: `Day ${i + 1}`,
+      value: currentValue,
+    });
+  }
+
+  return data;
+};
+
 export default function PriceComparisonChart({
   title = "Real-time Market Analysis",
   onTriggerAlert,
@@ -33,13 +55,8 @@ export default function PriceComparisonChart({
   const [timePeriod, setTimePeriod] = useState(5); // 0-10 representing last day to last year
   const timeLabels = ["1d", "3d", "1w", "2w", "1m", "3m", "6m", "9m", "1y"];
 
-  // Price trend data
-  const [priceTrendData, setPriceTrendData] = useState(
-    generateMarketData(30, 130, 5)
-  );
-  const [competitorTrendData, setCompetitorTrendData] = useState(
-    generateMarketData(30, 150, 8)
-  );
+  // Price trend data formatted for shadcn charts
+  const [chartData, setChartData] = useState<any[]>([]);
 
   // Sample competitors price data
   const [competitorData, setCompetitorData] = useState<CompetitorData[]>([
@@ -90,15 +107,27 @@ export default function PriceComparisonChart({
 
     setCompetitorData(updatedData);
 
-    // Update price trend data
-    const volatility = 5 + timePeriod * 0.5;
-    const yourBasePrice = 130 + timePeriod * 2;
-    const competitorBasePrice = 150 - timePeriod * 3;
+    // Generate chart data for the LineChart component
+    // Creating 30 data points for a smooth chart
+    const days = 30;
+    const dataPoints = Array.from({ length: days }).map((_, i) => {
+      // Create a data point for each day
+      return {
+        name: `Day ${i + 1}`,
+        "Your Store": Math.round(
+          120 + Math.sin(i / 3) * 10 + (timePeriod * i) / 20
+        ),
+        "Competitor A": Math.round(150 - (i * timePeriod) / 5),
+        "Competitor B": Math.round(
+          110 + (i * timePeriod) / 10 + Math.cos(i / 2) * 5
+        ),
+        "Competitor C": Math.round(
+          135 + Math.cos(i / 4) * 15 - (timePeriod * (days - i)) / 40
+        ),
+      };
+    });
 
-    setPriceTrendData(generateMarketData(30, yourBasePrice, volatility));
-    setCompetitorTrendData(
-      generateMarketData(30, competitorBasePrice, volatility)
-    );
+    setChartData(dataPoints);
   }, [timePeriod]);
 
   return (
@@ -151,34 +180,30 @@ export default function PriceComparisonChart({
           </div>
         </div>
 
-        {/* Price trend chart - BIGGER */}
+        {/* Price trend chart with ShadCN LineChart */}
         <div className="mt-6 bg-muted/30 rounded-lg p-4">
           <h4 className="text-sm font-medium mb-2">Price Trends</h4>
-          <div className="h-[180px]">
+          <div className="h-[220px]">
             <LineChart
-              data={priceTrendData}
-              compareData={competitorTrendData}
-              height={180}
-              color={customColors.yourStore}
-              compareColor={customColors.competitorA}
+              data={chartData}
+              keys={[
+                "Your Store",
+                "Competitor A",
+                "Competitor B",
+                "Competitor C",
+              ]}
+              height={220}
+              colors={[
+                customColors.yourStore,
+                customColors.competitorA,
+                customColors.competitorB,
+                customColors.competitorC,
+              ]}
               showLegend={true}
+              interactive={true}
+              dotSize={4}
+              className="mt-4"
             />
-          </div>
-          <div className="flex items-center justify-between mt-2 text-xs">
-            <div className="flex items-center">
-              <span
-                className="inline-block w-3 h-3 rounded-full mr-1"
-                style={{ backgroundColor: customColors.yourStore }}
-              ></span>
-              <span>Your Store</span>
-            </div>
-            <div className="flex items-center">
-              <span
-                className="inline-block w-3 h-3 rounded-full mr-1"
-                style={{ backgroundColor: customColors.competitorA }}
-              ></span>
-              <span>Competitors Avg.</span>
-            </div>
           </div>
         </div>
 
@@ -201,7 +226,22 @@ export default function PriceComparisonChart({
               key={i}
               className="flex justify-between items-center p-2 rounded bg-background"
             >
-              <span>{item.name}</span>
+              <div className="flex items-center">
+                <span
+                  className="h-3 w-3 rounded-full mr-2"
+                  style={{
+                    backgroundColor:
+                      i === 0
+                        ? customColors.yourStore
+                        : i === 1
+                        ? customColors.competitorA
+                        : i === 2
+                        ? customColors.competitorB
+                        : customColors.competitorC,
+                  }}
+                ></span>
+                <span>{item.name}</span>
+              </div>
               <div className="flex items-center">
                 <span className="font-medium mr-2">{item.price}</span>
                 <span

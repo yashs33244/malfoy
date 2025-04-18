@@ -5,7 +5,12 @@ import { GradientCard } from "@/components/ui/card";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { ArrowRight, TrendingUp, Zap } from "lucide-react";
 import SimpleHeading from "./SimpleHeading";
-import { LineChart, generateMarketData } from "@/components/ui/charts";
+import {
+  AreaChart,
+  BarChart,
+  LineChart,
+  chartColors,
+} from "@/components/ui/shadcn-charts";
 
 export default function PricingSimulations() {
   // Interactive price impact simulator
@@ -15,16 +20,52 @@ export default function PricingSimulations() {
   const [salesVolume, setSalesVolume] = useState(-3.2);
   const [marketPosition, setMarketPosition] = useState(2.5);
 
-  // Chart data
-  const [revenueChartData, setRevenueChartData] = useState(
-    generateMarketData(24, 100, 5)
-  );
-  const [optimizedChartData, setOptimizedChartData] = useState(
-    generateMarketData(24, 105, 5)
-  );
-
   // Toggle for simulation ROI calculator
   const [showBeforeAfter, setShowBeforeAfter] = useState(false);
+
+  // Generate chart data
+  const generateRevenueData = (priceChange: number) => {
+    const baseIncrease = priceChange > 0 ? priceChange * 2 : 0;
+    const volatilityIncrease = priceChange > 0 ? priceChange / 2 : 0;
+
+    return Array.from({ length: 24 }).map((_, i) => {
+      const day = `Day ${i + 1}`;
+      const volatility = 5 + volatilityIncrease;
+      const currentMultiplier =
+        Math.sin(i / 3) * volatility + 100 + baseIncrease;
+      const optimizedMultiplier =
+        currentMultiplier * (1 + (priceChange > 0 ? priceChange / 100 : 0));
+
+      return {
+        name: day,
+        Current: Math.round(currentMultiplier),
+        Optimized: Math.round(optimizedMultiplier),
+      };
+    });
+  };
+
+  // Generate bar chart data for revenue forecast
+  const generateBarData = (priceChange: number) => {
+    const baseValue = 100;
+    const quarters = ["Q1", "Q2", "Q3", "Q4"];
+
+    return quarters.map((quarter, i) => {
+      const currentValue = baseValue + i * 5;
+      const optimizedValue = currentValue * (1 + priceChange / 100);
+
+      return {
+        name: quarter,
+        Current: currentValue,
+        Optimized: Math.round(optimizedValue),
+      };
+    });
+  };
+
+  // Chart data
+  const [revenueChartData, setRevenueChartData] = useState(
+    generateRevenueData(5)
+  );
+  const [revenueBarData, setRevenueBarData] = useState(generateBarData(5));
 
   // Update metrics when price change slider moves
   useEffect(() => {
@@ -35,11 +76,8 @@ export default function PricingSimulations() {
     setMarketPosition(Math.round((priceChange * 0.4 + 0.5) * 10) / 10);
 
     // Update chart data based on price change
-    const baseIncrease = priceChange > 0 ? priceChange * 2 : 0;
-    const volatilityIncrease = priceChange > 0 ? priceChange / 2 : 0;
-    setOptimizedChartData(
-      generateMarketData(24, 100 + baseIncrease, 5 + volatilityIncrease)
-    );
+    setRevenueChartData(generateRevenueData(priceChange));
+    setRevenueBarData(generateBarData(priceChange));
   }, [priceChange]);
 
   return (
@@ -96,16 +134,34 @@ export default function PricingSimulations() {
             </span>
           </div>
 
-          {/* Revenue Forecast Chart */}
+          {/* Revenue Forecast Chart - Using Area Chart */}
           <div className="mt-6 bg-muted/30 rounded-lg p-4">
             <h4 className="text-sm font-medium mb-2">Revenue Forecast</h4>
-            <div className="h-[120px]">
-              <LineChart
+            <div className="h-[160px]">
+              <AreaChart
                 data={revenueChartData}
-                compareData={showBeforeAfter ? optimizedChartData : undefined}
-                height={120}
-                showLegend={false}
-                fillArea={false}
+                keys={showBeforeAfter ? ["Current", "Optimized"] : ["Current"]}
+                height={160}
+                colors={[chartColors.accent3, chartColors.primary]}
+                showLegend={true}
+                showGrid={true}
+              />
+            </div>
+          </div>
+
+          {/* Revenue by Quarter - Bar Chart */}
+          <div className="mt-6 bg-muted/30 rounded-lg p-4">
+            <h4 className="text-sm font-medium mb-2">
+              Quarterly Revenue Projection
+            </h4>
+            <div className="h-[160px]">
+              <BarChart
+                data={revenueBarData}
+                keys={showBeforeAfter ? ["Current", "Optimized"] : ["Current"]}
+                height={160}
+                colors={[chartColors.accent3, chartColors.primary]}
+                showLegend={true}
+                showGrid={false}
               />
             </div>
           </div>
@@ -141,55 +197,24 @@ export default function PricingSimulations() {
                 </div>
               </div>
 
-              {/* Interactive Graph */}
-              <div className="bg-background rounded-lg p-3 h-36">
-                <div className="h-full w-full relative flex items-end justify-between space-x-1">
-                  {/* Graph bars - dynamically adjusted based on price change */}
-                  {Array.from({ length: 10 }).map((_, i) => {
-                    // Dynamic bar heights based on position and price change
-                    let height;
-                    if (i < 7) {
-                      height = 40 + i * 3 + (priceChange > 0 ? priceChange : 0);
-                    } else {
-                      height = 65 + (i - 6) * 10 + priceChange * 1.5;
-                    }
+              {/* Interactive Graph - Line Chart */}
+              <div className="bg-background rounded-lg p-3 h-40">
+                <LineChart
+                  data={generateRevenueData(priceChange).slice(-10)}
+                  keys={["Current", "Optimized"]}
+                  height={140}
+                  colors={[chartColors.accent3, chartColors.primary]}
+                  showLegend={false}
+                  showGrid={false}
+                  interactive={true}
+                  dotSize={3}
+                />
 
-                    // Ensure height is between 20% and 95%
-                    height = Math.max(20, Math.min(95, height));
-
-                    return (
-                      <div
-                        key={i}
-                        className={`flex-1 ${
-                          i >= 7
-                            ? priceChange >= 5
-                              ? "bg-primary"
-                              : "bg-primary/50"
-                            : "bg-blue-500/20"
-                        } rounded-t-sm relative group transition-all duration-200`}
-                        style={{ height: `${height}%` }}
-                      >
-                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                          {i >= 7 ? "AI Optimized" : "Current"}: $
-                          {(
-                            100 +
-                            i * 5 +
-                            (i >= 7 ? priceChange * 2 : 0)
-                          ).toLocaleString()}
-                          k
-                        </div>
-                      </div>
-                    );
-                  })}
-
-                  {/* AI recommendation highlight */}
-                  <div className="absolute -bottom-6 right-0 text-xs text-primary font-medium w-3/10 text-right">
-                    AI Recommended <span className="animate-pulse">•</span>
-                  </div>
-
-                  {/* Trend line */}
-                  <div className="absolute inset-0 pointer-events-none flex items-center">
-                    <div className="w-full h-0.5 bg-gradient-to-r from-blue-300/20 via-blue-400/50 to-primary"></div>
+                {/* AI recommendation indicator */}
+                <div className="flex justify-end mt-1">
+                  <div className="text-xs text-primary font-medium flex items-center">
+                    AI Recommended{" "}
+                    <span className="ml-1 inline-block h-2 w-2 bg-primary rounded-full animate-pulse"></span>
                   </div>
                 </div>
               </div>
@@ -251,7 +276,7 @@ export default function PricingSimulations() {
                     Market Position
                   </p>
                   <p className="text-xl font-bold text-green-500">
-                    +{marketPosition}%
+                    +{marketPosition}
                   </p>
                   <div className="absolute bottom-0 left-0 h-1 w-full bg-green-500/20"></div>
                   <div
@@ -260,11 +285,6 @@ export default function PricingSimulations() {
                   ></div>
                 </div>
               </div>
-
-              <button className="w-full py-2 bg-primary text-white rounded-md flex items-center justify-center group hover:bg-primary/90 transition-colors">
-                <span>Apply AI Recommendation</span>
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </button>
             </div>
           </GradientCard>
         </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import SimpleHeading from "./SimpleHeading";
+import { RadarChart, chartColors } from "@/components/ui/shadcn-charts";
 
 interface MarketZone {
   id: number;
@@ -30,54 +31,137 @@ export default function MarketPositioningMap({
   const [selectedMarketZone, setSelectedMarketZone] =
     useState<MarketZone | null>(null);
 
+  // Create radar chart data from market zones
+  const radarData = [
+    {
+      name: "Quality",
+      Your_Product: 80,
+      Premium_Market: 90,
+      Value_Market: 60,
+      Budget_Market: 40,
+      Luxury_Market: 95,
+    },
+    {
+      name: "Price",
+      Your_Product: 65,
+      Premium_Market: 75,
+      Value_Market: 55,
+      Budget_Market: 30,
+      Luxury_Market: 90,
+    },
+    {
+      name: "Features",
+      Your_Product: 75,
+      Premium_Market: 85,
+      Value_Market: 60,
+      Budget_Market: 35,
+      Luxury_Market: 95,
+    },
+    {
+      name: "Support",
+      Your_Product: 85,
+      Premium_Market: 80,
+      Value_Market: 60,
+      Budget_Market: 40,
+      Luxury_Market: 90,
+    },
+    {
+      name: "Brand",
+      Your_Product: 70,
+      Premium_Market: 85,
+      Value_Market: 65,
+      Budget_Market: 40,
+      Luxury_Market: 95,
+    },
+    {
+      name: "Market Share",
+      Your_Product: 60,
+      Premium_Market: 70,
+      Value_Market: 75,
+      Budget_Market: 60,
+      Luxury_Market: 45,
+    },
+  ];
+
+  // Transform market zones for the bar chart
+  const competitorData = [
+    {
+      name: "Premium Market",
+      competitors:
+        marketZones.find((z) => z.name === "Premium Market")?.competitors || 3,
+    },
+    {
+      name: "Value Market",
+      competitors:
+        marketZones.find((z) => z.name === "Value Market")?.competitors || 8,
+    },
+    {
+      name: "Budget Market",
+      competitors:
+        marketZones.find((z) => z.name === "Budget Market")?.competitors || 5,
+    },
+    {
+      name: "Luxury Market",
+      competitors:
+        marketZones.find((z) => z.name === "Luxury Market")?.competitors || 2,
+    },
+    {
+      name: "Mass Market",
+      competitors:
+        marketZones.find((z) => z.name === "Mass Market")?.competitors || 12,
+    },
+  ];
+
+  const handleZoneClick = (zone: MarketZone) => {
+    setSelectedMarketZone(zone);
+  };
+
   return (
     <div className={`grid md:grid-cols-2 gap-8 items-center ${className}`}>
       <div className="order-2 md:order-1 relative">
-        <div className="relative h-80 rounded-xl overflow-hidden bg-muted">
-          <div className="absolute inset-0 grid grid-cols-5 grid-rows-4 gap-2 p-4">
-            {/* Market positioning heatmap */}
-            {marketZones.map((zone) => (
-              <div
-                key={zone.id}
-                className={`${zone.gridPosition} ${zone.className} hover:brightness-105 rounded-lg flex items-center justify-center cursor-pointer transition-colors relative`}
-                onClick={() => setSelectedMarketZone(zone)}
-              >
-                <span className={`${zone.textColor} font-medium`}>
-                  {zone.name}
-                </span>
-
-                {/* Show indicators if any */}
-                {zone.indicators?.map((indicator, i) => (
-                  <div
-                    key={i}
-                    className="absolute top-2 right-2 h-3 w-3 rounded-full"
-                    style={{
-                      backgroundColor: indicator.color,
-                      right: `${2 + i * 4}px`,
-                      opacity: indicator.opacity || 1,
-                    }}
-                  />
-                ))}
-              </div>
-            ))}
-
-            {/* Quality Scale - properly centered with proper rotation */}
-            <div className="col-span-1 row-span-4 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center">
-              <div className="flex items-center justify-center h-full w-full">
-                <span className="text-gray-800 font-medium transform -rotate-90 whitespace-nowrap">
-                  Quality Scale
-                </span>
-              </div>
-            </div>
-
-            {/* Price Scale - centered horizontally */}
-            <div className="col-span-4 row-span-1 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center">
-              <span className="text-gray-800 font-medium">Price Scale</span>
-            </div>
-          </div>
+        <div className="relative h-80 rounded-xl overflow-hidden bg-muted/50">
+          {/* Radar Chart for Market Positioning */}
+          <RadarChart
+            data={radarData}
+            keys={[
+              "Your_Product",
+              "Premium_Market",
+              "Value_Market",
+              "Budget_Market",
+              "Luxury_Market",
+            ]}
+            height={310}
+            colors={[
+              chartColors.primary,
+              chartColors.secondary,
+              chartColors.tertiary,
+              chartColors.quaternary,
+              chartColors.accent1,
+            ]}
+            showGrid={true}
+            showTooltip={true}
+            showLegend={true}
+          />
         </div>
 
-        {/* Market zone info overlay - Positioned BELOW the heatmap */}
+        {/* List of clickable market zones */}
+        <div className="mt-4 grid grid-cols-5 gap-2">
+          {marketZones.map((zone) => (
+            <div
+              key={zone.id}
+              className={`${
+                zone.className
+              } cursor-pointer hover:brightness-105 rounded-md p-2 text-center text-sm ${
+                selectedMarketZone?.id === zone.id ? "ring-2 ring-primary" : ""
+              }`}
+              onClick={() => handleZoneClick(zone)}
+            >
+              <span className={zone.textColor}>{zone.name}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Market zone info overlay - Positioned BELOW the radar chart */}
         {selectedMarketZone && (
           <div className="mt-4 bg-card shadow-lg border border-border p-4 rounded-lg">
             <div className="flex justify-between mb-2">
@@ -127,9 +211,9 @@ export default function MarketPositioningMap({
           </li>
         </ul>
         <p className="text-sm mt-4 bg-muted/50 p-3 rounded-lg">
-          <span className="font-medium">Try it:</span> Click on different market
-          segments in the interactive map to see competitor details and
-          opportunity analysis.
+          <span className="font-medium">Try it:</span> View the radar chart to
+          see how your product compares to different market segments across
+          multiple factors.
         </p>
       </div>
     </div>

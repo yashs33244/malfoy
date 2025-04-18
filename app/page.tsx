@@ -18,8 +18,7 @@ import {
   NavBody,
   NavItems,
 } from "@/components/ui/resizable-navbar";
-import { useState, useEffect } from "react";
-import { motion } from "motion/react";
+import { useState } from "react";
 
 const navItems = [
   {
@@ -42,12 +41,6 @@ const navItems = [
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isPageLoaded, setIsPageLoaded] = useState(false);
-
-  // Add an effect for page load animation
-  useEffect(() => {
-    setIsPageLoaded(true);
-  }, []);
 
   return (
     <>
@@ -105,23 +98,16 @@ export default function Home() {
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-
-      {/* Main content with padding for fixed navbar */}
-      <motion.main
-        className="pt-20" // Add padding at top for the navbar
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isPageLoaded ? 1 : 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Hero />
-        <ProductShowcase />
-        <WhyUs />
-        <PricingSection />
-        <FaqSection />
-        <CallToAction />
-        <EarlyAccessForm />
-        <Footer />
-      </motion.main>
+      {/* Main content with padding for fixed navbar */}{" "}
+      {/* Add padding at top for the navbar */}
+      <Hero />
+      <ProductShowcase />
+      <WhyUs />
+      <PricingSection />
+      <FaqSection />
+      <CallToAction />
+      <EarlyAccessForm />
+      <Footer />
     </>
   );
 }
