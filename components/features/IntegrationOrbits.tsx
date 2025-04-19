@@ -32,7 +32,7 @@ export function IntegrationOrbits({
     >
       {/* Center PriceIQ logo */}
       <div className="absolute z-10 w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-        <IntegrationIcons.PriceIQ className="text-lg" />
+        <IntegrationIcons.shein className="text-lg" />
       </div>
 
       {/* Primary orbit */}
@@ -43,16 +43,16 @@ export function IntegrationOrbits({
         reverse={primaryReverse}
       >
         <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.Shopify className="w-6 h-6 text-[#95BF47]" />
+          <IntegrationIcons.shopify className="w-6 h-6 text-[#95BF47]" />
         </div>
         <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.Amazon className="w-6 h-6 text-[#FF9900]" />
+          <IntegrationIcons.amazon className="w-6 h-6 text-[#FF9900]" />
         </div>
         <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.WooCommerce className="w-6 h-6 text-[#7F54B3]" />
+          <IntegrationIcons.airbnb className="w-6 h-6 text-[#7F54B3]" />
         </div>
         <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.Magento className="w-6 h-6 text-[#F26322]" />
+          <IntegrationIcons.costco className="w-6 h-6 text-[#F26322]" />
         </div>
       </OrbitingCircles>
 
@@ -64,10 +64,10 @@ export function IntegrationOrbits({
         reverse={secondaryReverse}
       >
         <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.BigCommerce className="w-5 h-5 text-[#2A6FBB]" />
+          <IntegrationIcons.blinkit className="w-5 h-5 text-[#2A6FBB]" />
         </div>
         <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.eBay className="w-5 h-5 text-[#E53238]" />
+          <IntegrationIcons.instacart className="w-5 h-5 text-[#E53238]" />
         </div>
       </OrbitingCircles>
     </div>

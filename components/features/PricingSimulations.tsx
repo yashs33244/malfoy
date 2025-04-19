@@ -1,9 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { GradientCard } from "@/components/ui/card";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { ArrowRight, TrendingUp, Zap } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import {
+  ArrowRight,
+  TrendingUp,
+  Zap,
+  FileCheck,
+  ThumbsUp,
+  AlertTriangle,
+  ChevronUp,
+  ChevronDown,
+  Calendar,
+  Info,
+} from "lucide-react";
 import SimpleHeading from "./SimpleHeading";
 import {
   AreaChart,
@@ -11,16 +20,65 @@ import {
   LineChart,
   chartColors,
 } from "@/components/ui/shadcn-charts";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-// Define interfaces for chart data types - matches the one in shadcn-charts
+import { Badge } from "@/components/ui/badge";
+
+// Define interfaces for chart data types
 interface ChartDataPoint {
   name: string;
   [key: string]: number | string;
 }
 
-// We don't need to extend the interface for these specific data types
 type RevenueDataPoint = ChartDataPoint;
 type BarDataPoint = ChartDataPoint;
+
+// Define other custom interfaces for the component
+interface SimulationImpactCardProps {
+  label: string;
+  value: number;
+  prefix?: string;
+  isPositive?: boolean;
+  description?: string;
+  icon?: React.ReactNode;
+}
+
+interface IndustryCardProps {
+  id: string;
+  name: string;
+  icon: React.ReactNode;
+  description: string;
+  active: boolean;
+  onClick: (id: string) => void;
+}
+
+interface IndustryModifier {
+  elasticity: number;
+  profitMargin: number;
+  volumeSensitivity: number;
+}
+
+interface IndustryModifiers {
+  software: IndustryModifier;
+  retail: IndustryModifier;
+  manufacturing: IndustryModifier;
+  healthcare: IndustryModifier;
+  finance: IndustryModifier;
+  [key: string]: IndustryModifier;
+}
+
+interface PieDataPoint {
+  name: string;
+  value: number;
+}
+
+// Define type for timeframe
+type TimeframeType = "monthly" | "quarterly" | "weekly";
 
 export default function PricingSimulations() {
   // Interactive price impact simulator
@@ -29,92 +87,287 @@ export default function PricingSimulations() {
   const [profitImpact, setProfitImpact] = useState(18.7);
   const [salesVolume, setSalesVolume] = useState(-3.2);
   const [marketPosition, setMarketPosition] = useState(2.5);
+  const [customerRetention, setCustomerRetention] = useState(1.8);
+  const [competitiveIndex, setCompetitiveIndex] = useState(3.1);
+
+  // Time series selection
+  const [timeframe, setTimeframe] = useState<TimeframeType>("monthly");
+
+  // Industry selection
+  const [industry, setIndustry] = useState("software");
+
+  // Toggle for advanced view
+  const [showAdvancedView, setShowAdvancedView] = useState(false);
 
   // Toggle for simulation ROI calculator
   const [showBeforeAfter, setShowBeforeAfter] = useState(false);
 
-  // Generate chart data
-  const generateRevenueData = (priceChange: number): RevenueDataPoint[] => {
-    const baseIncrease = priceChange > 0 ? priceChange * 2 : 0;
-    const volatilityIncrease = priceChange > 0 ? priceChange / 2 : 0;
+  // Toggle for scenario comparison
+  const [showScenarioComparison, setShowScenarioComparison] = useState(false);
 
-    return Array.from({ length: 24 }).map((_, i) => {
-      const day = `Day ${i + 1}`;
-      const volatility = 5 + volatilityIncrease;
-      const currentMultiplier =
-        Math.sin(i / 3) * volatility + 100 + baseIncrease;
-      const optimizedMultiplier =
-        currentMultiplier * (1 + (priceChange > 0 ? priceChange / 100 : 0));
+  // Selected scenario
+  const [selectedScenario, setSelectedScenario] = useState("moderate");
+
+  // Industry-specific elasticity modifiers
+  const industryModifiers: IndustryModifiers = {
+    software: { elasticity: 1.2, profitMargin: 1.5, volumeSensitivity: 0.7 },
+    retail: { elasticity: 1.8, profitMargin: 0.9, volumeSensitivity: 1.5 },
+    manufacturing: {
+      elasticity: 0.6,
+      profitMargin: 1.2,
+      volumeSensitivity: 1.1,
+    },
+    healthcare: { elasticity: 0.4, profitMargin: 1.7, volumeSensitivity: 0.5 },
+    finance: { elasticity: 0.9, profitMargin: 2.1, volumeSensitivity: 0.8 },
+  };
+
+  // Scenarios
+  const scenarios = {
+    conservative: {
+      priceChange: 2,
+      description: "Minimal price adjustment with stable metrics",
+    },
+    moderate: {
+      priceChange: 5,
+      description: "Balanced approach with moderate growth",
+    },
+    aggressive: {
+      priceChange: 12,
+      description: "High growth potential with some volume risk",
+    },
+    ai_optimal: {
+      priceChange: 8,
+      description: "AI-recommended optimal price point",
+    },
+  };
+
+  // Time series data generator with realistic seasonality patterns
+  const generateTimeSeriesData = (
+    priceChange: number,
+    timeframe: TimeframeType,
+    industry: string
+  ) => {
+    const modifier = industryModifiers[industry];
+    const periods =
+      timeframe === "monthly" ? 12 : timeframe === "quarterly" ? 4 : 24;
+    const periodLabel =
+      timeframe === "monthly"
+        ? (i: number) => `Month ${i + 1}`
+        : timeframe === "quarterly"
+        ? (i: number) => `Q${i + 1}`
+        : (i: number) => `Week ${i + 1}`;
+
+    // Base growth pattern
+    const baseGrowth = 1 + priceChange * modifier.elasticity * 0.01;
+
+    // Industry-specific seasonality patterns
+    const seasonalityAmplitude = {
+      software: 0.05,
+      retail: 0.15,
+      manufacturing: 0.07,
+      healthcare: 0.03,
+      finance: 0.08,
+    }[industry];
+
+    // Generate realistic data with seasonality
+    return Array.from({ length: periods }).map((_, i) => {
+      // Calculate base value with growth trend
+      const baseValue = 100 + i * 1.2;
+
+      // Add industry-specific seasonality
+      const seasonalFactor =
+        Math.sin((i / periods) * Math.PI * 2) * seasonalityAmplitude;
+
+      // Add some randomness for realism
+      const randomness = Math.random() * 0.04 - 0.02;
+
+      // Calculate current value with seasonality and randomness
+      const currentValue = baseValue * (1 + seasonalFactor + randomness);
+
+      // Apply price change impact with industry-specific elasticity
+      const optimizedValue =
+        currentValue * Math.pow(baseGrowth, i / periods + 0.2);
+
+      // Add AI-optimized value with more sophisticated pattern
+      const aiOptimizedValue =
+        optimizedValue *
+        (1 + 0.05 * Math.tanh((i / periods) * 3)) *
+        (1 + (i > periods / 3 ? 0.03 : 0));
 
       return {
-        name: day,
-        Current: Math.round(currentMultiplier),
-        Optimized: Math.round(optimizedMultiplier),
+        name: periodLabel(i),
+        Current: Math.round(currentValue * 10) / 10,
+        Optimized: Math.round(optimizedValue * 10) / 10,
+        AIOptimized: Math.round(aiOptimizedValue * 10) / 10,
       };
     });
   };
 
-  // Generate bar chart data for revenue forecast
-  const generateBarData = (priceChange: number): BarDataPoint[] => {
-    const baseValue = 100;
-    const quarters = ["Q1", "Q2", "Q3", "Q4"];
+  // Generate customer segment data for pie chart
+  const generateSegmentData = (
+    priceChange: number,
+    industry: string
+  ): PieDataPoint[] => {
+    const segmentNames = {
+      software: ["Enterprise", "SMB", "Startup", "Individual"],
+      retail: ["Premium", "Mid-market", "Budget", "Occasional"],
+      manufacturing: ["Tier 1", "Tier 2", "Tier 3", "Small batch"],
+      healthcare: ["Hospital", "Clinic", "Private", "Government"],
+      finance: ["Corporate", "Small Business", "Premium", "Standard"],
+    }[industry];
 
-    return quarters.map((quarter, i) => {
-      const currentValue = baseValue + i * 5;
-      const optimizedValue = currentValue * (1 + priceChange / 100);
+    // Base values with industry-specific distribution
+    const baseValues = {
+      software: [45, 30, 15, 10],
+      retail: [20, 40, 30, 10],
+      manufacturing: [35, 40, 20, 5],
+      healthcare: [50, 25, 15, 10],
+      finance: [30, 25, 30, 15],
+    }[industry];
+
+    // Impact factors (how each segment responds to price changes)
+    const impactFactors = {
+      software: [0.2, 0.5, 1.2, 1.5],
+      retail: [0.3, 0.6, 1.0, 1.4],
+      manufacturing: [0.1, 0.3, 0.8, 1.2],
+      healthcare: [0.2, 0.4, 0.6, 1.0],
+      finance: [0.3, 0.5, 0.7, 1.1],
+    }[industry];
+
+    // Calculate changes based on price impact
+    return segmentNames.map((name, i) => {
+      const impact =
+        priceChange > 0
+          ? 1 - priceChange * impactFactors[i] * 0.01
+          : 1 + Math.abs(priceChange) * impactFactors[i] * 0.005;
+
+      const newValue = Math.max(1, Math.round(baseValues[i] * impact));
 
       return {
-        name: quarter,
-        Current: currentValue,
-        Optimized: Math.round(optimizedValue),
+        name,
+        value: newValue,
       };
     });
   };
 
-  // Generate more realistic AI-optimized data with clear improvement pattern
-  const generateAIOptimizedData = (priceChange: number): RevenueDataPoint[] => {
-    const baseValue = 100;
-    const days = 24;
+  // Generate competitive benchmark data
+  const generateCompetitorData = (priceChange: number, industry: string) => {
+    const competitors = {
+      software: [
+        "Industry Leader",
+        "Your Company",
+        "Competitor A",
+        "Competitor B",
+        "Competitor C",
+      ],
+      retail: [
+        "Market Leader",
+        "Your Company",
+        "Main Competitor",
+        "Budget Option",
+        "Premium Brand",
+      ],
+      manufacturing: [
+        "Industry Giant",
+        "Your Company",
+        "Regional Player",
+        "Specialty Maker",
+        "Budget Manufacturer",
+      ],
+      healthcare: [
+        "Market Leader",
+        "Your Company",
+        "National Provider",
+        "Regional Network",
+        "Boutique Service",
+      ],
+      finance: [
+        "Major Bank",
+        "Your Company",
+        "Traditional Provider",
+        "Digital Challenger",
+        "Niche Service",
+      ],
+    }[industry];
 
-    return Array.from({ length: days }).map((_, i) => {
-      const day = `Day ${i + 1}`;
-      // Current follows seasonal pattern with some randomness
-      const seasonality = Math.sin(i / 4) * 10;
-      const randomFactor = Math.random() * 5 - 2.5;
-      const currentValue = baseValue + seasonality + randomFactor + i * 0.5;
+    // Base market share values
+    const baseShares = {
+      software: [35, 18, 25, 12, 10],
+      retail: [30, 15, 22, 20, 13],
+      manufacturing: [40, 20, 15, 15, 10],
+      healthcare: [35, 22, 18, 15, 10],
+      finance: [42, 16, 20, 12, 10],
+    }[industry];
 
-      // AI Optimized shows more stable growth and improved performance
-      const aiImprovement = priceChange * 0.8; // AI performs better with higher price changes
-      const aiSmoothingFactor = seasonality * 0.7; // AI reduces volatility
-      const aiRandomFactor = Math.random() * 2 - 1; // Less randomness
-      const aiValue =
-        currentValue +
-        aiImprovement +
-        aiSmoothingFactor +
-        aiRandomFactor +
-        i * 0.8;
+    // Calculate impact of price change on market share
+    const optimizedShares = baseShares.map((share, i) => {
+      if (i === 1) {
+        // Your company
+        return (
+          share *
+          (1 + (priceChange > 0 ? priceChange * 0.1 : priceChange * 0.15))
+        );
+      }
+      return (
+        share *
+        (1 - (priceChange > 0 ? priceChange * 0.02 : priceChange * 0.03))
+      );
+    });
 
+    // Calculate total and adjust to ensure they sum to 100
+    const optimizedTotal = optimizedShares.reduce(
+      (a: number, b: number) => a + b,
+      0
+    );
+    const adjustedShares = optimizedShares.map(
+      (share) => (share / optimizedTotal) * 100
+    );
+
+    return competitors.map((name, i) => {
       return {
-        name: day,
-        Current: Math.round(currentValue),
-        AIOptimized: Math.round(aiValue),
+        name,
+        "Current Share": Math.round(baseShares[i]),
+        "Projected Share": Math.round(adjustedShares[i]),
       };
     });
   };
+
+  // Generate elasticity curve data
+  const generateElasticityCurve = () => {
+    // Create data points from -20% to +20% price change
+    return Array.from({ length: 41 }).map((_, i) => {
+      const priceChange = i - 20;
+
+      // Apply elasticity formula with industry-specific modifier
+      const modifier = industryModifiers[industry];
+      const elasticityFactor = 2.1 * modifier.elasticity;
+      const volumeElasticityFactor = -0.9 * modifier.volumeSensitivity;
+
+      const revenueImpact = priceChange * elasticityFactor + 1.8;
+      const volumeImpact = priceChange * volumeElasticityFactor + 1.3;
+
+      return {
+        name: `${priceChange}%`,
+        "Revenue Impact": Math.round(revenueImpact * 10) / 10,
+        "Volume Impact": Math.round(volumeImpact * 10) / 10,
+      };
+    });
+  };
+
+  // Memoize the elasticity curve data to avoid recalculation
+  const elasticityCurveData = useMemo(
+    () => generateElasticityCurve(),
+    [industry]
+  );
 
   // Simulation Impact Calculator component
-  interface SimulationImpactCardProps {
-    label: string;
-    value: number;
-    prefix?: string;
-    isPositive?: boolean;
-  }
-
   const SimulationImpactCard = ({
     label,
     value,
     prefix = "",
     isPositive = true,
+    description = "",
+    icon = null,
   }: SimulationImpactCardProps) => {
     const colorClass = isPositive ? "text-green-500" : "text-red-500";
     const bgColorClass = isPositive ? "bg-green-500" : "bg-red-500";
@@ -123,7 +376,24 @@ export default function PricingSimulations() {
 
     return (
       <div className="bg-background p-3 rounded-lg relative overflow-hidden">
-        <p className="text-xs text-muted-foreground">{label}</p>
+        <div className="flex justify-between items-center mb-1">
+          <div className="flex items-center">
+            <p className="text-xs text-muted-foreground">{label}</p>
+            {description && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-3 w-3 ml-1 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs max-w-xs">{description}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+          </div>
+          {icon && <div className="text-muted-foreground">{icon}</div>}
+        </div>
         <p className={`text-xl font-bold ${colorClass}`}>
           {prefix}
           {value}%
@@ -139,23 +409,55 @@ export default function PricingSimulations() {
     );
   };
 
-  // Chart data
-  const [revenueChartData, setRevenueChartData] = useState(
-    generateRevenueData(5)
-  );
-  const [revenueBarData, setRevenueBarData] = useState(generateBarData(5));
-  const [aiOptimizedData, setAIOptimizedData] = useState(
-    generateAIOptimizedData(5)
+  // Industry Selection Card
+  const IndustryCard = ({
+    id,
+    name,
+    icon,
+    description,
+    active,
+    onClick,
+  }: IndustryCardProps) => (
+    <div
+      className={`p-4 rounded-lg cursor-pointer transition-all border ${
+        active
+          ? "border-primary bg-primary/5"
+          : "border-border hover:border-primary/50"
+      }`}
+      onClick={() => onClick(id)}
+    >
+      <div className="flex items-center">
+        <div
+          className={`mr-3 ${
+            active ? "text-primary" : "text-muted-foreground"
+          }`}
+        >
+          {icon}
+        </div>
+        <div>
+          <h4 className={`font-medium ${active ? "text-primary" : ""}`}>
+            {name}
+          </h4>
+          <p className="text-xs text-muted-foreground">{description}</p>
+        </div>
+      </div>
+    </div>
   );
 
-  // Update metrics when price change slider moves
+  // Update data and metrics when inputs change
   useEffect(() => {
-    // Realistic calculation logic based on price elasticity models
-    const elasticityFactor = 2.1; // Higher means more revenue impact per price change
-    const profitMarginFactor = 3.2; // Higher means more profit impact per price change
-    const volumeElasticityFactor = -0.9; // Negative means volume decreases as price increases
-    const marketPositionFactor = 0.4; // Market position improvement per price point
+    // Get industry-specific modifier
+    const modifier = industryModifiers[industry];
 
+    // Realistic calculation logic based on price elasticity models
+    const elasticityFactor = 2.1 * modifier.elasticity;
+    const profitMarginFactor = 3.2 * modifier.profitMargin;
+    const volumeElasticityFactor = -0.9 * modifier.volumeSensitivity;
+    const marketPositionFactor = 0.4 * (priceChange > 0 ? 1 : 0.5);
+    const retentionFactor = -0.3 * (priceChange > 0 ? 1 : 0.7);
+    const competitiveIndexFactor = 0.5 * (priceChange > 0 ? 1.2 : 0.6);
+
+    // Apply calculations with appropriate rounding
     setRevenueImpact(
       Math.round((priceChange * elasticityFactor + 1.8) * 10) / 10
     );
@@ -168,15 +470,85 @@ export default function PricingSimulations() {
     setMarketPosition(
       Math.round((priceChange * marketPositionFactor + 0.5) * 10) / 10
     );
+    setCustomerRetention(
+      Math.round((priceChange * retentionFactor + 1.5) * 10) / 10
+    );
+    setCompetitiveIndex(
+      Math.round((priceChange * competitiveIndexFactor + 1.0) * 10) / 10
+    );
+  }, [priceChange, industry]);
 
-    // Update chart data based on price change
-    setRevenueChartData(generateRevenueData(priceChange));
-    setRevenueBarData(generateBarData(priceChange));
-    setAIOptimizedData(generateAIOptimizedData(priceChange));
-  }, [priceChange]);
+  // Apply selected scenario
+  const applyScenario = (scenario: string) => {
+    setSelectedScenario(scenario);
+    setPriceChange(scenarios[scenario as keyof typeof scenarios].priceChange);
+  };
+
+  // Generate data for charts based on current settings
+  const revenueData = useMemo(
+    () => generateTimeSeriesData(priceChange, timeframe, industry),
+    [priceChange, timeframe, industry]
+  );
+
+  const segmentData = useMemo(
+    () => generateSegmentData(priceChange, industry),
+    [priceChange, industry]
+  );
+
+  const competitorData = useMemo(
+    () => generateCompetitorData(priceChange, industry),
+    [priceChange, industry]
+  );
 
   return (
     <div className="space-y-16">
+      {/* Industry Selection */}
+      <div className="bg-muted/30 rounded-lg p-6">
+        <h3 className="text-lg font-semibold mb-4">Select Your Industry</h3>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <IndustryCard
+            id="software"
+            name="Software / SaaS"
+            icon={<Zap className="h-5 w-5" />}
+            description="B2B & B2C software products"
+            active={industry === "software"}
+            onClick={setIndustry}
+          />
+          <IndustryCard
+            id="retail"
+            name="Retail"
+            icon={<ArrowRight className="h-5 w-5" />}
+            description="Consumer goods & e-commerce"
+            active={industry === "retail"}
+            onClick={setIndustry}
+          />
+          <IndustryCard
+            id="manufacturing"
+            name="Manufacturing"
+            icon={<FileCheck className="h-5 w-5" />}
+            description="Industrial & consumer products"
+            active={industry === "manufacturing"}
+            onClick={setIndustry}
+          />
+          <IndustryCard
+            id="healthcare"
+            name="Healthcare"
+            icon={<ThumbsUp className="h-5 w-5" />}
+            description="Medical & health services"
+            active={industry === "healthcare"}
+            onClick={setIndustry}
+          />
+          <IndustryCard
+            id="finance"
+            name="Financial"
+            icon={<TrendingUp className="h-5 w-5" />}
+            description="Banking & financial services"
+            active={industry === "finance"}
+            onClick={setIndustry}
+          />
+        </div>
+      </div>
+
       {/* AI-Powered Revenue Optimizer and Dynamic Price Impact Simulator */}
       <div className="grid md:grid-cols-2 gap-8 items-start">
         <div>
@@ -186,23 +558,74 @@ export default function PricingSimulations() {
             and customer behavior to simulate different pricing strategies and
             their impact on your business metrics.
           </p>
-          <ul className="space-y-3">
-            <li className="flex items-start">
-              <span className="mr-2 text-primary">✓</span>
-              Real-time AI simulations with 94% accuracy
-            </li>
-            <li className="flex items-start">
-              <span className="mr-2 text-primary">✓</span>
-              Forecast revenue, profit, and market share
-            </li>
-            <li className="flex items-start">
-              <span className="mr-2 text-primary">✓</span>
-              Compare multiple AI-generated optimal strategies
-            </li>
-          </ul>
+
+          {/* Scenario Selection */}
+          <div className="mb-6 bg-muted/30 rounded-lg p-4">
+            <h4 className="text-sm font-medium mb-3">Pricing Scenarios</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {Object.entries(scenarios).map(([key, scenario]) => (
+                <button
+                  key={key}
+                  className={`px-3 py-2 rounded-lg text-sm border transition-all ${
+                    selectedScenario === key
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border hover:border-primary/40"
+                  }`}
+                  onClick={() => applyScenario(key)}
+                >
+                  <div className="font-medium capitalize mb-1">
+                    {key.replace("_", " ")}
+                    {key === "ai_optimal" && (
+                      <Zap className="h-3 w-3 inline-block ml-1" />
+                    )}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {scenario.description}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Time Period Selection */}
+          <div className="mb-6">
+            <h4 className="text-sm font-medium mb-2">Time Period</h4>
+            <div className="flex bg-muted/30 rounded-lg p-1">
+              <button
+                className={`flex-1 py-2 px-3 rounded-md text-sm ${
+                  timeframe === "weekly"
+                    ? "bg-primary text-primary-foreground"
+                    : ""
+                }`}
+                onClick={() => setTimeframe("weekly")}
+              >
+                Weekly
+              </button>
+              <button
+                className={`flex-1 py-2 px-3 rounded-md text-sm ${
+                  timeframe === "monthly"
+                    ? "bg-primary text-primary-foreground"
+                    : ""
+                }`}
+                onClick={() => setTimeframe("monthly")}
+              >
+                Monthly
+              </button>
+              <button
+                className={`flex-1 py-2 px-3 rounded-md text-sm ${
+                  timeframe === "quarterly"
+                    ? "bg-primary text-primary-foreground"
+                    : ""
+                }`}
+                onClick={() => setTimeframe("quarterly")}
+              >
+                Quarterly
+              </button>
+            </div>
+          </div>
 
           {/* Toggle Button for Before/After View */}
-          <div className="mt-6 flex items-center space-x-3">
+          <div className="mb-6 flex items-center space-x-3">
             <span
               className={`text-sm ${
                 !showBeforeAfter ? "font-bold" : "text-muted-foreground"
@@ -230,17 +653,23 @@ export default function PricingSimulations() {
           </div>
 
           {/* AI-Optimized Revenue Forecast Chart */}
-          <div className="mt-6 bg-muted/30 rounded-lg p-4">
-            <h4 className="text-sm font-medium mb-2">
-              AI-Optimized Revenue Forecast
-            </h4>
-            <div className="h-[160px]">
+          <div className="mb-6 bg-muted/30 rounded-lg p-4">
+            <div className="flex justify-between items-center mb-2">
+              <h4 className="text-sm font-medium">
+                AI-Optimized Revenue Forecast
+              </h4>
+              <Badge variant="outline" className="text-xs">
+                <Calendar className="h-3 w-3 mr-1" />
+                {timeframe}
+              </Badge>
+            </div>
+            <div className="h-[200px]">
               <AreaChart
-                data={aiOptimizedData}
+                data={revenueData}
                 keys={
                   showBeforeAfter ? ["Current", "AIOptimized"] : ["Current"]
                 }
-                height={160}
+                height={200}
                 colors={[chartColors.accent3, chartColors.primary]}
                 showLegend={true}
                 showGrid={true}
@@ -248,23 +677,56 @@ export default function PricingSimulations() {
             </div>
           </div>
 
-          {/* Revenue by Quarter - Bar Chart */}
-          <div className="mt-6 bg-muted/30 rounded-lg p-4">
+          {/* Customer Segment Distribution */}
+          <div className="bg-muted/30 rounded-lg p-4">
             <h4 className="text-sm font-medium mb-2">
-              Quarterly Revenue Projection
+              Customer Segment Distribution
             </h4>
-            <div className="h-[160px]">
-              <BarChart
-                data={revenueBarData}
-                keys={showBeforeAfter ? ["Current", "Optimized"] : ["Current"]}
-                height={160}
-                colors={[chartColors.accent3, chartColors.primary]}
-                showLegend={true}
-                showGrid={false}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="h-[180px]">
+                {/* We'll use a div here instead of PieChart since it's not available */}
+                <div className="bg-muted/50 rounded-lg h-full flex items-center justify-center">
+                  <p className="text-xs text-muted-foreground">
+                    Segment visualization
+                  </p>
+                </div>
+              </div>
+              <div className="bg-background/50 rounded-lg p-3">
+                <h5 className="text-xs font-medium mb-2">Segment Analysis</h5>
+                <ul className="space-y-2 text-xs">
+                  {segmentData.map((segment, i) => (
+                    <li key={i} className="flex justify-between">
+                      <span>{segment.name}</span>
+                      <span className="font-medium">{segment.value}%</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
+
+          {showAdvancedView && (
+            <div className="mt-6 bg-muted/30 rounded-lg p-4">
+              <h4 className="text-sm font-medium mb-2">
+                Price Elasticity Curve
+              </h4>
+              <div className="h-[200px]">
+                <LineChart
+                  data={elasticityCurveData.filter((_, i) => i % 2 === 0)} // Use every other point for clarity
+                  keys={["Revenue Impact", "Volume Impact"]}
+                  height={200}
+                  colors={[chartColors.primary, chartColors.accent3]}
+                  showLegend={true}
+                  showGrid={true}
+                />
+              </div>
+              <div className="mt-2 text-xs text-muted-foreground">
+                <p>Optimal price point highlighted at {priceChange}% change</p>
+              </div>
+            </div>
+          )}
         </div>
+
         <div>
           <h1 className="text-4xl font-bold mb-4">
             Dynamic Price Impact Simulator
@@ -272,29 +734,51 @@ export default function PricingSimulations() {
           <p className="text-muted-foreground mb-6">
             Simulate price changes and see the impact on key business metrics in
             real-time. Our AI models calculate elasticity and market response
-            with high accuracy.
+            with high accuracy based on your industry-specific data patterns.
           </p>
+
           <div className="space-y-6">
             <div>
               <div className="flex justify-between mb-2">
-                <label className="block text-sm">Price Change (%)</label>
-                <span className="text-primary font-bold">
+                <label className="block text-sm font-medium">
+                  Price Change (%)
+                </label>
+                <span className="text-primary font-bold text-lg">
                   {priceChange >= 0 ? `+${priceChange}%` : `${priceChange}%`}
                 </span>
               </div>
-              <input
-                type="range"
-                min="-20"
-                max="20"
-                value={priceChange}
-                onChange={(e) => setPriceChange(parseInt(e.target.value))}
-                className="w-full accent-primary"
-                style={{
-                  height: "8px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
-              />
+
+              <div className="relative">
+                <input
+                  type="range"
+                  min="-20"
+                  max="20"
+                  step="1"
+                  value={priceChange}
+                  onChange={(e) => setPriceChange(parseInt(e.target.value))}
+                  className="w-full accent-primary"
+                  style={{
+                    height: "8px",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                />
+
+                {/* Optimal point indicator */}
+                <div
+                  className="absolute top-0 h-5 w-2 bg-primary/70 rounded-full"
+                  style={{
+                    left: `${
+                      ((scenarios.ai_optimal.priceChange + 20) / 40) * 100
+                    }%`,
+                    transform: "translateX(-50%) translateY(-50%)",
+                  }}
+                  title="AI recommended optimal point"
+                >
+                  <div className="h-2 w-2 bg-primary rounded-full absolute -top-1 left-0 animate-ping"></div>
+                </div>
+              </div>
+
               <div className="flex justify-between text-xs mt-1">
                 <span>-20%</span>
                 <span>0%</span>
@@ -302,40 +786,52 @@ export default function PricingSimulations() {
               </div>
             </div>
 
-            {/* Interactive Graph - Line Chart */}
-            <div className="bg-background rounded-lg p-3 h-40">
-              <LineChart
-                data={aiOptimizedData.slice(-10)}
-                keys={["Current", "AIOptimized"]}
-                height={140}
-                colors={[chartColors.accent3, chartColors.primary]}
-                showLegend={false}
-                showGrid={false}
-                interactive={true}
-                dotSize={3}
-              />
+            {/* Competitor Benchmark Chart */}
+            <div className="bg-background rounded-lg p-4">
+              <h4 className="text-sm font-medium mb-2">
+                Market Position Analysis
+              </h4>
+              <div className="h-[180px]">
+                <BarChart
+                  data={competitorData}
+                  keys={
+                    showBeforeAfter
+                      ? ["Current Share", "Projected Share"]
+                      : ["Current Share"]
+                  }
+                  height={180}
+                  colors={[chartColors.accent3, chartColors.primary]}
+                  showLegend={true}
+                  showGrid={false}
+                />
+              </div>
 
               {/* AI recommendation indicator */}
               <div className="flex justify-end mt-1">
                 <div className="text-xs text-primary font-medium flex items-center">
-                  AI Recommended{" "}
+                  AI Optimized Projection{" "}
                   <span className="ml-1 inline-block h-2 w-2 bg-primary rounded-full animate-pulse"></span>
                 </div>
               </div>
             </div>
 
+            {/* Metrics Cards Grid */}
             <div className="grid grid-cols-2 gap-4">
               <SimulationImpactCard
-                label="Projected Revenue Impact"
+                label="Revenue Impact"
                 value={revenueImpact}
                 prefix="+"
                 isPositive={true}
+                description="Projected change in total revenue based on price elasticity and volume"
+                icon={<TrendingUp className="h-4 w-4" />}
               />
               <SimulationImpactCard
-                label="Profit Margin Impact"
+                label="Profit Margin"
                 value={profitImpact}
                 prefix="+"
                 isPositive={true}
+                description="Expected change in profit margins across product portfolio"
+                icon={<TrendingUp className="h-4 w-4" />}
               />
             </div>
 
@@ -345,171 +841,45 @@ export default function PricingSimulations() {
                 value={salesVolume}
                 prefix={salesVolume >= 0 ? "+" : ""}
                 isPositive={salesVolume >= 0}
+                description="Projected change in unit sales based on price elasticity"
+                icon={<ChevronDown className="h-4 w-4" />}
               />
               <SimulationImpactCard
                 label="Market Position"
                 value={marketPosition}
                 prefix="+"
                 isPositive={true}
+                description="Estimated improvement in market share position"
+                icon={<ChevronUp className="h-4 w-4" />}
               />
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="grid md:grid-cols-2 gap-8 items-center">
-        <div className="order-2 md:order-1">
-          <BorderBeam
-            className="h-auto rounded-xl bg-card p-6"
-            beamDuration={8000}
-            beamSize={100}
-          >
-            <SimpleHeading>AI Performance Analysis</SimpleHeading>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-muted rounded-lg p-4 flex flex-col">
-                <h5 className="text-sm font-medium mb-3">
-                  Before AI Optimization
-                </h5>
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="relative h-32 w-32 mx-auto mb-3">
-                      {/* Circular progress indicator */}
-                      <svg className="w-full h-full" viewBox="0 0 100 100">
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="45"
-                          fill="none"
-                          stroke="#e2e8f0"
-                          strokeWidth="8"
-                        />
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="45"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="8"
-                          strokeDasharray="283"
-                          strokeDashoffset="113"
-                          className="text-muted-foreground"
-                          transform="rotate(-90 50 50)"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-2xl font-bold">60%</span>
-                        <span className="text-xs text-muted-foreground">
-                          Efficiency
-                        </span>
-                      </div>
-                    </div>
-                    <p className="text-2xl font-bold">$125,000</p>
-                    <p className="text-xs text-muted-foreground">
-                      Monthly Revenue
-                    </p>
-                  </div>
-                </div>
+            {showAdvancedView && (
+              <div className="grid grid-cols-2 gap-4">
+                <SimulationImpactCard
+                  label="Customer Retention"
+                  value={customerRetention}
+                  prefix={customerRetention >= 0 ? "+" : ""}
+                  isPositive={customerRetention >= 0}
+                  description="Projected impact on customer retention rates"
+                  icon={
+                    customerRetention >= 0 ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )
+                  }
+                />
+                <SimulationImpactCard
+                  label="Competitive Index"
+                  value={competitiveIndex}
+                  prefix="+"
+                  isPositive={true}
+                  description="Relative position against key competitors"
+                  icon={<TrendingUp className="h-4 w-4" />}
+                />
               </div>
-              <div className="bg-primary/10 rounded-lg p-4 flex flex-col relative overflow-hidden">
-                <h5 className="text-sm font-medium mb-3">
-                  After AI Optimization
-                </h5>
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="relative h-32 w-32 mx-auto mb-3">
-                      {/* Circular progress indicator */}
-                      <svg className="w-full h-full" viewBox="0 0 100 100">
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="45"
-                          fill="none"
-                          stroke="#e2e8f0"
-                          strokeWidth="8"
-                        />
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="45"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="8"
-                          strokeDasharray="283"
-                          strokeDashoffset="28"
-                          className="text-primary"
-                          transform="rotate(-90 50 50)"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-2xl font-bold">90%</span>
-                        <span className="text-xs text-primary/70">
-                          Efficiency
-                        </span>
-                      </div>
-                    </div>
-                    <p className="text-2xl font-bold">$187,500</p>
-                    <p className="text-xs text-muted-foreground">
-                      Monthly Revenue
-                    </p>
-                  </div>
-                </div>
-
-                {/* AI Badge */}
-                <div className="absolute top-3 right-3 bg-primary/20 text-primary text-xs py-1 px-2 rounded-full flex items-center">
-                  <Zap className="h-3 w-3 mr-1" />
-                  AI Optimized
-                </div>
-              </div>
-
-              {/* Growth indicators */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-card px-3 py-2 rounded-full shadow-lg">
-                <div className="flex items-center text-green-500 font-bold">
-                  <TrendingUp className="h-4 w-4 mr-1" />
-                  <span>+50%</span>
-                </div>
-              </div>
-            </div>
-          </BorderBeam>
-        </div>
-        <div className="order-1 md:order-2">
-          <SimpleHeading>ML-Driven Pricing Strategy</SimpleHeading>
-          <p className="text-muted-foreground mb-6">
-            Our ML models analyze thousands of market factors in real-time to
-            continuously optimize your pricing strategy for maximum revenue and
-            profit growth.
-          </p>
-          <ul className="space-y-3">
-            <li className="flex items-start">
-              <span className="mr-2 text-primary">✓</span>
-              Dynamic price elasticity modeling
-            </li>
-            <li className="flex items-start">
-              <span className="mr-2 text-primary">✓</span>
-              Predictive analytics for market trends
-            </li>
-            <li className="flex items-start">
-              <span className="mr-2 text-primary">✓</span>
-              Continuous learning from sales performance
-            </li>
-            <li className="flex items-start">
-              <span className="mr-2 text-primary">✓</span>
-              Automatic pricing optimization
-            </li>
-          </ul>
-
-          <div className="mt-6 bg-muted/50 rounded-lg p-4">
-            <div className="flex items-start">
-              <Zap className="h-5 w-5 text-primary mr-3 mt-1" />
-              <div>
-                <h4 className="font-medium mb-1">AI Insight</h4>
-                <p className="text-sm text-muted-foreground">
-                  Our AI suggests a {priceChange > 0 ? priceChange : 5}% price
-                  increase for your premium product line would result in a{" "}
-                  {revenueImpact}% revenue growth with minimal impact on sales
-                  volume.
-                </p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
