@@ -299,7 +299,7 @@ export default function WhyUs() {
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground mb-1">
-                          With PriceIQ
+                          With Malfoy
                         </p>
                         <ul className="text-xs space-y-1">
                           <li className="text-green-500">• 2 hours/month</li>

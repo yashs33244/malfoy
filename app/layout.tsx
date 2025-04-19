@@ -13,7 +13,7 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
-  title: "PriceIQ - Price Smarter. Profit Faster.",
+  title: "Malfoy - Price Smarter. Profit Faster.",
   description:
     "Advanced pricing intelligence platform for competitive market analysis and dynamic pricing strategies.",
   generator: "v0.dev",

@@ -1,18 +1,22 @@
-"use client"
+"use client";
 
-import { Spotlight } from "@/components/ui/spotlight"
-import { GradientText } from "@/components/ui/gradient-text"
-import { RainbowButton } from "@/components/ui/rainbow-button"
-import { useTheme } from "next-themes"
+import { Spotlight } from "@/components/ui/spotlight";
+import { GradientText } from "@/components/ui/gradient-text";
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { useTheme } from "next-themes";
 
 export default function CallToAction() {
-  const { resolvedTheme } = useTheme()
+  const { resolvedTheme } = useTheme();
 
   return (
     <section className="py-20 relative overflow-hidden">
       <Spotlight
         className="top-40 left-0"
-        fill={resolvedTheme === "dark" ? "rgba(121, 82, 179, 0.4)" : "rgba(26, 54, 93, 0.4)"}
+        fill={
+          resolvedTheme === "dark"
+            ? "rgba(121, 82, 179, 0.4)"
+            : "rgba(26, 54, 93, 0.4)"
+        }
       />
 
       <div className="container mx-auto px-4 relative z-10">
@@ -26,7 +30,8 @@ export default function CallToAction() {
           </h2>
 
           <p className="text-xl text-muted-foreground mb-8">
-            Join hundreds of businesses already using PriceIQ to optimize their pricing and increase profits.
+            Join hundreds of businesses already using Malfoy to optimize their
+            pricing and increase profits.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
@@ -53,7 +58,7 @@ export default function CallToAction() {
               </div>
               <div className="ml-4">
                 <p className="font-medium">500+ Businesses</p>
-                <p className="text-sm text-muted-foreground">Trust PriceIQ</p>
+                <p className="text-sm text-muted-foreground">Trust Malfoy</p>
               </div>
             </div>
 
@@ -79,12 +84,14 @@ export default function CallToAction() {
               </div>
               <div className="ml-4">
                 <p className="font-medium">4.9/5 Rating</p>
-                <p className="text-sm text-muted-foreground">From our customers</p>
+                <p className="text-sm text-muted-foreground">
+                  From our customers
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -30,7 +30,7 @@ export function IntegrationOrbits({
     <div
       className={`relative h-80 w-full flex items-center justify-center ${className}`}
     >
-      {/* Center PriceIQ logo */}
+      {/* Center Malfoy logo */}
       <div className="absolute z-10 w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
         <IntegrationIcons.shein className="text-lg" />
       </div>

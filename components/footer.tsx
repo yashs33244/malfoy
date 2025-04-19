@@ -197,7 +197,7 @@ export default function Footer() {
       <div className="pt-6">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} PriceIQ. All rights reserved.
+            &copy; {new Date().getFullYear()} Malfoy. All rights reserved.
           </p>
 
           <div className="flex space-x-6">
