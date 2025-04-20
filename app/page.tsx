@@ -46,7 +46,6 @@ export default function Home() {
 
   return (
     <>
-      <ScrollProgress />
       <Navbar>
         {/* Desktop Navigation */}
         <NavBody>
@@ -54,7 +53,7 @@ export default function Home() {
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
             <NavbarButton variant="secondary">Login</NavbarButton>
-            <NavbarButton variant="primary">Book a call</NavbarButton>
+            <NavbarButton variant="book-call">Book a call</NavbarButton>
           </div>
         </NavBody>
 
@@ -103,17 +102,38 @@ export default function Home() {
       </Navbar>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-cyan-50 to-white dark:from-slate-900 dark:to-black">
-        <Hero />
+
+      <Hero />
+      <div className="text-center pt-10 m-10">
+        <h1 className="text-2xl md:text-4xl lg:text-6xl font-medium leading-tight">
+          <span className="font-extrabold text-black dark:text-white">
+            Automated
+          </span>{" "}
+          <span className="text-gray-400">invoicing for</span>
+          <br />
+          <span className="text-gray-400">the aviation </span>
+          <span className="font-extrabold text-black dark:text-white">
+            industry
+          </span>
+        </h1>
+
+        {/* Colored Chips */}
+        <div className="mt-8 flex justify-center gap-4 flex-wrap">
+          <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-pink-600 bg-pink-100 rounded-2xl border border-pink-300">
+            <span>🧭</span> Efficiency
+          </span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-purple-600 bg-purple-100 rounded-2xl border border-purple-300">
+            <span>🔗</span> Streamline
+          </span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-green-600 bg-green-100 rounded-2xl border border-green-300">
+            <span>⭐</span> Automation
+          </span>
+        </div>
       </div>
 
       {/* Product Showcase Section */}
-      <div
-        id="features"
-        className="bg-gradient-to-br from-viridian-50 to-white dark:from-slate-900 dark:to-black"
-      >
-        <ProductShowcase />
-      </div>
+
+      <ProductShowcase />
 
       {/* Companies Section */}
       <div className="bg-white dark:bg-black py-16">
@@ -125,15 +145,12 @@ export default function Home() {
       </div>
 
       {/* Why Us Section */}
-      <div className="bg-gradient-to-br from-sgbus_green-50 to-white dark:from-slate-900 dark:to-black">
+      <div className="bg-white dark:bg-black">
         <WhyUs />
       </div>
 
       {/* Pricing Section */}
-      <div
-        id="pricing"
-        className="bg-gradient-to-br from-cyan-50 to-white dark:from-slate-900 dark:to-black py-16"
-      >
+      <div id="pricing" className="bg-white dark:bg-black py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto rounded-2xl bg-white/80 dark:bg-slate-900/80 overflow-hidden shadow-lg">
             <div className="p-8">
@@ -153,15 +170,12 @@ export default function Home() {
       </div>
 
       {/* Call To Action Section */}
-      <div className="bg-gradient-to-br from-viridian-50 to-white dark:from-slate-900 dark:to-black">
+      <div className="bg-white dark:bg-black">
         <CallToAction />
       </div>
 
       {/* Early Access Form Section */}
-      <div
-        id="early-access"
-        className="bg-gradient-to-br from-sgbus_green-50 to-white dark:from-slate-900 dark:to-black py-16"
-      >
+      <div id="early-access" className="bg-white dark:bg-black py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto rounded-2xl bg-white/80 dark:bg-slate-900/80 overflow-hidden shadow-lg">
             <div className="p-8">

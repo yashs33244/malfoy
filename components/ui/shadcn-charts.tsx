@@ -24,6 +24,7 @@ import {
   YAxis,
 } from "recharts";
 import { cn } from "@/lib/utils";
+import { Circle } from "lucide-react";
 
 // Color palette for charts
 export const chartColors = {
@@ -441,7 +442,18 @@ export const RadarChart = ({
           {showLegend && (
             <Legend
               verticalAlign="top"
-              wrapperStyle={{ paddingBottom: "10px" }}
+              layout="vertical"
+              align="left"
+              iconSize={10} // smaller icon
+              wrapperStyle={{
+                paddingBottom: "5px",
+                fontSize: "10px", // smaller text
+                lineHeight: "1.5", // reduce vertical spacing
+              }}
+              margin={{ top: 10 }}
+              height={10}
+              chartHeight={10}
+              chartWidth={10}
             />
           )}
           {keys.map((key, index) => (
@@ -455,11 +467,12 @@ export const RadarChart = ({
               dot={{
                 r: 4,
                 fill: colors[index % colors.length],
-                stroke: "white",
+                stroke: "green",
                 strokeWidth: 1,
               }}
               isAnimationActive={true}
               animationDuration={1000}
+              scale="linear"
             />
           ))}
         </RechartsRadarChart>

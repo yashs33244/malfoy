@@ -1,128 +1,122 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import { cn } from "@/lib/utils"
+import createGlobe, { COBEOptions } from "cobe";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-interface GlobeProps {
-  className?: string
-  dotColor?: string
-  glowColor?: string
-  backgroundColor?: string
-  size?: number
-  dotSize?: number
-  dotCount?: number
-  speed?: number
-}
+import { cn } from "@/lib/utils";
+
+const GLOBE_CONFIG: COBEOptions = {
+  width: 800,
+  height: 800,
+  onRender: () => {},
+  devicePixelRatio: 2,
+  phi: 0,
+  theta: 0.3,
+  dark: 0,
+  diffuse: 0.4,
+  mapSamples: 16000,
+  mapBrightness: 1.2,
+  baseColor: [1, 1, 1],
+  markerColor: [251 / 255, 100 / 255, 21 / 255],
+  glowColor: [1, 1, 1],
+  markers: [
+    { location: [14.5995, 120.9842], size: 0.03 },
+    { location: [19.076, 72.8777], size: 0.1 },
+    { location: [23.8103, 90.4125], size: 0.05 },
+    { location: [30.0444, 31.2357], size: 0.07 },
+    { location: [39.9042, 116.4074], size: 0.08 },
+    { location: [-23.5505, -46.6333], size: 0.1 },
+    { location: [19.4326, -99.1332], size: 0.1 },
+    { location: [40.7128, -74.006], size: 0.1 },
+    { location: [34.6937, 135.5022], size: 0.05 },
+    { location: [41.0082, 28.9784], size: 0.06 },
+  ],
+};
 
 export function Globe({
   className,
-  dotColor = "#ffffff",
-  glowColor = "rgba(255, 255, 255, 0.5)",
-  backgroundColor = "transparent",
-  size = 400,
-  dotSize = 2,
-  dotCount = 50,
-  speed = 0.005,
-}: GlobeProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>()
+  config = GLOBE_CONFIG,
+}: {
+  className?: string;
+  config?: COBEOptions;
+}) {
+  let phi = 0;
+  let width = 0;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pointerInteracting = useRef(null);
+  const pointerInteractionMovement = useRef(0);
+  const [r, setR] = useState(0);
+
+  const updatePointerInteraction = (value: any) => {
+    pointerInteracting.current = value;
+    if (canvasRef.current) {
+      canvasRef.current.style.cursor = value ? "grabbing" : "grab";
+    }
+  };
+
+  const updateMovement = (clientX: any) => {
+    if (pointerInteracting.current !== null) {
+      const delta = clientX - pointerInteracting.current;
+      pointerInteractionMovement.current = delta;
+      setR(delta / 200);
+    }
+  };
+
+  const onRender = useCallback(
+    (state: Record<string, any>) => {
+      if (!pointerInteracting.current) phi += 0.005;
+      state.phi = phi + r;
+      state.width = width * 2;
+      state.height = width * 2;
+    },
+    [r]
+  );
+
+  const onResize = () => {
+    if (canvasRef.current) {
+      width = canvasRef.current.offsetWidth;
+    }
+  };
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
+    window.addEventListener("resize", onResize);
+    onResize();
 
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
+    const globe = createGlobe(canvasRef.current!, {
+      ...config,
+      width: width * 2,
+      height: width * 2,
+      onRender,
+    });
 
-    // Set canvas size
-    const dpr = window.devicePixelRatio || 1
-    canvas.width = size * dpr
-    canvas.height = size * dpr
-    ctx.scale(dpr, dpr)
+    setTimeout(() => (canvasRef.current!.style.opacity = "1"));
+    return () => globe.destroy();
+  }, []);
 
-    // Create dots
-    const dots: { x: number; y: number; z: number; radius: number }[] = []
-    for (let i = 0; i < dotCount; i++) {
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.acos(Math.random() * 2 - 1)
-      const radius = (size / 2) * 0.8 // 80% of the globe radius
-
-      dots.push({
-        x: radius * Math.sin(phi) * Math.cos(theta),
-        y: radius * Math.sin(phi) * Math.sin(theta),
-        z: radius * Math.cos(phi),
-        radius: dotSize * (Math.random() * 0.5 + 0.5), // Random size between 50% and 100% of dotSize
-      })
-    }
-
-    let rotation = 0
-
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-      // Draw background
-      if (backgroundColor !== "transparent") {
-        ctx.fillStyle = backgroundColor
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-      }
-
-      // Draw globe
-      const centerX = size / 2
-      const centerY = size / 2
-
-      // Sort dots by z-index for proper rendering
-      const sortedDots = [...dots].sort((a, b) => a.z - b.z)
-
-      // Draw dots
-      sortedDots.forEach((dot) => {
-        // Rotate around Y axis
-        const cosRotation = Math.cos(rotation)
-        const sinRotation = Math.sin(rotation)
-        const x = dot.x * cosRotation - dot.z * sinRotation
-        const z = dot.z * cosRotation + dot.x * sinRotation
-
-        // Project 3D to 2D
-        const scale = size / 2 / (size / 2 - z)
-        const projectedX = centerX + x * scale
-        const projectedY = centerY + dot.y * scale
-
-        // Draw dot
-        ctx.beginPath()
-        ctx.arc(projectedX, projectedY, dot.radius * scale, 0, Math.PI * 2)
-        ctx.fillStyle = dotColor
-        ctx.fill()
-
-        // Draw glow
-        const gradient = ctx.createRadialGradient(
-          projectedX,
-          projectedY,
-          0,
-          projectedX,
-          projectedY,
-          dot.radius * scale * 3,
-        )
-        gradient.addColorStop(0, glowColor)
-        gradient.addColorStop(1, "transparent")
-        ctx.beginPath()
-        ctx.arc(projectedX, projectedY, dot.radius * scale * 3, 0, Math.PI * 2)
-        ctx.fillStyle = gradient
-        ctx.fill()
-      })
-
-      // Update rotation
-      rotation += speed
-
-      animationRef.current = requestAnimationFrame(render)
-    }
-
-    render()
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current)
-      }
-    }
-  }, [size, dotSize, dotCount, dotColor, glowColor, backgroundColor, speed])
-
-  return <canvas ref={canvasRef} className={cn("", className)} style={{ width: size, height: size }} />
+  return (
+    <div
+      className={cn(
+        "absolute inset-0 mx-auto aspect-[1/1] w-full max-w-[600px]",
+        className
+      )}
+    >
+      <canvas
+        className={cn(
+          "size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
+        )}
+        ref={canvasRef}
+        onPointerDown={(e) =>
+          updatePointerInteraction(
+            e.clientX - pointerInteractionMovement.current
+          )
+        }
+        onPointerUp={() => updatePointerInteraction(null)}
+        onPointerOut={() => updatePointerInteraction(null)}
+        onMouseMove={(e) => updateMovement(e.clientX)}
+        onTouchMove={(e) =>
+          e.touches[0] && updateMovement(e.touches[0].clientX)
+        }
+      />
+    </div>
+  );
 }

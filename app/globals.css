@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Mona Sans font */
+@import url('https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+
 @layer base {
   :root {
     --background: 150 15% 96%;
@@ -72,44 +75,55 @@
   }
 }
 
-@font-face {
-  font-family: "SF Pro Display";
-  src: url("/fonts/SF-Pro-Display-Regular.otf") format("opentype");
+/* Mona Sans font styles */
+.mona-sans-regular {
+  font-family: "Mona Sans", sans-serif;
+  font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-variation-settings:
+    "wdth" 100;
 }
 
-@font-face {
-  font-family: "SF Pro Display";
-  src: url("/fonts/SF-Pro-Display-Medium.otf") format("opentype");
+.mona-sans-medium {
+  font-family: "Mona Sans", sans-serif;
+  font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
-  font-display: swap;
+  font-variation-settings:
+    "wdth" 100;
 }
 
-@font-face {
-  font-family: "SF Pro Display";
-  src: url("/fonts/SF-Pro-Display-Bold.otf") format("opentype");
+.mona-sans-semibold {
+  font-family: "Mona Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.mona-sans-bold {
+  font-family: "Mona Sans", sans-serif;
+  font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-variation-settings:
+    "wdth" 100;
 }
 
 @layer base {
   * {
-    @apply border-border;
+    font-family: "Mona Sans", sans-serif;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
+
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: var(--font-kanit);
+    font-family: "Mona Sans", sans-serif;
   }
   p,
   span,
@@ -118,7 +132,7 @@
   button,
   input,
   textarea {
-    font-family: "SF Pro Display", sans-serif;
+    font-family: "Mona Sans", sans-serif;
   }
 }
 
@@ -139,7 +153,6 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--secondary), var(--accent));
   transition: width 0.3s ease;
 }
 
@@ -163,7 +176,7 @@
 .glassmorphism.scrolled {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  background: rgba(255, 255, 255, 0.8);
+  
 }
 
 .dark .glassmorphism.scrolled {

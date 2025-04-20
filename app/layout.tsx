@@ -1,16 +1,9 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Kanit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
 // Import Kanit font with all specified weights
-const kanit = Kanit({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-kanit",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Malfoy - Price Smarter. Profit Faster.",
@@ -26,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${kanit.variable} font-sans antialiased`}>
+      <body className={`font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

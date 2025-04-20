@@ -240,57 +240,98 @@ export default function CompetitiveIntelligence({
   }, [timePeriod]);
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-24 ">
       {/* Real-time Market Analysis with Price Comparison Chart */}
-      <PriceComparisonChart onTriggerAlert={triggerPriceAlert} />
+      <div className="mb-16">
+        <PriceComparisonChart onTriggerAlert={triggerPriceAlert} />
+      </div>
 
       {/* Market Positioning Map */}
-      <MarketPositioningMap marketZones={marketZones} />
+      <div className="mb-16">
+        <h4 className="text-xl font-semibold mb-4">
+          Market Positioning Analysis
+        </h4>
+        <MarketPositioningMap marketZones={marketZones} />
+      </div>
 
       {/* Competitor Timeline */}
-      <CompetitorTimeline
-        points={timelinePoints}
-        startDate="Jan 12"
-        endDate="Apr 18"
-      />
+      <div className="mb-16">
+        <h4 className="text-xl font-semibold mb-4">
+          Competitor Price Timeline
+        </h4>
+        <CompetitorTimeline
+          points={timelinePoints}
+          startDate="Jan 12"
+          endDate="Apr 18"
+        />
+      </div>
 
-      <h3 className="text-2xl font-bold mb-4">Key Features</h3>
-      <BentoGrid className="max-w-4xl mx-auto">
-        {[
-          {
-            title: "Price Alerts",
-            description:
-              "Get notified when competitors change their prices beyond your set thresholds.",
-            icon: <Zap className="h-6 w-6 text-primary" />,
-          },
-          {
-            title: "Trend Analysis",
-            description:
-              "Identify pricing patterns and seasonal trends to stay ahead of the market.",
-            icon: <TrendingUp className="h-6 w-6 text-secondary" />,
-          },
-          {
-            title: "Market Share Tracking",
-            description:
-              "Monitor how your pricing strategy affects your market position over time.",
-            icon: <PieChart className="h-6 w-6 text-accent" />,
-          },
-          {
-            title: "Competitor Timeline",
-            description:
-              "View historical pricing data to understand competitor strategies.",
-            icon: <LineChartIcon className="h-6 w-6 text-primary" />,
-          },
-        ].map((item, i) => (
-          <BentoGridItem
-            key={i}
-            title={item.title}
-            description={item.description}
-            icon={item.icon}
-            className="border border-border"
-          />
-        ))}
-      </BentoGrid>
+      <h3 className="text-2xl font-bold mb-8">Key Features</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
+          <div className="flex items-start mb-4">
+            <div className="mr-4 p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
+              <Zap className="h-6 w-6 text-blue-500" />
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-2">Price Alerts</h4>
+              <p className="text-slate-600 dark:text-slate-400">
+                Get notified when competitors change their prices beyond your
+                set thresholds.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
+          <div className="flex items-start mb-4">
+            <div className="mr-4 p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
+              <TrendingUp className="h-6 w-6 text-blue-500" />
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-2">Trend Analysis</h4>
+              <p className="text-slate-600 dark:text-slate-400">
+                Identify pricing patterns and seasonal trends to stay ahead of
+                the market.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
+          <div className="flex items-start mb-4">
+            <div className="mr-4 p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
+              <PieChart className="h-6 w-6 text-blue-500" />
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-2">
+                Market Share Tracking
+              </h4>
+              <p className="text-slate-600 dark:text-slate-400">
+                Monitor how your pricing strategy affects your market position
+                over time.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
+          <div className="flex items-start mb-4">
+            <div className="mr-4 p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
+              <LineChartIcon className="h-6 w-6 text-blue-500" />
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-2">
+                Competitor Timeline
+              </h4>
+              <p className="text-slate-600 dark:text-slate-400">
+                View historical pricing data to understand competitor
+                strategies.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

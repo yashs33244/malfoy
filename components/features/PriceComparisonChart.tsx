@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Bell } from "lucide-react";
+import { Bell, Check } from "lucide-react";
 import { LineChart, chartColors } from "@/components/ui/shadcn-charts";
+import { FeatureItem } from "../featureItem";
 
 // Define custom colors for each line in graphs
 const customColors = {
@@ -131,30 +132,39 @@ export default function PriceComparisonChart({
   }, [timePeriod]);
 
   return (
-    <div className={`grid md:grid-cols-2 gap-8 items-center ${className}`}>
-      <div>
+    <div className={`w-full space-y-8 ${className}`}>
+      {/* Main content section */}
+      <div className="w-full">
         <h3 className="text-2xl font-bold mb-2">{title}</h3>
         <p className="text-muted-foreground mb-6">
           Monitor your competitors' pricing strategies in real-time and identify
           market opportunities before they do.
         </p>
-        <ul className="space-y-3">
-          <li className="flex items-start">
-            <span className="mr-2 text-primary">✓</span>
-            Track price changes across multiple marketplaces
-          </li>
-          <li className="flex items-start">
-            <span className="mr-2 text-primary">✓</span>
-            Analyze pricing trends and patterns
-          </li>
-          <li className="flex items-start">
-            <span className="mr-2 text-primary">✓</span>
-            Receive alerts for significant market movements
-          </li>
+
+        {/* Feature list */}
+        <ul className="space-y-3 mb-6">
+          <FeatureItem
+            icon={<Check />}
+            title="Track price changes across multiple marketplaces"
+            subtitle="Track price changes across multiple marketplaces"
+            description="Track price changes across multiple marketplaces"
+          />
+          <FeatureItem
+            icon={<Check />}
+            title="Analyze pricing trends and patterns"
+            subtitle="Analyze pricing trends and patterns"
+            description="Analyze pricing trends and patterns"
+          />
+          <FeatureItem
+            icon={<Check />}
+            title="Receive alerts for significant market movements"
+            subtitle="Receive alerts for significant market movements"
+            description="Receive alerts for significant market movements"
+          />
         </ul>
 
         {/* Live Comparison Time Slider */}
-        <div className="mt-6">
+        <div className="mb-6">
           <div className="flex justify-between mb-2">
             <label className="block text-sm">Historical Time Period</label>
             <span className="text-primary font-bold">
@@ -181,7 +191,7 @@ export default function PriceComparisonChart({
         </div>
 
         {/* Price trend chart with ShadCN LineChart */}
-        <div className="mt-6 bg-muted/30 rounded-lg p-4">
+        <div className="mb-6 bg-muted/30 rounded-lg p-4">
           <h4 className="text-sm font-medium mb-2">Price Trends</h4>
           <div className="h-[220px]">
             <LineChart
@@ -211,20 +221,22 @@ export default function PriceComparisonChart({
         {onTriggerAlert && (
           <button
             onClick={onTriggerAlert}
-            className="mt-4 flex items-center bg-muted hover:bg-muted/80 rounded-md px-4 py-2 text-sm"
+            className="flex items-center bg-muted hover:bg-muted/80 rounded-md px-4 py-2 text-sm"
           >
             <Bell className="h-4 w-4 mr-2" />
             Trigger Demo Price Alert
           </button>
         )}
       </div>
-      <div className="border border-border rounded-xl bg-card p-6">
+
+      {/* Competitor Price Comparison section - now positioned below and full width */}
+      <div className="w-full border border-border rounded-xl bg-card p-6">
         <h3 className="text-xl font-bold mb-3">Competitor Price Comparison</h3>
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {competitorData.map((item, i) => (
             <div
               key={i}
-              className="flex justify-between items-center p-2 rounded bg-background"
+              className="flex justify-between items-center p-3 rounded bg-background"
             >
               <div className="flex items-center">
                 <span

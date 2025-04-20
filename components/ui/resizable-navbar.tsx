@@ -8,7 +8,7 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -73,14 +73,14 @@ export const Navbar = ({ children, className }: NavbarProps) => {
     <motion.div
       ref={ref}
       className={cn(
-        "fixed inset-x-0 top-0 z-40 w-full flex justify-center",
+        "fixed inset-x-0 top-0 z-40 w-full flex justify-center m-3",
         className
       )}
     >
       <motion.div
         className="w-full"
         animate={{
-          width: isScrolled ? "60%" : "80%",
+          width: isScrolled ? "60%" : "90%",
         }}
         transition={{
           type: "spring",
@@ -96,6 +96,17 @@ export const Navbar = ({ children, className }: NavbarProps) => {
 };
 
 export const NavBody = ({ children, className }: NavBodyProps) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <motion.div
       style={{
@@ -105,13 +116,11 @@ export const NavBody = ({ children, className }: NavBodyProps) => {
         marginTop: "16px",
       }}
       className={cn(
-        "relative z-[60] flex flex-row items-center justify-between self-start rounded-full lg:flex bg-white/30 dark:bg-neutral-950/30 backdrop-blur-xl",
+        "relative z-[60] flex flex-row items-center justify-between self-start rounded-full lg:flex bg-white transition-shadow duration-300",
+        isScrolled ? "shadow-md" : "",
+        "mx-auto max-w-7xl", // 💥 centers and limits width
         className
       )}
-      animate={{
-        boxShadow:
-          "0 0 24px rgba(34, 42, 53, 0.15), 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(34, 42, 53, 0.08), 0 0 8px rgba(34, 42, 53, 0.12), 0 16px 68px rgba(47, 48, 55, 0.1), 0 1px 0 rgba(255, 255, 255, 0.15) inset",
-      }}
     >
       {children}
     </motion.div>
@@ -125,7 +134,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 lg:flex lg:space-x-2",
+        "flex-1 flex flex-row items-center justify-start space-x-2 text-sm font-medium text-zinc-600 ml-6",
         className
       )}
     >
@@ -133,14 +142,14 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <a
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
+          className="relative px-4 py-2 text-neutral-600 hover:text-black transition-colors"
           key={`link-${idx}`}
           href={item.link}
         >
           {hovered === idx && (
             <motion.div
               layoutId="hovered"
-              className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
+              className="absolute inset-0 h-full w-full rounded-full bg-gray-100"
               transition={{
                 type: "spring",
                 stiffness: 300,
@@ -165,7 +174,7 @@ export const MobileNav = ({ children, className }: MobileNavProps) => {
         marginTop: "16px",
       }}
       className={cn(
-        "relative z-50 flex flex-col items-center justify-between py-2 lg:hidden rounded-full bg-white/30 dark:bg-neutral-950/30 backdrop-blur-xl",
+        "relative z-50 flex flex-col items-center justify-between py-2 lg:hidden rounded-full bg-white shadow-md",
         className
       )}
       animate={{
@@ -212,7 +221,7 @@ export const MobileNavMenu = ({
             ease: "easeInOut",
           }}
           className={cn(
-            "absolute inset-x-0 mx-auto top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white/30 backdrop-blur-xl px-4 py-8 dark:bg-neutral-950/30",
+            "absolute inset-x-0 mx-auto top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-md",
             className
           )}
           style={{
@@ -236,9 +245,9 @@ export const MobileNavToggle = ({
   onClick: () => void;
 }) => {
   return isOpen ? (
-    <IconX className="text-black dark:text-white" onClick={onClick} />
+    <IconX className="text-black" onClick={onClick} />
   ) : (
-    <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
+    <IconMenu2 className="text-black" onClick={onClick} />
   );
 };
 
@@ -246,15 +255,18 @@ export const NavbarLogo = () => {
   return (
     <a
       href="#"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
+      className="relative z-20 flex items-center space-x-2 font-normal text-black"
     >
-      <img
-        src="https://ysingla.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fe12b42ac-4e54-476f-a4f5-7d6bdb1e61e2%2F714beba9-2afc-440e-b1c8-8d95f9c03bda%2Fproductnerd_a_modern_logo_for_a_company_called_greenmind_that_2b7c439c-f8f7-48bc-8446-0d129b699a3f_2-removebg-preview.png?table=block&id=1cfe6255-f338-81c4-9a65-c21f3b88d852&spaceId=e6b92090-480d-4e79-a4a6-82eca60a06b3&width=250&userId=&cache=v2"
-        alt="logo"
-        width={30}
-        height={30}
-      />
-      <span className="font-bold text-black dark:text-white ">Malfoy</span>
+      <div className="w-10 h-10 rounded-full flex items-center justify-center">
+        <img
+          src="https://ysingla.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fe12b42ac-4e54-476f-a4f5-7d6bdb1e61e2%2F714beba9-2afc-440e-b1c8-8d95f9c03bda%2Fproductnerd_a_modern_logo_for_a_company_called_greenmind_that_2b7c439c-f8f7-48bc-8446-0d129b699a3f_2-removebg-preview.png?table=block&id=1cfe6255-f338-81c4-9a65-c21f3b88d852&spaceId=e6b92090-480d-4e79-a4a6-82eca60a06b3&width=250&userId=&cache=v2"
+          alt="logo"
+          width={45}
+          height={45}
+          className="object-contain"
+        />
+      </div>
+      <span className="font-bold text-black">Malfoy</span>
     </a>
   );
 };
@@ -271,21 +283,23 @@ export const NavbarButton = ({
   as?: React.ElementType;
   children: React.ReactNode;
   className?: string;
-  variant?: "primary" | "secondary" | "dark" | "gradient";
+  variant?: "primary" | "secondary" | "dark" | "gradient" | "book-call";
 } & (
   | React.ComponentPropsWithoutRef<"a">
   | React.ComponentPropsWithoutRef<"button">
 )) => {
   const baseStyles =
-    "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer inline-block text-center";
+    "px-4 py-2 rounded-md bg-white button text-sm font-bold relative cursor-pointer inline-block text-center";
 
   const variantStyles = {
     primary:
-      "shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
-    secondary: "bg-transparent shadow-none dark:text-white",
+      "shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] text-black",
+    secondary: "bg-transparent shadow-none text-black",
     dark: "bg-black text-white shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
     gradient:
       "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
+    "book-call":
+      "bg-black text-white rounded-full hover:bg-gray-800 transition-colors",
   };
 
   return (
