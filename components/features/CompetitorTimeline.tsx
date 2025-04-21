@@ -28,12 +28,12 @@ export default function CompetitorTimeline({
   );
 
   return (
-    <div className={`bg-card border border-border rounded-xl p-6 ${className}`}>
-      <h3 className="text-2xl font-bold mb-4">Competitor Timeline</h3>
-
-      <div className="relative h-24">
+    <div
+      className={`bg-gray-100 border border-gray-200 rounded-xl p-6 ${className}`}
+    >
+      <div className="relative h-48">
         <div className="absolute inset-0 flex items-center">
-          <div className="h-0.5 w-full bg-muted"></div>
+          <div className="h-0.5 w-full bg-gray-300 mt-16"></div>
         </div>
 
         {/* Timeline points */}
@@ -45,40 +45,40 @@ export default function CompetitorTimeline({
           return (
             <div
               key={point.id}
-              className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 rounded-full cursor-pointer transition-all
+              className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 rounded-full cursor-pointer transition-all mt-8
                 ${
                   isActive
-                    ? "bg-primary shadow-lg shadow-primary/30 scale-110"
-                    : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                    ? "bg-green-500 shadow-lg shadow-green-500/30 scale-110"
+                    : "bg-gray-400 hover:bg-gray-500"
                 }`}
               style={{ left: `${position}%` }}
               onMouseEnter={() => setActiveTimelinePoint(point.id)}
               onMouseLeave={() => setActiveTimelinePoint(null)}
             >
               <div
-                className={`absolute -top-14 -left-16 w-32 bg-card border border-border p-2 rounded text-xs
-                transition-opacity duration-150 z-10
+                className={`absolute -top-14 -left-16 w-32 bg-white border border-gray-200 p-2 rounded-lg text-xs
+                transition-opacity duration-150 z-10 shadow-md
                 ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}`}
               >
-                <div className="font-medium">{point.date}</div>
-                <div className="text-muted-foreground">{point.description}</div>
+                <div className="font-medium text-black">{point.date}</div>
+                <div className="text-gray-600">{point.description}</div>
               </div>
             </div>
           );
         })}
 
         {/* Date labels */}
-        <div className="absolute -bottom-6 left-0 text-xs text-muted-foreground">
+        <div className="absolute -bottom-6 left-0 text-xs text-gray-500">
           {startDate}
         </div>
-        <div className="absolute -bottom-6 right-0 text-xs text-muted-foreground">
+        <div className="absolute -bottom-6 right-0 text-xs text-gray-500">
           {endDate}
         </div>
       </div>
 
       <div className="mt-12 flex justify-center">
-        <p className="text-sm bg-muted/50 p-3 rounded-lg inline-block flex items-center">
-          <Info className="h-4 w-4 mr-2 text-primary" />
+        <p className="text-sm bg-gray-100 p-3 rounded-lg inline-block flex items-center border border-gray-200">
+          <Info className="h-4 w-4 mr-2 text-green-500" />
           Hover over timeline points to see competitor price changes and
           important market events
         </p>

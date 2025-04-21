@@ -377,9 +377,11 @@ export default function PricingSimulations() {
   );
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-12">
+      {/* Header and Section Title */}
+
       {/* Industry Selection */}
-      <section className=" rounded-xl p-6 md:p-8 ">
+      <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
         <h3 className="text-xl font-semibold mb-6">Select Your Industry</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <IndustryCard
@@ -423,27 +425,25 @@ export default function PricingSimulations() {
             onClick={setIndustry}
           />
         </div>
-      </section>
+      </div>
 
       {/* Main content */}
-      <div className="grid md:grid-cols-2 gap-12">
-        {/* Left Column: Revenue Optimizer */}
-        <section className="space-y-8">
-          <div className="rounded-xl p-6 ">
-            <h3 className="text-xl font-semibold mb-6">
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* Left Column */}
+        <div className="space-y-8">
+          {/* Revenue Optimizer */}
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <h3 className="text-xl font-semibold mb-4">
               AI-Powered Revenue Optimizer
             </h3>
-            <p className="text-slate-600 dark:text-slate-400 mb-8">
-              Our advanced ML algorithms analyze market data, competitor
-              pricing, and customer behavior to simulate different pricing
+            <p className="text-slate-600 dark:text-slate-400 mb-6">
+              Advanced algorithms analyze market data to simulate pricing
               strategies.
             </p>
 
             {/* Scenario Selection */}
-            <div className="mb-8">
-              <h4 className="text-base font-medium mb-4">
-                Choose Pricing Scenario
-              </h4>
+            <div className="mb-6">
+              <h4 className="text-base font-medium mb-4">Pricing Scenario</h4>
               <ScenarioSelector
                 scenarios={scenarios}
                 selectedScenario={selectedScenario}
@@ -452,8 +452,8 @@ export default function PricingSimulations() {
             </div>
 
             {/* Time Period Selection */}
-            <div className="mb-8">
-              <h4 className="text-base font-medium mb-4">Select Time Period</h4>
+            <div className="mb-6">
+              <h4 className="text-base font-medium mb-4">Time Period</h4>
               <TimePeriodSelector
                 timeframe={timeframe}
                 setTimeframe={setTimeframe}
@@ -461,7 +461,7 @@ export default function PricingSimulations() {
             </div>
 
             {/* Toggle Button for Before/After View */}
-            <div className="mb-8">
+            <div className="mb-6">
               <h4 className="text-base font-medium mb-4">Comparison View</h4>
               <ToggleSwitch
                 enabled={showBeforeAfter}
@@ -470,63 +470,32 @@ export default function PricingSimulations() {
                 rightLabel="AI Optimized"
               />
             </div>
-
-            {/* AI-Optimized Revenue Forecast Chart */}
-            <div className="mb-8">
-              <h4 className="text-base font-medium mb-4">Revenue Forecast</h4>
-              <RevenueForecastChart
-                data={revenueData}
-                timeframe={timeframe}
-                showComparison={showBeforeAfter}
-              />
-            </div>
           </div>
 
-          {/* Customer Segments Analysis */}
-          <div className="bg-slate-50 dark:bg-slate-800/30 rounded-xl p-6 md:p-8 border border-slate-200 dark:border-slate-700">
-            <h4 className="text-base font-medium mb-6">
-              Customer Segment Analysis
-            </h4>
-            <div className="bg-white dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
-              <h5 className="text-sm font-medium mb-4">Segment Distribution</h5>
-              <ul className="space-y-3 text-sm">
-                {segmentData.map((segment, i) => (
-                  <li key={i} className="flex justify-between items-center">
-                    <span className="text-slate-700 dark:text-slate-300">
-                      {segment.name}
-                    </span>
-                    <div className="flex items-center">
-                      <div className="w-36 h-2 bg-slate-100 dark:bg-slate-700 rounded-full mr-3">
-                        <div
-                          className="h-2 bg-blue-500 rounded-full"
-                          style={{ width: `${segment.value}%` }}
-                        ></div>
-                      </div>
-                      <span className="font-medium text-slate-900 dark:text-white w-12 text-right">
-                        {segment.value}%
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* Revenue Forecast Chart */}
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <h4 className="text-base font-medium mb-4">Revenue Forecast</h4>
+            <RevenueForecastChart
+              data={revenueData}
+              timeframe={timeframe}
+              showComparison={showBeforeAfter}
+            />
           </div>
-        </section>
+        </div>
 
-        {/* Right Column: Price Impact Simulator */}
-        <section className="space-y-8">
-          <div className="bg-slate-50 dark:bg-slate-800/30 rounded-xl p-6 md:p-8 border border-slate-200 dark:border-slate-700">
-            <h3 className="text-xl font-semibold mb-6">
+        {/* Right Column */}
+        <div className="space-y-8">
+          {/* Price Impact Simulator */}
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <h3 className="text-xl font-semibold mb-4">
               Dynamic Price Impact Simulator
             </h3>
-            <p className="text-slate-600 dark:text-slate-400 mb-8">
-              Simulate price changes and see the impact on key business metrics
-              in real-time. Our AI models calculate elasticity and market
-              response with high accuracy.
+            <p className="text-slate-600 dark:text-slate-400 mb-6">
+              Adjust prices and see real-time impact on key business metrics.
             </p>
 
             {/* Price Slider */}
-            <div className="mb-8">
+            <div className="mb-6">
               <h4 className="text-base font-medium mb-4">
                 Adjust Price Change
               </h4>
@@ -537,39 +506,8 @@ export default function PricingSimulations() {
               />
             </div>
 
-            {/* Market Position Analysis */}
-            <div className="mb-8">
-              <h4 className="text-base font-medium mb-4">
-                Market Position Analysis
-              </h4>
-              <div className="bg-white dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
-                <div className="h-[220px]">
-                  <BarChart
-                    data={competitorData}
-                    keys={
-                      showBeforeAfter
-                        ? ["Current Share", "Projected Share"]
-                        : ["Current Share"]
-                    }
-                    height={220}
-                    colors={[chartColors.accent3, chartColors.primary]}
-                    showLegend={true}
-                    showGrid={false}
-                  />
-                </div>
-                {showBeforeAfter && (
-                  <div className="flex justify-end mt-2">
-                    <div className="text-xs text-blue-500 font-medium flex items-center">
-                      AI Optimized Projection{" "}
-                      <span className="ml-1 inline-block h-2 w-2 bg-blue-500 rounded-full animate-pulse"></span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Impact Metrics */}
-            <div>
+            {/* Impact Metrics - First Row */}
+            <div className="mb-6">
               <h4 className="text-base font-medium mb-4">Impact Metrics</h4>
               <div className="grid grid-cols-2 gap-4">
                 <SimulationImpactCard
@@ -577,7 +515,7 @@ export default function PricingSimulations() {
                   value={revenueImpact}
                   prefix="+"
                   isPositive={true}
-                  description="Projected change in total revenue based on price elasticity and volume"
+                  description="Projected change in total revenue"
                   icon={<TrendingUp className="h-4 w-4" />}
                 />
                 <SimulationImpactCard
@@ -585,7 +523,7 @@ export default function PricingSimulations() {
                   value={profitImpact}
                   prefix="+"
                   isPositive={true}
-                  description="Expected change in profit margins across product portfolio"
+                  description="Expected change in profit margins"
                   icon={<TrendingUp className="h-4 w-4" />}
                 />
               </div>
@@ -595,7 +533,7 @@ export default function PricingSimulations() {
                   value={salesVolume}
                   prefix={salesVolume >= 0 ? "+" : ""}
                   isPositive={salesVolume >= 0}
-                  description="Projected change in unit sales based on price elasticity"
+                  description="Projected change in unit sales"
                   icon={<ChevronDown className="h-4 w-4" />}
                 />
                 <SimulationImpactCard
@@ -603,13 +541,67 @@ export default function PricingSimulations() {
                   value={marketPosition}
                   prefix="+"
                   isPositive={true}
-                  description="Estimated improvement in market share position"
+                  description="Estimated market share position"
                   icon={<ChevronUp className="h-4 w-4" />}
                 />
               </div>
             </div>
           </div>
-        </section>
+
+          {/* Market Position Analysis */}
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <h4 className="text-base font-medium mb-4">
+              Market Position Analysis
+            </h4>
+            <div className="bg-white dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+              <div className="h-[220px]">
+                <BarChart
+                  data={competitorData}
+                  keys={
+                    showBeforeAfter
+                      ? ["Current Share", "Projected Share"]
+                      : ["Current Share"]
+                  }
+                  height={220}
+                  colors={[chartColors.accent3, chartColors.primary]}
+                  showLegend={true}
+                  showGrid={false}
+                />
+              </div>
+              {showBeforeAfter && (
+                <div className="flex justify-end mt-2">
+                  <div className="text-xs text-blue-500 font-medium flex items-center">
+                    AI Optimized Projection{" "}
+                    <span className="ml-1 inline-block h-2 w-2 bg-blue-500 rounded-full animate-pulse"></span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Additional Impact Card for Symmetry */}
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <h4 className="text-base font-medium mb-4">Additional Metrics</h4>
+            <div className="grid grid-cols-2 gap-4">
+              <SimulationImpactCard
+                label="Customer Retention"
+                value={customerRetention}
+                prefix={customerRetention >= 0 ? "+" : ""}
+                isPositive={customerRetention >= 0}
+                description="Change in customer retention rate"
+                icon={<ThumbsUp className="h-4 w-4" />}
+              />
+              <SimulationImpactCard
+                label="Competitive Index"
+                value={competitiveIndex}
+                prefix="+"
+                isPositive={true}
+                description="Relative position to competitors"
+                icon={<TrendingUp className="h-4 w-4" />}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

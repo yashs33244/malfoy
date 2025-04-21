@@ -56,3 +56,20 @@ export interface Scenarios {
 
 // Define type for timeframe
 export type TimeframeType = "monthly" | "quarterly" | "weekly";
+
+export interface TimelinePoint {
+  id: number;
+  date: string;
+  description: string;
+  isHighlighted: boolean;
+  priceChange?: number;
+  marketImpact?: string;
+}
+
+export interface CompetitorTimelineProps {
+  points: TimelinePoint[];
+  startDate: string;
+  endDate: string;
+  className?: string;
+  onPointSelect?: (priceChange: number) => void;
+}

@@ -43,14 +43,13 @@ export default function ProductShowcase() {
 
         {/* Feature 2: Pricing Simulations */}
         <div className="mb-32">
-          <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800">
+          <div className="flex-1 flex flex-col md:flex-row items-center py-8 md:py-12 gap-8 md:gap-12 bg-[#f3f3f3] dark:bg-[#121212] rounded-3xl border border-slate-200 dark:border-slate-700 shadow-lg">
             <div className="p-8 md:p-12">
-              <div className="mb-8">
-                <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                  Pricing Simulations
-                </h3>
-              </div>
-              <div className="bg-slate-50 dark:bg-slate-800/40 p-6 rounded-xl">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                Pricing Simulations
+              </h3>
+
+              <div className="dark:bg-slate-800/40 p-6 rounded-xl">
                 <PricingSimulations />
               </div>
             </div>
@@ -62,8 +61,8 @@ export default function ProductShowcase() {
 
         {/* Feature 3: Automated Dynamic Pricing */}
         <div className="mb-16">
-          <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800">
-            <div className="p-8 md:p-12">
+          <div className="">
+            <div className="">
               <div className="mb-8">
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">
                   Automated Dynamic Pricing
