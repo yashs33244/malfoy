@@ -6,6 +6,7 @@ import { RadarChart, chartColors } from "@/components/ui/shadcn-charts";
 import { Check } from "lucide-react";
 import { SmallFeatureItem } from "./small-featureitem";
 import { TextRevealByWord } from "../ui/text-reveal";
+import { Text_03 } from "../ui/wave-text";
 
 interface MarketZone {
   id: number;
@@ -32,7 +33,7 @@ export default function MarketPositioningMap({
   className = "",
 }: MarketPositioningMapProps) {
   const [selectedMarketZone, setSelectedMarketZone] =
-    useState<MarketZone | null>(null);
+    useState<MarketZone | null>(marketZones[0]);
 
   // Create radar chart data from market zones
   const radarData = [
@@ -155,22 +156,31 @@ export default function MarketPositioningMap({
             </div>
             {/* List of clickable market zones */}
             <div className="grid grid-cols-5 gap-2">
-              {marketZones.map((zone) => (
-                <div
-                  key={zone.id}
-                  className={`${
-                    zone.className
-                  } cursor-pointer hover:brightness-105 rounded-md p-2 text-center text-sm ${
-                    selectedMarketZone?.id === zone.id
-                      ? "ring-2 ring-primary"
-                      : ""
-                  }`}
-                  onClick={() => handleZoneClick(zone)}
-                >
-                  <span className={zone.textColor}>{zone.name}</span>
-                </div>
-              ))}
+              {marketZones.map((zone) => {
+                const isSelected = selectedMarketZone?.id === zone.id;
+                return (
+                  <div
+                    key={zone.id}
+                    className={`transition-all duration-200 ease-in-out transform cursor-pointer 
+          hover:scale-[1.03] 
+          rounded-full p-2 text-center text-sm
+          ${zone.className}
+          ${isSelected ? "shadow-[0_0_0.2rem] shadow-current" : ""}
+          hover:shadow-[0_0_0.6rem] hover:shadow-current`}
+                    onClick={() => handleZoneClick(zone)}
+                  >
+                    <span
+                      className={`transition-colors duration-200 ${
+                        isSelected ? "" : zone.textColor
+                      }`}
+                    >
+                      {zone.name}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
+
             {/* Fixed height container for selected zone info to prevent layout shifts */}
             <div className="h-32">
               {selectedMarketZone && (
@@ -230,11 +240,6 @@ export default function MarketPositioningMap({
               description="Receive alerts for significant market movements"
             />
           </ul>
-          <p className="text-sm mt-4 bg-[#f3f3f3] p-3 rounded-lg">
-            <span className="font-medium">Try it:</span> View the radar chart to
-            see how your product compares to different market segments across
-            multiple factors.
-          </p>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ import { ArrowDown } from "lucide-react";
 export default function ProductShowcase() {
   return (
     <section id="features" className="py-12 md:py-20 relative">
-      <div className="container mx-auto px-4">
+      <div className="m-5">
         <div className="max-w-5xl mx-auto mb-16 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Our Platform Features
@@ -44,7 +44,7 @@ export default function ProductShowcase() {
         {/* Feature 2: Pricing Simulations */}
         <div className="mb-32">
           <div className="flex-1 flex flex-col md:flex-row items-center py-8 md:py-12 gap-8 md:gap-12 bg-[#f3f3f3] dark:bg-[#121212] rounded-3xl border border-slate-200 dark:border-slate-700 shadow-lg">
-            <div className="p-8 md:p-12">
+            <div className="ml-8">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
                 Pricing Simulations
               </h3>

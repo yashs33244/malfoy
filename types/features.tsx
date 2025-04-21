@@ -73,3 +73,35 @@ export interface CompetitorTimelineProps {
   className?: string;
   onPointSelect?: (priceChange: number) => void;
 }
+
+export interface ScenarioSelectorProps {
+  scenarios: {
+    [key: string]: Scenario;
+  };
+  selectedScenario: string;
+  onSelect: (scenario: string) => void;
+}
+
+export interface TimePeriodSelectorProps {
+  timeframe: TimeframeType;
+  setTimeframe: (timeframe: TimeframeType) => void;
+}
+
+export interface ToggleSwitchProps {
+  enabled: boolean;
+  onChange: () => void;
+  leftLabel: string;
+  rightLabel: string;
+}
+
+export interface PriceSliderProps {
+  value: number;
+  onChange: (value: number) => void;
+  optimalPoint: number;
+}
+
+export interface RevenueForecastChartProps {
+  data: ChartDataPoint[];
+  timeframe: TimeframeType;
+  showComparison: boolean;
+}

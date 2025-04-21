@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import SimpleHeading from "./SimpleHeading";
 import { RadarChart, generateMarketData } from "@/components/ui/charts";
 import { IntegrationOrbits } from "./IntegrationOrbits";
+import { SmallFeatureItem } from "./small-featureitem";
+import { Clock, DollarSign, Users } from "lucide-react";
 
 interface PricingRule {
   id: string;
@@ -188,24 +190,27 @@ export default function AutomatedPricing() {
               metrics in real-time.
             </p>
             <ul className="space-y-4">
-              <li className="flex items-start">
-                <span className="mr-2 text-blue-500">✓</span>
-                <span className="text-slate-700 dark:text-slate-300">
-                  Set up rule-based pricing automation
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-blue-500">✓</span>
-                <span className="text-slate-700 dark:text-slate-300">
-                  Define custom triggers and conditions
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-blue-500">✓</span>
-                <span className="text-slate-700 dark:text-slate-300">
-                  Implement guardrails to protect margins
-                </span>
-              </li>
+              <SmallFeatureItem
+                title="Market Share"
+                subtitle="Increase market share by 15%"
+                description="Automatically adjust prices to gain a larger share of the market"
+                icon={<Users className="h-5 w-5" />}
+                dark={true}
+              />
+              <SmallFeatureItem
+                title="Price Competitiveness"
+                subtitle="Increase price competitiveness by 10%"
+                description="Automatically adjust prices to be more competitive"
+                icon={<DollarSign className="h-5 w-5" />}
+                dark={true}
+              />
+              <SmallFeatureItem
+                title="Speed"
+                subtitle="Increase speed by 15%"
+                description="Automatically adjust prices to be more competitive"
+                icon={<Clock className="h-5 w-5" />}
+                dark={true}
+              />
             </ul>
           </div>
 
