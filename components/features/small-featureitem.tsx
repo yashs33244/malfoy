@@ -8,7 +8,7 @@ interface FeatureCardProps {
   dark?: boolean;
 }
 
-export const FeatureItem = ({
+export const SmallFeatureItem = ({
   icon,
   title,
   subtitle,
@@ -17,7 +17,7 @@ export const FeatureItem = ({
 }: FeatureCardProps) => {
   return (
     <div
-      className={`flex items-center justify-between p-4 rounded-full transition-all duration-400 cursor-pointer group shadow-sm ${
+      className={`flex items-center justify-between p-3 rounded-full transition-all duration-400 cursor-pointer group shadow-sm ${
         dark
           ? "bg-black text-white hover:bg-black/90"
           : "bg-gray-100 hover:bg-black"
@@ -25,7 +25,7 @@ export const FeatureItem = ({
     >
       <div className="flex items-start gap-4 flex-1">
         {/* Icon container */}
-        <div className="w-11 h-10 mt-2 ml-2 mr-2 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:drop-shadow-[0_0_8px_rgba(0,0,255,0.7)]">
+        <div className="w-8 h-7 mt-3 ml-2 mr-2 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:drop-shadow-[0_0_8px_rgba(0,0,255,0.7)]">
           <div className="text-blue-500 group-hover:text-blue-600 transition-all">
             {icon}
           </div>

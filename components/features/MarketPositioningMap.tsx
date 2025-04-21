@@ -3,6 +3,9 @@
 import { useState } from "react";
 import SimpleHeading from "./SimpleHeading";
 import { RadarChart, chartColors } from "@/components/ui/shadcn-charts";
+import { Check } from "lucide-react";
+import { SmallFeatureItem } from "./small-featureitem";
+import { TextRevealByWord } from "../ui/text-reveal";
 
 interface MarketZone {
   id: number;
@@ -117,117 +120,122 @@ export default function MarketPositioningMap({
   };
 
   return (
-    <div className={`grid md:grid-cols-2 gap-8 items-start ${className}`}>
-      <div className="order-2 md:order-1">
-        {/* Fixed height container to prevent layout shifts */}
-        <div className="flex flex-col space-y-4">
-          {/* Radar Chart with increased height */}
-          <div className="relative h-96 rounded-xl overflow-hidden bg-[#f3f3f3] m-2">
-            <RadarChart
-              data={radarData}
-              keys={[
-                "Your_Product",
-                "Premium_Market",
-                "Value_Market",
-                "Budget_Market",
-                "Luxury_Market",
-              ]}
-              height={380}
-              colors={[
-                chartColors.primary,
-                chartColors.secondary,
-                chartColors.tertiary,
-                chartColors.quaternary,
-                chartColors.accent1,
-              ]}
-              showGrid={true}
-              showTooltip={true}
-              showLegend={true}
-            />
-          </div>
-
-          {/* List of clickable market zones */}
-          <div className="grid grid-cols-5 gap-2">
-            {marketZones.map((zone) => (
-              <div
-                key={zone.id}
-                className={`${
-                  zone.className
-                } cursor-pointer hover:brightness-105 rounded-md p-2 text-center text-sm ${
-                  selectedMarketZone?.id === zone.id
-                    ? "ring-2 ring-primary"
-                    : ""
-                }`}
-                onClick={() => handleZoneClick(zone)}
-              >
-                <span className={zone.textColor}>{zone.name}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Fixed height container for selected zone info to prevent layout shifts */}
-          <div className="h-32">
-            {selectedMarketZone && (
-              <div className="bg-[#f3f3f3] shadow border border-gray-200 p-4 rounded-lg">
-                <div className="flex justify-between mb-2">
-                  <h4 className="text-lg font-medium">
-                    {selectedMarketZone.name}
-                  </h4>
-                  <button
-                    onClick={() => setSelectedMarketZone(null)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
-                    ✕
-                  </button>
+    <div>
+      <TextRevealByWord
+        text="Visualize your position in the market across different regions and product categories."
+        className="text-2xl md:text-3xl font-bold mb-4"
+      />
+      <div className={`grid md:grid-cols-2 gap-8 items-start ${className}`}>
+        <div className="order-2 md:order-1">
+          {/* Fixed height container to prevent layout shifts */}
+          <div className="flex flex-col space-y-4">
+            {/* Radar Chart with increased height */}
+            <div className="relative h-96 rounded-xl overflow-hidden bg-[#f3f3f3] m-2">
+              <RadarChart
+                data={radarData}
+                keys={[
+                  "Your_Product",
+                  "Premium_Market",
+                  "Value_Market",
+                  "Budget_Market",
+                  "Luxury_Market",
+                ]}
+                height={380}
+                colors={[
+                  chartColors.primary,
+                  chartColors.secondary,
+                  chartColors.tertiary,
+                  chartColors.quaternary,
+                  chartColors.accent1,
+                ]}
+                showGrid={true}
+                showTooltip={true}
+                showLegend={true}
+              />
+            </div>
+            {/* List of clickable market zones */}
+            <div className="grid grid-cols-5 gap-2">
+              {marketZones.map((zone) => (
+                <div
+                  key={zone.id}
+                  className={`${
+                    zone.className
+                  } cursor-pointer hover:brightness-105 rounded-md p-2 text-center text-sm ${
+                    selectedMarketZone?.id === zone.id
+                      ? "ring-2 ring-primary"
+                      : ""
+                  }`}
+                  onClick={() => handleZoneClick(zone)}
+                >
+                  <span className={zone.textColor}>{zone.name}</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-sm">
-                  <div>
-                    <p className="text-gray-500">Price</p>
-                    <p className="font-medium">{selectedMarketZone.price}</p>
+              ))}
+            </div>
+            {/* Fixed height container for selected zone info to prevent layout shifts */}
+            <div className="h-32">
+              {selectedMarketZone && (
+                <div className="bg-[#f3f3f3] shadow border border-gray-200 p-4 rounded-lg">
+                  <div className="flex justify-between mb-2">
+                    <h4 className="text-lg font-medium">
+                      {selectedMarketZone.name}
+                    </h4>
+                    <button
+                      onClick={() => setSelectedMarketZone(null)}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      ✕
+                    </button>
                   </div>
-                  <div>
-                    <p className="text-gray-500">Competitors</p>
-                    <p className="font-medium">
-                      {selectedMarketZone.competitors}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Opportunity</p>
-                    <p className="font-medium">
-                      {selectedMarketZone.opportunity}
-                    </p>
+                  <div className="grid grid-cols-3 gap-2 text-sm">
+                    <div>
+                      <p className="text-gray-500">Price</p>
+                      <p className="font-medium">{selectedMarketZone.price}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Competitors</p>
+                      <p className="font-medium">
+                        {selectedMarketZone.competitors}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Opportunity</p>
+                      <p className="font-medium">
+                        {selectedMarketZone.opportunity}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="order-1 md:order-2">
-        <SimpleHeading>Market Positioning Map</SimpleHeading>
-        <p className="text-gray-500 mb-6">
-          Visualize your position in the market relative to competitors across
-          different regions and product categories.
-        </p>
-        <ul className="space-y-3">
-          <li className="flex items-start">
-            <span className="mr-2 text-primary">✓</span>
-            Identify underserved market segments
-          </li>
-          <li className="flex items-start">
-            <span className="mr-2 text-primary">✓</span>
-            Spot pricing opportunities by region
-          </li>
-          <li className="flex items-start">
-            <span className="mr-2 text-primary">✓</span>
-            Track market share changes over time
-          </li>
-        </ul>
-        <p className="text-sm mt-4 bg-[#f3f3f3] p-3 rounded-lg">
-          <span className="font-medium">Try it:</span> View the radar chart to
-          see how your product compares to different market segments across
-          multiple factors.
-        </p>
+        <div className="order-1 md:order-2">
+          <ul className="space-y-8 mt-10">
+            <SmallFeatureItem
+              icon={<Check className="w-4 h-4 text-blue-500 font-bold" />}
+              title="Track price changes "
+              subtitle="Monitor competitors in real-time"
+              description="Track price changes across multiple marketplaces"
+            />
+            <SmallFeatureItem
+              icon={<Check className="w-4 h-4 text-blue-500 font-bold" />}
+              title="Analyze pricing trends and patterns"
+              subtitle="Identify market opportunities"
+              description="Analyze pricing trends and patterns"
+            />
+            <SmallFeatureItem
+              icon={<Check className="w-4 h-4 text-blue-500 font-sm" />}
+              title="Receive alerts"
+              subtitle="Stay ahead of market changes"
+              description="Receive alerts for significant market movements"
+            />
+          </ul>
+          <p className="text-sm mt-4 bg-[#f3f3f3] p-3 rounded-lg">
+            <span className="font-medium">Try it:</span> View the radar chart to
+            see how your product compares to different market segments across
+            multiple factors.
+          </p>
+        </div>
       </div>
     </div>
   );

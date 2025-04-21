@@ -39,7 +39,7 @@ const generateChartData = (
     currentValue = Math.max(50, currentValue + change);
 
     data.push({
-      name: `Day ${i + 1}`,
+      name: `${i + 1}`,
       value: currentValue,
     });
   }
@@ -114,7 +114,7 @@ export default function PriceComparisonChart({
     const dataPoints = Array.from({ length: days }).map((_, i) => {
       // Create a data point for each day
       return {
-        name: `Day ${i + 1}`,
+        name: `${i + 1}`,
         "Your Store": Math.round(
           120 + Math.sin(i / 3) * 10 + (timePeriod * i) / 20
         ),
@@ -132,68 +132,112 @@ export default function PriceComparisonChart({
   }, [timePeriod]);
 
   return (
-    <div className={`w-full space-y-8 ${className}`}>
+    <div className={`w-full space-y-6 ${className}`}>
       {/* Main content section */}
       <div className="w-full">
-        <h3 className="text-2xl font-bold mb-2">{title}</h3>
-        <p className="text-muted-foreground mb-6">
-          Monitor your competitors' pricing strategies in real-time and identify
-          market opportunities before they do.
-        </p>
-
         {/* Feature list */}
         <ul className="space-y-3 mb-6">
           <FeatureItem
-            icon={<Check />}
+            icon={<Check className="w-6 h-6 text-blue-500 font-bold" />}
             title="Track price changes across multiple marketplaces"
-            subtitle="Track price changes across multiple marketplaces"
+            subtitle="Monitor competitors in real-time"
             description="Track price changes across multiple marketplaces"
           />
           <FeatureItem
-            icon={<Check />}
+            icon={<Check className="w-6 h-6 text-blue-500 font-bold" />}
             title="Analyze pricing trends and patterns"
-            subtitle="Analyze pricing trends and patterns"
+            subtitle="Identify market opportunities"
             description="Analyze pricing trends and patterns"
           />
           <FeatureItem
-            icon={<Check />}
+            icon={<Check className="w-6 h-6 text-blue-500 font-bold" />}
             title="Receive alerts for significant market movements"
-            subtitle="Receive alerts for significant market movements"
+            subtitle="Stay ahead of market changes"
             description="Receive alerts for significant market movements"
           />
         </ul>
 
         {/* Live Comparison Time Slider */}
-        <div className="mb-6">
+        <div className="mt-4 mb-4 px-4 py-3 ">
           <div className="flex justify-between mb-2">
-            <label className="block text-sm">Historical Time Period</label>
-            <span className="text-primary font-bold">
+            <label className="block text-sm font-medium">
+              Historical Time Period
+            </label>
+            <span className="text-black font-bold">
               {timeLabels[timePeriod]}
             </span>
           </div>
-          <input
-            type="range"
-            min="0"
-            max="8"
-            value={timePeriod}
-            onChange={(e) => setTimePeriod(parseInt(e.target.value))}
-            className="w-full accent-primary"
-            style={{
-              height: "8px",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-          />
-          <div className="flex justify-between text-xs mt-1">
+          <div className="relative">
+            <div className="absolute w-full flex justify-between px-[8px] -mt-1">
+              {[...Array(9)].map((_, index) => (
+                <div
+                  key={index}
+                  className="w-1 h-1 bg-gray-400 rounded-full z-10"
+                />
+              ))}
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="8"
+              step="any"
+              value={timePeriod}
+              onChange={(e) => {
+                const value = parseFloat(e.target.value);
+                const roundedValue = Math.round(value);
+                setTimePeriod(roundedValue);
+              }}
+              className="w-full appearance-none bg-gray-200 rounded-full h-2 cursor-pointer transition-all duration-200 mt-2"
+              style={{
+                background: `linear-gradient(to right, black 0%, black ${
+                  (timePeriod / 8) * 100
+                }%, #e5e7eb ${(timePeriod / 8) * 100}%, #e5e7eb 100%)`,
+              }}
+            />
+            <style jsx>{`
+              input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                height: 16px;
+                width: 16px;
+                border-radius: 50%;
+                background: rgb(0, 0, 0);
+                cursor: pointer;
+                transition: all 0.2s ease;
+              }
+              input[type="range"]:hover::-webkit-slider-thumb {
+                box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+                transform: scale(1.1);
+              }
+              input[type="range"]::-moz-range-thumb {
+                height: 16px;
+                width: 16px;
+                border-radius: 50%;
+                background: rgb(0, 0, 0);
+                cursor: pointer;
+                border: none;
+                transition: all 0.2s ease;
+              }
+              input[type="range"]:hover::-moz-range-thumb {
+                box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+                transform: scale(1.1);
+              }
+              input[type="range"] {
+                border-radius: 8px;
+                height: 8px;
+              }
+            `}</style>
+          </div>
+          <div className="flex justify-between text-xs mt-1 text-muted">
             <span>1 day</span>
             <span>1 year</span>
           </div>
         </div>
 
-        {/* Price trend chart with ShadCN LineChart */}
-        <div className="mb-6 bg-muted/30 rounded-lg p-4">
-          <h4 className="text-sm font-medium mb-2">Price Trends</h4>
-          <div className="h-[220px]">
+        {/* Price trend chart with corrected height */}
+        <div className="mb-6 rounded-lg p-4">
+          <div className="h-[270px] bg-muted/20 rounded-lg">
+            {" "}
+            {/* Fixed height */}
             <LineChart
               data={chartData}
               keys={[
@@ -202,7 +246,6 @@ export default function PriceComparisonChart({
                 "Competitor B",
                 "Competitor C",
               ]}
-              height={220}
               colors={[
                 customColors.yourStore,
                 customColors.competitorA,
@@ -211,8 +254,10 @@ export default function PriceComparisonChart({
               ]}
               showLegend={true}
               interactive={true}
-              dotSize={4}
-              className="mt-4"
+              dotSize={3}
+              showTooltip={true}
+              xAxisLabel="Days"
+              yAxisLabel="Price"
             />
           </div>
         </div>
@@ -221,7 +266,7 @@ export default function PriceComparisonChart({
         {onTriggerAlert && (
           <button
             onClick={onTriggerAlert}
-            className="flex items-center bg-muted hover:bg-muted/80 rounded-md px-4 py-2 text-sm"
+            className="flex items-center bg-muted/50 hover:bg-muted/80 rounded-md px-4 py-2 text-sm transition-colors duration-200"
           >
             <Bell className="h-4 w-4 mr-2" />
             Trigger Demo Price Alert
@@ -229,18 +274,22 @@ export default function PriceComparisonChart({
         )}
       </div>
 
-      {/* Competitor Price Comparison section - now positioned below and full width */}
-      <div className="w-full border border-border rounded-xl bg-card p-6">
-        <h3 className="text-xl font-bold mb-3">Competitor Price Comparison</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Competitor Price Comparison section - proper spacing */}
+      <div className="w-full  rounded-full p-4 mt-6">
+        <div className="mb-4 flex justify-center pb-10">
+          <span className="inline-flex items-center gap-2 px-4 py-2 text-lg font-medium text-purple-600 bg-slate-100 rounded-2xl border border-purple-300">
+            Real-time Price Comparison
+          </span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           {competitorData.map((item, i) => (
             <div
               key={i}
-              className="flex justify-between items-center p-3 rounded bg-background"
+              className="flex justify-between items-center p-3 mt-3 rounded-full bg-background/70 border border-border/20 cursor-pointer group transition-all duration-300 hover:bg-black hover:text-white"
             >
               <div className="flex items-center">
                 <span
-                  className="h-3 w-3 rounded-full mr-2"
+                  className="h-2.5 w-2.5 rounded-full mr-2 transition-all group-hover:drop-shadow-[0_0_6px_rgba(0,255,0,0.7)]"
                   style={{
                     backgroundColor:
                       i === 0
@@ -252,17 +301,19 @@ export default function PriceComparisonChart({
                         : customColors.competitorC,
                   }}
                 ></span>
-                <span>{item.name}</span>
+                <span className="text-sm transition-all">{item.name}</span>
               </div>
               <div className="flex items-center">
-                <span className="font-medium mr-2">{item.price}</span>
+                <span className="font-medium mr-2 text-sm transition-all">
+                  {item.price}
+                </span>
                 <span
-                  className={`text-xs ${
+                  className={`text-xs transition-all ${
                     item.change.startsWith("+")
-                      ? "text-green-500"
+                      ? "group-hover:text-green-400 text-green-500"
                       : item.change === "+0%"
-                      ? "text-muted-foreground"
-                      : "text-red-500"
+                      ? "group-hover:text-gray-300 text-muted-foreground"
+                      : "group-hover:text-red-400 text-red-500"
                   }`}
                 >
                   {item.change}

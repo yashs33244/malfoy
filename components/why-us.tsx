@@ -1,6 +1,5 @@
 "use client";
 
-import { TextReveal } from "@/components/ui/text-reveal";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
@@ -14,6 +13,7 @@ import {
   Search,
   TrendingUp,
 } from "lucide-react";
+import { TextRevealByWord } from "./ui/text-reveal";
 
 export default function WhyUs() {
   return (
@@ -31,7 +31,7 @@ export default function WhyUs() {
           {/* REAL-TIME PRICING */}
           <div>
             <div className="max-w-3xl mx-auto text-center mb-10">
-              <TextReveal
+              <TextRevealByWord
                 text="Real-Time Pricing Intelligence"
                 className="text-2xl md:text-3xl font-bold mb-4"
               />
@@ -193,7 +193,7 @@ export default function WhyUs() {
           {/* SIMULATION SANDBOX */}
           <div>
             <div className="max-w-3xl mx-auto text-center mb-10">
-              <TextReveal
+              <TextRevealByWord
                 text="Simulation Sandbox"
                 className="text-2xl md:text-3xl font-bold mb-4"
               />
@@ -345,7 +345,7 @@ export default function WhyUs() {
           {/* CUSTOM DASHBOARDS */}
           <div>
             <div className="max-w-3xl mx-auto text-center mb-10">
-              <TextReveal
+              <TextRevealByWord
                 text="Custom Dashboards"
                 className="text-2xl md:text-3xl font-bold mb-4"
               />

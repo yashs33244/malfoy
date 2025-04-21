@@ -429,7 +429,7 @@ export default function PricingSimulations() {
       <div className="grid md:grid-cols-2 gap-12">
         {/* Left Column: Revenue Optimizer */}
         <section className="space-y-8">
-          <div className="ounded-xl p-6 ">
+          <div className="rounded-xl p-6 ">
             <h3 className="text-xl font-semibold mb-6">
               AI-Powered Revenue Optimizer
             </h3>

@@ -22,6 +22,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  TooltipProps,
 } from "recharts";
 import { cn } from "@/lib/utils";
 import { Circle } from "lucide-react";
@@ -53,7 +54,7 @@ export const generateChartData = (
   min: number = 0
 ): DataPoint[] => {
   return Array.from({ length: points }).map((_, i) => {
-    const dataPoint: DataPoint = { name: `Day ${i + 1}` };
+    const dataPoint: DataPoint = { name: `${i + 1}` };
 
     keys.forEach((key) => {
       dataPoint[key] = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -273,6 +274,40 @@ export const BarChart = ({
 };
 
 // Line Chart with Dots and Colors
+// Custom tooltip component with glassmorphism effect
+const GlassmorphismTooltip = ({
+  active,
+  payload,
+  label,
+}: TooltipProps<number, string>) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="rounded-lg backdrop-blur-md bg-white/70 border border-white/20 shadow-lg p-3">
+        <p className="text-xs font-medium text-gray-700 mb-1">{label}</p>
+        <div className="space-y-1">
+          {payload.map((entry, index) => (
+            <div key={`tooltip-item-${index}`} className="flex items-center">
+              <div
+                className="w-2 h-2 rounded-full mr-2"
+                style={{ backgroundColor: entry.color }}
+              />
+              <span
+                className="text-xs font-medium"
+                style={{ color: entry.color }}
+              >
+                {entry.name}:
+              </span>
+              <span className="text-xs ml-1 font-semibold text-gray-800">
+                {entry.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
 interface LineChartProps {
   data: DataPoint[];
   keys: string[];
@@ -293,7 +328,7 @@ export const LineChart = ({
   keys,
   height = 300,
   className,
-  colors = Object.values(chartColors).slice(0, 6),
+  colors = [], // Default value will be handled in component
   showGrid = true,
   showTooltip = true,
   showLegend = true,
@@ -303,10 +338,18 @@ export const LineChart = ({
   dotSize = 4,
 }: LineChartProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const chartColors = colors.length
+    ? colors
+    : ["#60a5fa", "#f87171", "#6ee7b7", "#fcd34d", "#c4b5fd", "#f9a8d4"]; // softer tones
 
   return (
-    <div className={cn("w-full h-full", className)}>
-      <ResponsiveContainer width="100%" height={height}>
+    <div
+      className={cn(
+        "w-full h-full bg-[#f3f3f3] rounded-lg shadow-lg",
+        className
+      )}
+    >
+      <ResponsiveContainer width="100%" height="100%" className="pb-6 pr-4">
         <RechartsLineChart
           data={data}
           margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
@@ -317,49 +360,75 @@ export const LineChart = ({
           }}
           onMouseLeave={() => interactive && setHoveredIndex(null)}
         >
-          {showGrid && <CartesianGrid strokeDasharray="3 3" opacity={0.2} />}
+          {showGrid && (
+            <CartesianGrid stroke="#00000030" strokeDasharray="3 3" />
+          )}
           <XAxis
             dataKey="name"
-            tickLine={false}
-            axisLine={false}
-            fontSize={12}
+            tickLine={true}
+            axisLine={{ stroke: "#00000020" }}
+            fontSize={10}
             tickMargin={10}
+            stroke="#000000"
             label={
               xAxisLabel
-                ? { value: xAxisLabel, position: "bottom", offset: 5 }
+                ? {
+                    value: xAxisLabel,
+                    position: "bottom",
+                    offset: 10,
+                    fontSize: 12,
+                    padding: 10,
+                    margin: 10,
+                  }
                 : undefined
             }
           />
           <YAxis
-            tickLine={false}
-            axisLine={false}
-            fontSize={12}
+            tickLine={true}
+            axisLine={{ stroke: "#00000030" }}
+            fontSize={10}
             tickMargin={10}
+            stroke="#000000"
             label={
               yAxisLabel
-                ? { value: yAxisLabel, angle: -90, position: "left", offset: 5 }
+                ? {
+                    value: yAxisLabel,
+                    angle: -90,
+                    position: "left",
+                    offset: 1,
+                    fontSize: 12,
+                    fontWeight: "bold",
+                    margin: 10,
+                    padding: 10,
+                  }
                 : undefined
             }
           />
           {showTooltip && (
             <Tooltip
               cursor={{
-                stroke: "#d4d4d8",
+                stroke: "#000000",
                 strokeWidth: 1,
-                strokeDasharray: "3 3",
+                strokeDasharray: "2 2",
               }}
-              contentStyle={{
-                backgroundColor: "rgba(255, 255, 255, 0.9)",
-                borderRadius: "6px",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                border: "none",
-              }}
+              content={<GlassmorphismTooltip />}
+              wrapperStyle={{ outline: "none" }}
             />
           )}
           {showLegend && (
             <Legend
               verticalAlign="top"
+              iconType="circle"
+              iconSize={8}
               wrapperStyle={{ paddingBottom: "10px" }}
+              formatter={(value) => (
+                <span
+                  className="text-xs font-medium"
+                  style={{ color: "#000000" }}
+                >
+                  {value}
+                </span>
+              )}
             />
           )}
           {keys.map((key, index) => (
@@ -367,28 +436,31 @@ export const LineChart = ({
               key={key}
               type="monotone"
               dataKey={key}
-              stroke={colors[index % colors.length]}
+              stroke={chartColors[index % chartColors.length]}
               strokeWidth={
                 hoveredIndex !== null
-                  ? data[hoveredIndex] && data[hoveredIndex][key]
-                    ? 3
-                    : 1
+                  ? data[hoveredIndex] && data[hoveredIndex][key] !== undefined
+                    ? 2.5
+                    : 1.5
                   : 2
               }
               dot={{
                 r: dotSize,
-                fill: colors[index % colors.length],
-                stroke: "white",
-                strokeWidth: 1,
+                fill: chartColors[index % chartColors.length],
+                stroke: "black",
+                strokeWidth: 0.5,
+                opacity: 0.9,
               }}
               activeDot={{
-                r: dotSize + 2,
-                fill: colors[index % colors.length],
-                stroke: "white",
-                strokeWidth: 2,
+                r: dotSize + 1.5,
+                fill: chartColors[index % chartColors.length],
+                stroke: "green",
+                strokeWidth: 1,
+                opacity: 1,
               }}
               isAnimationActive={true}
-              animationDuration={1000}
+              animationDuration={1200}
+              animationEasing="ease-in-out"
             />
           ))}
         </RechartsLineChart>

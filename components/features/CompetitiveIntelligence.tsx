@@ -248,9 +248,6 @@ export default function CompetitiveIntelligence({
 
       {/* Market Positioning Map */}
       <div className="mb-16">
-        <h4 className="text-xl font-semibold mb-4">
-          Market Positioning Analysis
-        </h4>
         <MarketPositioningMap marketZones={marketZones} />
       </div>
 
@@ -266,7 +263,7 @@ export default function CompetitiveIntelligence({
         />
       </div>
 
-      <h3 className="text-2xl font-bold mb-8">Key Features</h3>
+      {/* <h3 className="text-2xl font-bold mb-8">Key Features</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         <div className="bg-slate-50 dark:bg-slate-800/60 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
           <div className="flex items-start mb-4">
@@ -331,7 +328,7 @@ export default function CompetitiveIntelligence({
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
