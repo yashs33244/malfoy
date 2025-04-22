@@ -65,7 +65,9 @@ export default function Home() {
                     <NavbarButton variant="secondary">Login</NavbarButton>
                   </Link>
                   <Link href="/signup">
-                    <NavbarButton variant="primary">Sign Up</NavbarButton>
+                    <NavbarButton className="rounded-full bg-green-500 hover:bg-green-300">
+                      Sign Up
+                    </NavbarButton>
                   </Link>
                 </>
               )}

@@ -72,7 +72,7 @@ export const sendVerificationEmail = async (
     <body>
       <div class="container">
         <div class="header">
-          <img src="${process.env.NEXTAUTH_URL}/malfoy_logo.png" alt="Malfoy Logo">
+          <img src="https://ysingla.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fe12b42ac-4e54-476f-a4f5-7d6bdb1e61e2%2F714beba9-2afc-440e-b1c8-8d95f9c03bda%2Fproductnerd_a_modern_logo_for_a_company_called_greenmind_that_2b7c439c-f8f7-48bc-8446-0d129b699a3f_2-removebg-preview.png?table=block&id=1cfe6255-f338-81c4-9a65-c21f3b88d852&spaceId=e6b92090-480d-4e79-a4a6-82eca60a06b3&width=250&userId=&cache=v2" alt="Malfoy Logo">
           <h1>Email Verification</h1>
         </div>
         

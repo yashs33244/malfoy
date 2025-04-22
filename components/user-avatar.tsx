@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/context/auth-context";
+import { LogOut } from "lucide-react";
 
 export function UserAvatar() {
   const { user, logout, isLoggedIn } = useAuth();
@@ -38,22 +39,37 @@ export function UserAvatar() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer">
+        <Avatar className="cursor-pointer h-10 w-10 border-2 border-slate-200 hover:border-slate-300 transition-colors">
           <AvatarImage
             src={user?.image || undefined}
             alt={user?.name || "User"}
           />
-          <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
+          <AvatarFallback className="bg-slate-100 text-slate-700 font-medium">
+            {getInitials(user?.name)}
+          </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <div className="px-2 py-1.5 text-sm font-medium">
-          {user?.name || user?.email}
+      <DropdownMenuContent
+        align="end"
+        className="w-56 p-2 rounded-xl border border-slate-200 shadow-lg"
+      >
+        <div className="px-3 py-2">
+          <div className="font-medium text-slate-900">
+            {user?.name || "User"}
+          </div>
+          <div className="text-xs text-slate-500">{user?.email}</div>
         </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-          Log out
-        </DropdownMenuItem>
+
+        <DropdownMenuSeparator className="my-2" />
+
+        {/* Custom styled item that overrides any default hover effects */}
+        <div
+          onClick={handleLogout}
+          className="cursor-pointer px-3 py-2 flex items-center gap-2 bg-red-500 text-white rounded-md mx-1 hover:bg-red-600"
+        >
+          <LogOut size={16} />
+          <span>Log out</span>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

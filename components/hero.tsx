@@ -56,18 +56,19 @@ export default function Hero() {
             Automated Inventory Management
           </p>
           <div className="flex gap-6 pt-4">
-            <InteractiveHoverButton className="px-8 py-4 text-base font-medium bg-black dark:bg-white text-white dark:text-black rounded-full">
+            <InteractiveHoverButton className="px-8 py-4 text-base font-medium bg-black text-white rounded-full transition-colors duration-200 hover:bg-[#03c76e] hover:text-black">
               View Demo
             </InteractiveHoverButton>
-            <InteractiveHoverButton className="px-8 py-4 text-base font-medium border border-slate-300 dark:border-slate-600 bg-transparent text-black dark:text-white rounded-full">
+            <InteractiveHoverButton className="px-8 py-4 text-base font-medium bg-white text-black border border-slate-300 dark:border-slate-600 rounded-full transition-colors duration-200 hover:bg-[#03c76e] hover:text-white">
               Learn More
             </InteractiveHoverButton>
           </div>
+
           {/* <p className="text-sm md:text-sm text-slate-600 dark:text-slate-400 max-w-md">
             Leverage the power of AI in <AvatarCircles avatarUrls={avatars} />{" "}
             aircraft parts procurement
           </p> */}
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-black dark:text-white leading-tight ">
+          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-black dark:text-white leading-tight pt-10">
             Optimize,
             <br />
             Outperform
