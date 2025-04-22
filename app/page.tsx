@@ -47,58 +47,62 @@ export default function Home() {
   return (
     <>
       <Navbar>
-        {/* Desktop Navigation */}
-        <NavBody>
-          <NavbarLogo />
-          <NavItems items={navItems} />
-          <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary">Login</NavbarButton>
-            <NavbarButton variant="book-call">Book a call</NavbarButton>
-          </div>
-        </NavBody>
-
-        {/* Mobile Navigation */}
-        <MobileNav>
-          <MobileNavHeader>
+        {/* Desktop & Mobile Navigation - Responsive Layout */}
+        <div className="hidden lg:block w-full">
+          <NavBody>
             <NavbarLogo />
-            <MobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
-          </MobileNavHeader>
-
-          <MobileNavMenu
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
-            {navItems.map((item, idx) => (
-              <a
-                key={`mobile-link-${idx}`}
-                href={item.link}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
-              >
-                <span className="block">{item.name}</span>
-              </a>
-            ))}
-            <div className="flex w-full flex-col gap-4">
-              <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Login
-              </NavbarButton>
-              <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Book a call
-              </NavbarButton>
+            <NavItems items={navItems} />
+            <div className="flex items-center gap-4">
+              <NavbarButton variant="secondary">Login</NavbarButton>
+              <NavbarButton variant="book-call">Book a call</NavbarButton>
             </div>
-          </MobileNavMenu>
-        </MobileNav>
+          </NavBody>
+        </div>
+
+        {/* Mobile Navigation Only */}
+        <div className="block lg:hidden w-full mr-10">
+          <MobileNav>
+            <MobileNavHeader>
+              <NavbarLogo />
+              <MobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              />
+            </MobileNavHeader>
+
+            <MobileNavMenu
+              isOpen={isMobileMenuOpen}
+              onClose={() => setIsMobileMenuOpen(false)}
+            >
+              {navItems.map((item, idx) => (
+                <a
+                  key={`mobile-link-${idx}`}
+                  href={item.link}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="relative text-neutral-600 dark:text-neutral-300"
+                >
+                  <span className="block">{item.name}</span>
+                </a>
+              ))}
+              <div className="flex w-full flex-col gap-4">
+                <NavbarButton
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  variant="primary"
+                  className="w-full"
+                >
+                  Login
+                </NavbarButton>
+                <NavbarButton
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  variant="primary"
+                  className="w-full"
+                >
+                  Book a call
+                </NavbarButton>
+              </div>
+            </MobileNavMenu>
+          </MobileNav>
+        </div>
       </Navbar>
 
       {/* Hero Section */}
@@ -138,16 +142,15 @@ export default function Home() {
       {/* Companies Section */}
       <div className="bg-white dark:bg-black py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-sm p-8">
+          <div className=" ">
             <Companies />
           </div>
         </div>
       </div>
 
       {/* Why Us Section */}
-      <div className="bg-white dark:bg-black">
-        <WhyUs />
-      </div>
+
+      <WhyUs />
 
       {/* Pricing Section */}
       <div id="pricing" className="bg-white dark:bg-black py-16">
@@ -169,11 +172,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Call To Action Section */}
-      <div className="bg-white dark:bg-black">
-        <CallToAction />
-      </div>
-
       {/* Early Access Form Section */}
       <div id="early-access" className="bg-white dark:bg-black py-16">
         <div className="container mx-auto px-4">
@@ -186,9 +184,9 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div className="bg-gray-100 dark:bg-gray-950 py-12">
+      <div className=" py-12">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto rounded-2xl bg-white/90 dark:bg-slate-900/90 overflow-hidden shadow-md p-8">
+          <div className="">
             <Footer />
           </div>
         </div>

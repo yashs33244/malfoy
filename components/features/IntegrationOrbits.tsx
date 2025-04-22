@@ -30,9 +30,9 @@ export function IntegrationOrbits({
     <div
       className={`relative h-80 w-full flex items-center justify-center ${className}`}
     >
-      {/* Center Malfoy logo */}
+      {/* Center Shein logo */}
       <div className="absolute z-10 w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-        <IntegrationIcons.shein className="text-lg" />
+        <div className="text-sm font-bold">Integration</div>
       </div>
 
       {/* Primary orbit */}
@@ -42,17 +42,26 @@ export function IntegrationOrbits({
         speed={primarySpeed}
         reverse={primaryReverse}
       >
-        <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.shopify className="w-6 h-6 text-[#95BF47]" />
+        <div className="bg-card p-2 rounded-full flex items-center justify-center">
+          <IntegrationIcons.shopify className="w-6 h-6 object-contain" />
         </div>
-        <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.amazon className="w-6 h-6 text-[#FF9900]" />
+        <div className="bg-card p-2 rounded-full flex items-center justify-center">
+          <IntegrationIcons.amazon className="w-6 h-6 object-contain" />
         </div>
-        <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.airbnb className="w-6 h-6 text-[#7F54B3]" />
+        <div className="bg-card p-2 rounded-full flex items-center justify-center">
+          <IntegrationIcons.airbnb className="w-6 h-6 object-contain" />
         </div>
-        <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.costco className="w-6 h-6 text-[#F26322]" />
+        <div className="bg-card p-2 rounded-full flex items-center justify-center">
+          <IntegrationIcons.costco className="w-6 h-6 object-contain" />
+        </div>
+        <div className="bg-card p-2 rounded-full flex items-center justify-center">
+          <IntegrationIcons.googleanalytics className="w-6 h-6 object-contain" />
+        </div>
+        <div className="bg-card p-2 rounded-full flex items-center justify-center">
+          <IntegrationIcons.walmart className="w-6 h-6 object-contain" />
+        </div>
+        <div className="bg-card p-2 rounded-full flex items-center justify-center">
+          <IntegrationIcons.doordash className="w-6 h-6 object-contain" />
         </div>
       </OrbitingCircles>
 
@@ -64,10 +73,25 @@ export function IntegrationOrbits({
         reverse={secondaryReverse}
       >
         <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.blinkit className="w-5 h-5 text-[#2A6FBB]" />
+          <IntegrationIcons.blinkit className="w-5 h-5 object-contain" />
         </div>
         <div className="bg-card p-1 rounded-full flex items-center justify-center">
-          <IntegrationIcons.instacart className="w-5 h-5 text-[#E53238]" />
+          <IntegrationIcons.instacart className="w-5 h-5 object-contain" />
+        </div>
+        <div className="bg-card p-1 rounded-full flex items-center justify-center">
+          <IntegrationIcons.commerceiq className="w-5 h-5 object-contain" />
+        </div>
+        <div className="bg-card p-1 rounded-full flex items-center justify-center">
+          <IntegrationIcons.wholefoods className="w-5 h-5 object-contain" />
+        </div>
+        <div className="bg-card p-1 rounded-full flex items-center justify-center">
+          <IntegrationIcons.uber className="w-5 h-5 object-contain" />
+        </div>
+        <div className="bg-card p-1 rounded-full flex items-center justify-center">
+          <IntegrationIcons.ola className="w-5 h-5 object-contain" />
+        </div>
+        <div className="bg-card p-1 rounded-full flex items-center justify-center">
+          <IntegrationIcons.flipkart className="w-5 h-5 object-contain" />
         </div>
       </OrbitingCircles>
     </div>

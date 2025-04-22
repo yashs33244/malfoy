@@ -3,12 +3,12 @@ import { VelocityScroll } from "./magicui/scroll-based-velocity";
 
 export default function Companies() {
   return (
-    <section className="w-full bg-background py-16 px-4 md:px-8 lg:px-20">
+    <section className="w-full py-16 px-4 md:px-8 lg:px-20">
       <div className="mx-auto max-w-6xl text-center">
-        <h2 className="text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl mb-4">
+        <h2 className="text-6xl font-bold leading-tight tracking-tight text-foreground mb-5">
           Versatile Platform
         </h2>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-lg  max-w-2xl mx-auto mb-40">
           Elevate your workflow by seamlessly integrating our machine learning
           platform with your existing tools. Our platform supports a wide array
           of marketplaces and enablement tools for smooth collaboration.
@@ -45,8 +45,8 @@ export default function Companies() {
         </VelocityScroll>
 
         {/* Gradient Fade Effects */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background via-background/70 to-transparent z-10" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background via-background/70 to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-white to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-white to-transparent z-10" />
       </div>
     </section>
   );

@@ -41,15 +41,26 @@ export default function ProductShowcase() {
           </div>
         </div>
 
+        <h1 className="text-center md:text-4xl lg:text-6xl font-medium leading-tight mb-60">
+          <span className="font-extrabold text-black dark:text-white text-8xl">
+            Optimize
+          </span>{" "}
+          <span className="font-extrabold text-black dark:text-white">
+            your pricing
+          </span>{" "}
+          <br />
+          <span className="text-gray-400">with intelligent insights</span>{" "}
+          <br />
+          <span className="font-extrabold text-black dark:text-white">
+            that drive growth
+          </span>
+        </h1>
+
         {/* Feature 2: Pricing Simulations */}
         <div className="mb-32">
           <div className="flex-1 flex flex-col md:flex-row items-center py-8 md:py-12 gap-8 md:gap-12 bg-[#f3f3f3] dark:bg-[#121212] rounded-3xl border border-slate-200 dark:border-slate-700 shadow-lg">
             <div className="ml-8">
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                Pricing Simulations
-              </h3>
-
-              <div className="dark:bg-slate-800/40 p-6 rounded-xl">
+              <div className="">
                 <PricingSimulations />
               </div>
             </div>
@@ -63,18 +74,37 @@ export default function ProductShowcase() {
         <div className="mb-16">
           <div className="">
             <div className="">
-              <div className="mb-8">
-                <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                  Automated Dynamic Pricing
-                </h3>
-                <p className="text-slate-600 dark:text-slate-400">
-                  Set up rule-based pricing automation that responds to market
-                  conditions, optimizing your prices 24/7 without manual
-                  intervention.
-                </p>
+              <div className="text-center pt-10 mb-60">
+                <h1 className="text-2xl md:text-4xl lg:text-6xl font-medium leading-tight">
+                  <span className="font-extrabold text-black dark:text-white text-8xl">
+                    Dynamic
+                  </span>{" "}
+                  <span className="text-gray-400">
+                    Pricing <br /> Intelligence
+                  </span>
+                  <br />
+                  <span className="font-extrabold text-black dark:text-white">
+                    Platform
+                  </span>
+                </h1>
+
+                {/* Colored Chips */}
+                {/* <div className="mt-8 flex justify-center gap-4 flex-wrap">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-pink-600 bg-pink-100 rounded-2xl border border-pink-300">
+                    <span>🧭</span> Efficiency
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-purple-600 bg-purple-100 rounded-2xl border border-purple-300">
+                    <span>🔗</span> Streamline
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-green-600 bg-green-100 rounded-2xl border border-green-300">
+                    <span>⭐</span> Automation
+                  </span>
+                </div> */}
               </div>
-              <div className="bg-slate-50 dark:bg-slate-800/40 p-6 rounded-xl">
-                <AutomatedPricing />
+              <div className="flex-1 flex flex-col md:flex-row items-center py-8 md:py-12 gap-8 md:gap-12 bg-[#f3f3f3] dark:bg-[#121212] rounded-3xl border border-slate-200 dark:border-slate-700 shadow-lg m-2">
+                <div className="container mx-auto px-4 ">
+                  <AutomatedPricing />
+                </div>
               </div>
             </div>
           </div>

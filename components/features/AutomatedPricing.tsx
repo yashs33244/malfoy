@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import SimpleHeading from "./SimpleHeading";
-import { RadarChart, generateMarketData } from "@/components/ui/charts";
+import { RadarChart } from "@/components/ui/charts";
 import { IntegrationOrbits } from "./IntegrationOrbits";
-import { SmallFeatureItem } from "./small-featureitem";
 import { Clock, DollarSign, Users } from "lucide-react";
 
 interface PricingRule {
@@ -21,6 +19,33 @@ interface PricingRule {
     customerRetention: number;
   };
 }
+
+const SmallFeatureItem = ({
+  title,
+  subtitle,
+  description,
+  icon,
+}: {
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: React.ReactNode;
+}) => (
+  <div className="flex items-start gap-3 p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg">
+    <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg text-indigo-700 dark:text-indigo-400">
+      {icon}
+    </div>
+    <div>
+      <h4 className="font-medium text-slate-900 dark:text-white">{title}</h4>
+      <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400">
+        {subtitle}
+      </p>
+      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+        {description}
+      </p>
+    </div>
+  </div>
+);
 
 export default function AutomatedPricing() {
   // Define pricing rules with their impact on radar metrics
@@ -177,185 +202,185 @@ export default function AutomatedPricing() {
   }, [pricingRules, platformIntegrations]);
 
   return (
-    <div className="space-y-24">
-      <div className="grid md:grid-cols-2 gap-12 items-start">
-        <div className="space-y-8">
-          <div>
-            <h3 className="text-xl font-semibold mb-6">
-              Automated Pricing Rules
-            </h3>
-            <p className="text-slate-600 dark:text-slate-400 mb-8">
-              Create sophisticated pricing rules that automatically adjust your
-              prices based on market conditions, then see their impact on your
-              metrics in real-time.
-            </p>
-            <ul className="space-y-4">
-              <SmallFeatureItem
-                title="Market Share"
-                subtitle="Increase market share by 15%"
-                description="Automatically adjust prices to gain a larger share of the market"
-                icon={<Users className="h-5 w-5" />}
-                dark={true}
-              />
-              <SmallFeatureItem
-                title="Price Competitiveness"
-                subtitle="Increase price competitiveness by 10%"
-                description="Automatically adjust prices to be more competitive"
-                icon={<DollarSign className="h-5 w-5" />}
-                dark={true}
-              />
-              <SmallFeatureItem
-                title="Speed"
-                subtitle="Increase speed by 15%"
-                description="Automatically adjust prices to be more competitive"
-                icon={<Clock className="h-5 w-5" />}
-                dark={true}
-              />
-            </ul>
-          </div>
-
-          {/* Add radar chart with dynamic data */}
-          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
-            <h4 className="text-base font-medium mb-4">
-              Market Coverage Analysis
-            </h4>
-            <div className="h-[240px]">
-              <RadarChart
-                data={marketCoverageData}
-                labels={marketCoverageLabels}
-                height={240}
-                color="#4F46E5"
-              />
+    <div className="">
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* First card - Automated Rules */}
+        <div className="bg-indigo-100 rounded-3xl p-8 shadow-sm">
+          <h2 className="text-3xl font-bold mb-6 text-indigo-800">
+            Automated Pricing
+          </h2>
+          <div className="space-y-6">
+            <div>
+              <p className="text-indigo-700 mb-6">
+                Create sophisticated pricing rules that automatically adjust
+                your prices based on market conditions, then see their impact on
+                your metrics in real-time.
+              </p>
+              <div className="space-y-3">
+                <SmallFeatureItem
+                  title="Market Share"
+                  subtitle="Increase market share by 15%"
+                  description="Automatically adjust prices to gain a larger share of the market"
+                  icon={<Users className="h-5 w-5" />}
+                />
+                <SmallFeatureItem
+                  title="Price Competitiveness"
+                  subtitle="Increase price competitiveness by 10%"
+                  description="Automatically adjust prices to be more competitive"
+                  icon={<DollarSign className="h-5 w-5" />}
+                />
+                <SmallFeatureItem
+                  title="Speed"
+                  subtitle="Increase speed by 15%"
+                  description="Automatically adjust prices to be more competitive"
+                  icon={<Clock className="h-5 w-5" />}
+                />
+              </div>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-4">
-              Toggle rules in the Rule Builder to see how they affect your
-              market coverage.
-            </p>
+
+            <div className="bg-white rounded-2xl p-5 shadow-sm">
+              <h4 className="text-base font-medium text-indigo-800 mb-4">
+                Market Coverage Analysis
+              </h4>
+              <div className="h-56">
+                <RadarChart
+                  data={marketCoverageData}
+                  labels={marketCoverageLabels}
+                  height={220}
+                  color="#4F46E5"
+                />
+              </div>
+              <p className="text-xs text-slate-500 mt-4">
+                Toggle rules in the Rule Builder to see how they affect your
+                market coverage.
+              </p>
+            </div>
           </div>
         </div>
 
-        <div>
-          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-8 border border-slate-200 dark:border-slate-700">
-            <h4 className="text-lg font-semibold mb-4">Rule Builder</h4>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
-              Click on a rule to toggle it on or off and see the impact in
-              real-time.
-            </p>
-            <div className="space-y-6">
-              {pricingRules.map((rule) => (
-                <div
-                  key={rule.id}
-                  className={`bg-white dark:bg-slate-900 p-4 rounded-lg border ${
-                    rule.active
-                      ? "border-blue-400/50 shadow-sm"
-                      : "border-slate-200 dark:border-slate-700"
-                  } cursor-pointer transition-all hover:shadow-md`}
-                  onClick={() => toggleRule(rule.id)}
-                >
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="font-medium text-slate-900 dark:text-white">
-                      {rule.name}
-                    </span>
-                    <div className="h-5 w-10 rounded-full relative bg-slate-200 dark:bg-slate-700 flex items-center px-0.5">
-                      <div
-                        className={`h-4 w-4 rounded-full transition-all ${
-                          rule.active
-                            ? "bg-blue-500 translate-x-5"
-                            : "bg-slate-400 dark:bg-slate-600"
-                        }`}
-                      ></div>
-                    </div>
+        {/* Second card - Rule Builder */}
+        <div className="bg-pink-100 rounded-3xl p-8 shadow-sm">
+          <h2 className="text-3xl font-bold mb-6 text-pink-800">
+            Rule Builder
+          </h2>
+          <p className="text-pink-700 mb-6">
+            Schedule all your price rules and adjustments now and we'll apply
+            them automatically later.
+          </p>
+          <div className="space-y-4">
+            {pricingRules.map((rule) => (
+              <div
+                key={rule.id}
+                className={`bg-white p-4 rounded-xl border-2 ${
+                  rule.active
+                    ? "border-pink-400 shadow-sm"
+                    : "border-transparent"
+                } cursor-pointer transition-all hover:shadow-md`}
+                onClick={() => toggleRule(rule.id)}
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium text-slate-900">
+                    {rule.name}
+                  </span>
+                  <div className="h-6 w-12 rounded-full relative bg-slate-200 flex items-center px-1">
+                    <div
+                      className={`h-4 w-4 rounded-full transition-all ${
+                        rule.active
+                          ? "bg-pink-500 translate-x-6"
+                          : "bg-slate-400"
+                      }`}
+                    ></div>
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
-                    {rule.description}
-                  </p>
-                  {rule.active && (
-                    <div className="mt-4 flex gap-2 flex-wrap">
-                      {Object.entries(rule.impact).map(([key, value]) => (
-                        <span
-                          key={key}
-                          className={`text-xs px-2 py-1 rounded-full ${
-                            value > 0
-                              ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300"
-                              : value < 0
-                              ? "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300"
-                              : "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300"
-                          }`}
-                        >
-                          {key
-                            .replace(/([A-Z])/g, " $1")
-                            .replace(/^./, (str) => str.toUpperCase())}
-                          : {value > 0 ? "+" : ""}
-                          {value}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
-              ))}
-            </div>
+                <p className="text-sm text-slate-600 mb-2">
+                  {rule.description}
+                </p>
+                {rule.active && (
+                  <div className="mt-3 flex gap-2 flex-wrap">
+                    {Object.entries(rule.impact).map(([key, value]) => (
+                      <span
+                        key={key}
+                        className={`text-xs px-2 py-1 rounded-full ${
+                          value > 0
+                            ? "bg-pink-100 text-pink-800"
+                            : value < 0
+                            ? "bg-slate-100 text-slate-800"
+                            : "bg-slate-100 text-slate-800"
+                        }`}
+                      >
+                        {key
+                          .replace(/([A-Z])/g, " $1")
+                          .replace(/^./, (str) => str.toUpperCase())}
+                        : {value > 0 ? "+" : ""}
+                        {value}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-12 items-start">
-        <div className="order-2 md:order-1">
-          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-8 border border-slate-200 dark:border-slate-700">
-            <h4 className="text-lg font-semibold mb-4">
+      <div className="grid md:grid-cols-2 gap-6 mt-6">
+        {/* Third card - Integration Ecosystem */}
+        <div className="bg-green-100 rounded-3xl p-8 shadow-sm">
+          <h2 className="text-3xl font-bold mb-6 text-green-800">Wallet</h2>
+          <div className="bg-white rounded-2xl p-5 shadow-sm mb-6">
+            <h4 className="text-base font-medium text-green-800 mb-4">
               Integration Ecosystem
             </h4>
-            <div className="mb-8">
+            <div className="mb-6">
               <IntegrationOrbits />
             </div>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Our platform integrates seamlessly with all major e-commerce
-              platforms, ensuring your pricing rules are applied consistently
-              across all channels.
+            <p className="text-sm text-slate-600">
+              Access all your integrations and save up your Pricing Cash with
+              our seamless platform integration ecosystem.
             </p>
           </div>
         </div>
 
-        <div className="order-1 md:order-2">
-          <div className="space-y-8">
+        {/* Fourth card - Platform Coverage */}
+        <div className="bg-yellow-100 rounded-3xl p-8 shadow-sm">
+          <h2 className="text-3xl font-bold mb-6 text-yellow-800">Inbox</h2>
+          <div className="space-y-6">
             <div>
-              <h3 className="text-xl font-semibold mb-6">
-                Seamless Integrations
-              </h3>
-              <p className="text-slate-600 dark:text-slate-400 mb-8">
-                Connect with your existing e-commerce platforms and marketplaces
-                for automated price updates and synchronization across your
-                entire sales ecosystem.
+              <p className="text-yellow-700 mb-6">
+                Track your pricing changes, group notifications, and sent
+                updates across your entire sales ecosystem.
               </p>
-              <ul className="space-y-4">
-                <li className="flex items-start">
-                  <span className="mr-2 text-blue-500">✓</span>
-                  <span className="text-slate-700 dark:text-slate-300">
+              <ul className="space-y-3">
+                <li className="flex items-start bg-white p-3 rounded-lg">
+                  <span className="mr-2 text-yellow-500 font-bold">✓</span>
+                  <span className="text-slate-700">
                     Direct API integrations with major platforms
                   </span>
                 </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-blue-500">✓</span>
-                  <span className="text-slate-700 dark:text-slate-300">
+                <li className="flex items-start bg-white p-3 rounded-lg">
+                  <span className="mr-2 text-yellow-500 font-bold">✓</span>
+                  <span className="text-slate-700">
                     Real-time synchronization of price changes
                   </span>
                 </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-blue-500">✓</span>
-                  <span className="text-slate-700 dark:text-slate-300">
+                <li className="flex items-start bg-white p-3 rounded-lg">
+                  <span className="mr-2 text-yellow-500 font-bold">✓</span>
+                  <span className="text-slate-700">
                     Customize pricing rules per platform
                   </span>
                 </li>
               </ul>
             </div>
 
-            {/* Add radar chart with platform data */}
-            <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
-              <h4 className="text-base font-medium mb-4">Platform Coverage</h4>
-              <div className="h-[240px]">
+            <div className="bg-white rounded-2xl p-5 shadow-sm">
+              <h4 className="text-base font-medium text-yellow-800 mb-4">
+                Platform Coverage
+              </h4>
+              <div className="h-56">
                 <RadarChart
                   data={platformIntegrationData}
                   labels={platformIntegrationLabels}
-                  height={240}
+                  height={220}
                   color="#4F46E5"
                 />
               </div>

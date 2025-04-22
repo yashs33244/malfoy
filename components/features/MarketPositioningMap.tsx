@@ -7,6 +7,7 @@ import { Check } from "lucide-react";
 import { SmallFeatureItem } from "./small-featureitem";
 import { TextRevealByWord } from "../ui/text-reveal";
 import { Text_03 } from "../ui/wave-text";
+import { FeatureItem } from "../featureItem";
 
 interface MarketZone {
   id: number;
@@ -122,16 +123,39 @@ export default function MarketPositioningMap({
 
   return (
     <div>
-      <TextRevealByWord
-        text="Visualize your position in the market across different regions and product categories."
-        className="text-2xl md:text-3xl font-bold mb-4"
-      />
-      <div className={`grid md:grid-cols-2 gap-8 items-start ${className}`}>
+      <div className="text-center pt-10 mb-40">
+        <h1 className="text-2xl md:text-4xl lg:text-6xl font-medium leading-tight">
+          <span className="font-extrabold text-black dark:text-white">
+            Discover your edge
+          </span>{" "}
+          <br />
+          <span className="text-gray-400">in a competitive landscape</span>{" "}
+          <br />
+          <span className="font-extrabold text-black dark:text-white">
+            across global markets
+          </span>
+        </h1>
+
+        {/* Colored Chips */}
+        {/* <div className="mt-8 flex justify-center gap-4 flex-wrap">
+          <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-pink-600 bg-pink-100 rounded-2xl border border-pink-300">
+            <span>🧭</span> Efficiency
+          </span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-purple-600 bg-purple-100 rounded-2xl border border-purple-300">
+            <span>🔗</span> Streamline
+          </span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-green-600 bg-green-100 rounded-2xl border border-green-300">
+            <span>⭐</span> Automation
+          </span>
+        </div> */}
+      </div>
+
+      <div className={` gap-8 items-start ${className}`}>
         <div className="order-2 md:order-1">
           {/* Fixed height container to prevent layout shifts */}
           <div className="flex flex-col space-y-4">
             {/* Radar Chart with increased height */}
-            <div className="relative h-96 rounded-xl overflow-hidden bg-[#f3f3f3] m-2">
+            <div className="relative h-100 rounded-xl overflow-hidden bg-[#151531] mt-4 pb-4">
               <RadarChart
                 data={radarData}
                 keys={[
@@ -141,7 +165,7 @@ export default function MarketPositioningMap({
                   "Budget_Market",
                   "Luxury_Market",
                 ]}
-                height={380}
+                height={500}
                 colors={[
                   chartColors.primary,
                   chartColors.secondary,
@@ -155,7 +179,7 @@ export default function MarketPositioningMap({
               />
             </div>
             {/* List of clickable market zones */}
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-6 gap-6">
               {marketZones.map((zone) => {
                 const isSelected = selectedMarketZone?.id === zone.id;
                 return (
@@ -182,36 +206,82 @@ export default function MarketPositioningMap({
             </div>
 
             {/* Fixed height container for selected zone info to prevent layout shifts */}
-            <div className="h-32">
+            {/* Fixed height container for selected zone info to prevent layout shifts */}
+            <div className="w-full h-48 flex justify-center">
               {selectedMarketZone && (
-                <div className="bg-[#f3f3f3] shadow border border-gray-200 p-4 rounded-lg">
+                <div
+                  className={`shadow border border-gray-200 p-4 rounded-xl w-full transition-all duration-300 ${selectedMarketZone.className} hover:bg-opacity-15`}
+                  style={{ backdropFilter: "blur(8px)" }}
+                >
                   <div className="flex justify-between mb-2">
-                    <h4 className="text-lg font-medium">
+                    <h4 className="text-lg font-medium flex items-center">
+                      <span
+                        className={`w-2 h-2 rounded-full mr-2 ${selectedMarketZone.className} opacity-80`}
+                      ></span>
                       {selectedMarketZone.name}
                     </h4>
-                    <button
-                      onClick={() => setSelectedMarketZone(null)}
-                      className="text-gray-500 hover:text-gray-700"
-                    >
-                      ✕
-                    </button>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 text-sm">
-                    <div>
-                      <p className="text-gray-500">Price</p>
-                      <p className="font-medium">{selectedMarketZone.price}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Competitors</p>
-                      <p className="font-medium">
-                        {selectedMarketZone.competitors}
+
+                  {/* Main content grid with 3 columns */}
+                  <div className="grid grid-cols-3 gap-4 text-sm mb-3">
+                    <div className="p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all">
+                      <p className="text-gray-500 dark:text-gray-300">
+                        Price Point
+                      </p>
+                      <p className="font-medium flex items-center">
+                        {selectedMarketZone.price}
+                        <span className="ml-1 text-xs text-gray-400">USD</span>
                       </p>
                     </div>
-                    <div>
-                      <p className="text-gray-500">Opportunity</p>
+                    <div className="p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all">
+                      <p className="text-gray-500 dark:text-gray-300">
+                        Competitors
+                      </p>
+                      <p className="font-medium flex items-center">
+                        {selectedMarketZone.competitors}
+                        <span
+                          className={`ml-2 text-xs ${
+                            selectedMarketZone.competitors > 5
+                              ? "text-red-400"
+                              : "text-green-400"
+                          }`}
+                        >
+                          {selectedMarketZone.competitors > 5 ? "High" : "Low"}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all">
+                      <p className="text-gray-500 dark:text-gray-300">
+                        Opportunity
+                      </p>
                       <p className="font-medium">
                         {selectedMarketZone.opportunity}
                       </p>
+                    </div>
+                  </div>
+
+                  {/* Additional content section */}
+                  <div className="mt-2 border-t border-gray-200 border-opacity-20 pt-2">
+                    <div className="flex justify-between items-center">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all cursor-pointer">
+                          <span className="w-1 h-1 rounded-full bg-blue-400 mr-1"></span>
+                          Market Share: {selectedMarketZone.id * 5 + 10}%
+                        </span>
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all cursor-pointer">
+                          <span className="w-1 h-1 rounded-full bg-green-400 mr-1"></span>
+                          Growth: {selectedMarketZone.id * 2 + 5}%
+                        </span>
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all cursor-pointer">
+                          <span className="w-1 h-1 rounded-full bg-purple-400 mr-1"></span>
+                          ROI: {selectedMarketZone.id * 3 + 12}%
+                        </span>
+                      </div>
+                      <button
+                        className={`text-xs px-4 py-1 rounded-lg transition-all duration-300 hover:scale-105 ${selectedMarketZone.className} text-black shadow-sm hover:shadow-md`}
+                      >
+                        View Analysis
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -221,19 +291,19 @@ export default function MarketPositioningMap({
         </div>
         <div className="order-1 md:order-2">
           <ul className="space-y-8 mt-10">
-            <SmallFeatureItem
+            <FeatureItem
               icon={<Check className="w-4 h-4 text-blue-500 font-bold" />}
               title="Track price changes "
               subtitle="Monitor competitors in real-time"
               description="Track price changes across multiple marketplaces"
             />
-            <SmallFeatureItem
+            <FeatureItem
               icon={<Check className="w-4 h-4 text-blue-500 font-bold" />}
               title="Analyze pricing trends and patterns"
               subtitle="Identify market opportunities"
               description="Analyze pricing trends and patterns"
             />
-            <SmallFeatureItem
+            <FeatureItem
               icon={<Check className="w-4 h-4 text-blue-500 font-sm" />}
               title="Receive alerts"
               subtitle="Stay ahead of market changes"

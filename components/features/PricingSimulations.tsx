@@ -212,7 +212,7 @@ const ToggleSwitch = ({
   leftLabel,
   rightLabel,
 }: ToggleSwitchProps) => (
-  <div className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700">
+  <div className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-full p-3 border border-slate-200 dark:border-slate-700">
     <span
       className={`text-sm ${
         !enabled ? "font-medium" : "text-slate-500 dark:text-slate-400"
@@ -788,7 +788,7 @@ export default function PricingSimulations() {
       </div>
 
       {/* Right Column - Dynamic Simulator and Results */}
-      <div className="md:col-span-7 grid grid-cols-1 gap-6">
+      <div className="md:col-span-7 grid grid-cols-1 gap-6 mr-10">
         {/* Price Impact Simulator */}
         <div className="bg-[#daf9d4] dark:bg-slate-800 rounded-xl p-8">
           <div className="text-4xl text-[#005900] font-bold flex items-center mb-6">
@@ -856,7 +856,7 @@ export default function PricingSimulations() {
         </div>
 
         {/* Market Position Analysis */}
-        <div className="bg-[#daf9d4] dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+        <div className="bg-[#daf9d4] dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 ">
           <h4 className="text-xl font-medium mb-4">Market Position Analysis</h4>
           <div className="bg-white/60 dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
             <div className="h-[220px]">
