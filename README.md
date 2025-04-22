@@ -1,6 +1,62 @@
 # Malfoy
 
-Malfoy is a Next.js application for advanced pricing intelligence and dynamic pricing strategies.
+Malfoy is a Next.js application I built for advanced pricing intelligence and dynamic pricing strategies.
+
+![Initial Design Thinking](thinking.png)
+*My initial brainstorming and competitive analysis*
+
+## Overview
+
+Malfoy provides powerful pricing analytics and visualization tools to help businesses make data-driven pricing decisions. I've designed the application to integrate interactive elements and real-time simulations that demonstrate pricing impact, making complex data actionable for users.
+
+![Rough Design Sketch](rough_design.png)
+*My initial rough design sketches that guided the final implementation*
+
+## Design Philosophy
+
+My design approach focuses on clarity and functionality while maintaining visual appeal. I started with extensive research and sketching to ensure that the final product would solve real user problems while being intuitive to navigate.
+
+### Design Inspiration
+
+- **Competitive Analysis**: I studied successful platforms like paddle.com, pricemoov.com, blackcurve.com, and pricefx.com to understand common patterns and identify differentiation opportunities
+- **Dribbble Inspiration**: I sourced modern dashboard designs from Dribbble, particularly [this aviation procurement platform](https://dribbble.com/shots/24127094-Looper-Website-design-for-the-aviation-procurement-platform), which influenced my approach to presenting complex data in digestible formats
+- **Key Design Principles** I established:
+  - Maintain simplicity while adding engaging interactive elements
+  - Use vibrant but purposeful colors to highlight important data
+  - Implement real-time simulations for immediate feedback
+  - Employ large typography for important metrics to grab attention
+
+### UX Strategy
+
+I approached the UX with careful consideration of the user journey:
+
+- **Information Architecture**: I organized around a navbar-based navigation with clearly defined sections to ensure users can quickly find what they need
+- **Interactive Elements**: I added dynamic components that respond to user input for a more engaging experience
+- **Microinteractions**: I implemented subtle animations that provide feedback on user actions
+- **Visual Hierarchy**: I used size, color, and positioning to guide users to the most important information first
+
+## Tech Stack & Architecture
+
+I made deliberate technology choices based on scalability, performance, and developer experience:
+
+- **Frontend**: Next.js with React components
+- **Backend**: Node.js API routes with Prisma ORM
+- **Database**: PostgreSQL for reliable data storage
+- **Authentication**: Implemented both Google OAuth and custom email/password signup
+- **Styling**: Tailwind CSS for consistent design language and rapid development
+- **State Management**: React Context API with hooks for global state
+- **Visualization**: Custom chart components for pricing data visualization
+- **UI Components**: Leveraged high-quality components from magicui.design, 21st.dev, and shadcnblocks.com
+- **Scheduling**: Integrated Calendly for meeting scheduling capabilities
+- **Deployment**: AWS infrastructure with Docker-optimized setup for both development and production environments
+
+## AI-Assisted Design Process
+
+I used AI tools strategically to improve my workflow:
+
+- **Claude AI**: Helped me refine my initial design concepts and improve copy
+- **Grok AI**: Assisted with converting my rough sketches to polished V1 designs
+- I believe that thoughtfully integrating AI tools into my design process allowed me to iterate faster while maintaining creative control
 
 ## Docker Setup
 
@@ -14,29 +70,23 @@ This project includes Docker configuration for both production and development e
 ### Running in Production Mode
 
 To run the application in production mode:
-
 ```bash
 # Build and start the container
 docker-compose up -d app
-
 # View logs
 docker-compose logs -f app
 ```
-
 The application will be available at http://localhost:3000
 
 ### Running in Development Mode
 
 For development with hot-reloading and other development features:
-
 ```bash
 # Build and start the development container
 docker-compose up -d dev
-
 # View logs
 docker-compose logs -f dev
 ```
-
 The development server will be available at http://localhost:3001
 
 ### Stopping the Containers
@@ -44,7 +94,6 @@ The development server will be available at http://localhost:3001
 ```bash
 # Stop all containers
 docker-compose down
-
 # Stop a specific container
 docker-compose stop app
 docker-compose stop dev
@@ -53,12 +102,10 @@ docker-compose stop dev
 ### Rebuilding the Containers
 
 If you make changes to the Dockerfile or dependencies:
-
 ```bash
 # Rebuild a specific service
 docker-compose build app
 docker-compose build dev
-
 # Rebuild and restart
 docker-compose up -d --build app
 docker-compose up -d --build dev
@@ -69,13 +116,60 @@ docker-compose up -d --build dev
 ```bash
 # Install dependencies
 npm install
-
 # Run development server
 npm run dev
-
 # Build for production
 npm run build
-
 # Start production server
 npm start
 ```
+
+## Product Thinking & Design Decisions
+
+I approached this project with a strong focus on product thinking, constantly asking "what problem am I solving and for whom?" Based on my competitive analysis, I identified several opportunities for improvement:
+
+### User-Centered Approach
+
+Throughout development, I maintained a focus on creating a product that:
+- Solves genuine pain points for pricing strategists and business analysts
+- Presents complex data in an accessible way
+- Guides users toward insights rather than just displaying raw data
+- Offers clear paths to action based on the insights provided
+
+### UI Improvements Over Competitors
+
+- **More Engaging Visuals**: I noticed many competitors lacked visual attractiveness and modern design elements, so I prioritized an aesthetically pleasing interface
+- **Interactive Data Visualization**: I added real-time simulations to show pricing impact, allowing users to test scenarios before implementation
+- **Color Strategy**: 
+  - I used vibrant complementary colors to highlight key metrics
+  - I implemented a consistent color scheme throughout the application
+  - I limited color usage to prevent overwhelming the interface
+
+### Key Features
+
+- **Global Market Analysis**: Dashboard with comprehensive pricing analytics
+- **Show/Save Service**: Ability to showcase and document pricing strategies
+- **Portfolio Section**: Visual representation of pricing models and performance
+- **Educational Components**: "What We Offer" section explaining methodology
+- **Scheduling Integration**: Calendly integration for booking consultations
+
+## Data Model & Backend Architecture
+
+I designed a robust backend system using:
+- **Prisma ORM**: For type-safe database queries and migrations
+- **PostgreSQL**: For reliable, relational data storage
+- **API Architecture**: RESTful endpoints with proper error handling and validation
+- **Authentication Flow**: Secure user authentication with JWT tokens, supporting both Google OAuth and email/password
+
+## Future Enhancements
+
+Based on my product roadmap, I plan to:
+- Implement AI-driven pricing recommendations
+- Add more customizable dashboard elements
+- Develop mobile-responsive interfaces for on-the-go analytics
+- Create shareable reports and collaborative features
+- Add more integrations with popular e-commerce platforms
+
+## Contributing
+
+Please read the contributing guidelines before submitting pull requests to the project.

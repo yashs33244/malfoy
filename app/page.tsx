@@ -21,6 +21,9 @@ import {
 import { useState } from "react";
 import Companies from "@/components/companies";
 import { ScrollProgress } from "@/components/magicui/scroll-progress";
+import Link from "next/link";
+import { useAuth } from "@/context/auth-context";
+import { UserAvatar } from "@/components/user-avatar";
 
 const navItems = [
   {
@@ -43,6 +46,7 @@ const navItems = [
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isLoggedIn } = useAuth();
 
   return (
     <>
@@ -53,7 +57,18 @@ export default function Home() {
             <NavbarLogo />
             <NavItems items={navItems} />
             <div className="flex items-center gap-4">
-              <NavbarButton variant="secondary">Login</NavbarButton>
+              {isLoggedIn ? (
+                <UserAvatar />
+              ) : (
+                <>
+                  <Link href="/login">
+                    <NavbarButton variant="secondary">Login</NavbarButton>
+                  </Link>
+                  <Link href="/signup">
+                    <NavbarButton variant="primary">Sign Up</NavbarButton>
+                  </Link>
+                </>
+              )}
               <NavbarButton variant="book-call">Book a call</NavbarButton>
             </div>
           </NavBody>
@@ -85,16 +100,35 @@ export default function Home() {
                 </a>
               ))}
               <div className="flex w-full flex-col gap-4">
+                {isLoggedIn ? (
+                  <div className="flex justify-center py-2">
+                    <UserAvatar />
+                  </div>
+                ) : (
+                  <>
+                    <Link href="/login" className="w-full">
+                      <NavbarButton
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        variant="primary"
+                        className="w-full"
+                      >
+                        Login
+                      </NavbarButton>
+                    </Link>
+                    <Link href="/signup" className="w-full">
+                      <NavbarButton
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        variant="secondary"
+                        className="w-full"
+                      >
+                        Sign Up
+                      </NavbarButton>
+                    </Link>
+                  </>
+                )}
                 <NavbarButton
                   onClick={() => setIsMobileMenuOpen(false)}
-                  variant="primary"
-                  className="w-full"
-                >
-                  Login
-                </NavbarButton>
-                <NavbarButton
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  variant="primary"
+                  variant="book-call"
                   className="w-full"
                 >
                   Book a call

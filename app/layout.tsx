@@ -2,6 +2,8 @@ import type React from "react";
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/context/auth-context";
+import { ReactQueryProvider } from "@/context/query-provider";
 
 // Import Kanit font with all specified weights
 
@@ -26,7 +28,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ReactQueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </ReactQueryProvider>
         </ThemeProvider>
       </body>
     </html>
