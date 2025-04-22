@@ -1,23 +1,24 @@
+version: "3.8"
+
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: yashs3324/malfoy:latest
     container_name: malfoy-app
     restart: always
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_TELEMETRY_DISABLED=1
-    volumes:
-      - app-data:/app/data
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "http://localhost:3000"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
+      - DATABASE_URL=postgresql://neondb_owner:npg_Qhnv9WSDl2fj@ep-muddy-voice-a494z8vq-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - NEXTAUTH_URL=https://malfoy.yashprojects.online
+      - NEXTAUTH_SECRET=QrFHKjWVmNx9Bc8h7tA5vEzP3dY6UeJZ
+      - JWT_SECRET=L7R5tQp2ZxK9WjS8bC1vE3mD6nH4gY7y
+      - NEXT_PUBLIC_API_URL=https://malfoy.yashprojects.online
+      - EMAIL_SERVER_HOST=smtp.gmail.com
+      - EMAIL_SERVER_PORT=465
+      - EMAIL_SERVER_USER=yashs3324@gmail.com
+      - EMAIL_SERVER_PASSWORD=avhszmzkkkfqjtwa
+      - EMAIL_FROM=yashs3324@gmail.com
     networks:
       - malfoy-network
 
