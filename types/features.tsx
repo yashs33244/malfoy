@@ -105,3 +105,65 @@ export interface RevenueForecastChartProps {
   timeframe: TimeframeType;
   showComparison: boolean;
 }
+
+export interface PricingRule {
+  id: string;
+  name: string;
+  description: string;
+  active: boolean;
+  impact: {
+    priceCompetitiveness: number;
+    marketShare: number;
+    speed: number;
+    accuracy: number;
+    revenueGrowth: number;
+    customerRetention: number;
+  };
+}
+
+export interface TimelinePoint {
+  id: number;
+  date: string;
+  description: string;
+  isHighlighted: boolean;
+}
+
+export interface CompetitorTimelineProps {
+  points: TimelinePoint[];
+  startDate: string;
+  endDate: string;
+  className?: string;
+}
+
+export interface MarketZone {
+  id: number;
+  name: string;
+  price: string;
+  competitors: number;
+  opportunity: string;
+  className: string;
+  gridPosition: string;
+  textColor: string;
+  indicators?: {
+    color: string;
+    opacity?: number;
+  }[];
+}
+
+export interface MarketPositioningMapProps {
+  marketZones: MarketZone[];
+  className?: string;
+}
+
+export type IndustryType =
+  | "software"
+  | "retail"
+  | "manufacturing"
+  | "healthcare"
+  | "finance";
+
+export type CardContainerProps = {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+};

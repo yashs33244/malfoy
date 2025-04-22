@@ -1,14 +1,8 @@
-"use client";
-
 import { useState } from "react";
-import SimpleHeading from "./SimpleHeading";
-import { RadarChart, chartColors } from "@/components/ui/shadcn-charts";
 import { Check } from "lucide-react";
-import { SmallFeatureItem } from "./small-featureitem";
-import { TextRevealByWord } from "../ui/text-reveal";
-import { Text_03 } from "../ui/wave-text";
-import { FeatureItem } from "../featureItem";
+import { RadarChart, chartColors } from "@/components/ui/shadcn-charts";
 
+// Define interfaces
 interface MarketZone {
   id: number;
   name: string;
@@ -18,10 +12,6 @@ interface MarketZone {
   className: string;
   gridPosition: string;
   textColor: string;
-  indicators?: {
-    color: string;
-    opacity?: number;
-  }[];
 }
 
 interface MarketPositioningMapProps {
@@ -29,12 +19,74 @@ interface MarketPositioningMapProps {
   className?: string;
 }
 
-export default function MarketPositioningMap({
-  marketZones = [],
-  className = "",
-}: MarketPositioningMapProps) {
-  const [selectedMarketZone, setSelectedMarketZone] =
-    useState<MarketZone | null>(marketZones[0]);
+export default function MarketPositioningMap() {
+  // Sample data for market zones
+  const marketZones = [
+    {
+      id: 1,
+      name: "Premium Market",
+      price: "$80-120",
+      competitors: 3,
+      opportunity: "High",
+      className: "bg-blue-100 text-blue-800 hover:bg-blue-200",
+      gridPosition: "col-span-2",
+      textColor: "text-blue-700",
+    },
+    {
+      id: 2,
+      name: "Value Market",
+      price: "$40-80",
+      competitors: 8,
+      opportunity: "Medium",
+      className: "bg-green-100 text-green-800 hover:bg-green-200",
+      gridPosition: "col-span-1",
+      textColor: "text-green-700",
+    },
+    {
+      id: 3,
+      name: "Budget Market",
+      price: "$20-40",
+      competitors: 5,
+      opportunity: "Low",
+      className: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
+      gridPosition: "col-span-1",
+      textColor: "text-yellow-700",
+    },
+    {
+      id: 4,
+      name: "Luxury Market",
+      price: "$120-500",
+      competitors: 2,
+      opportunity: "High",
+      className: "bg-purple-100 text-purple-800 hover:bg-purple-200",
+      gridPosition: "col-span-1",
+      textColor: "text-purple-700",
+    },
+    {
+      id: 5,
+      name: "Mass Market",
+      price: "$30-60",
+      competitors: 12,
+      opportunity: "Medium",
+      className: "bg-pink-100 text-pink-800 hover:bg-pink-200",
+      gridPosition: "col-span-1",
+      textColor: "text-pink-700",
+    },
+    {
+      id: 6,
+      name: "Your Product",
+      price: "$75-95",
+      competitors: 4,
+      opportunity: "High",
+      className: "bg-indigo-100 text-indigo-800 hover:bg-indigo-200",
+      gridPosition: "col-span-1",
+      textColor: "text-indigo-700",
+    },
+  ];
+
+  const [selectedMarketZone, setSelectedMarketZone] = useState<MarketZone>(
+    marketZones[0]
+  );
 
   // Create radar chart data from market zones
   const radarData = [
@@ -88,228 +140,369 @@ export default function MarketPositioningMap({
     },
   ];
 
-  // Transform market zones for the bar chart
-  const competitorData = [
-    {
-      name: "Premium Market",
-      competitors:
-        marketZones.find((z) => z.name === "Premium Market")?.competitors || 3,
-    },
-    {
-      name: "Value Market",
-      competitors:
-        marketZones.find((z) => z.name === "Value Market")?.competitors || 8,
-    },
-    {
-      name: "Budget Market",
-      competitors:
-        marketZones.find((z) => z.name === "Budget Market")?.competitors || 5,
-    },
-    {
-      name: "Luxury Market",
-      competitors:
-        marketZones.find((z) => z.name === "Luxury Market")?.competitors || 2,
-    },
-    {
-      name: "Mass Market",
-      competitors:
-        marketZones.find((z) => z.name === "Mass Market")?.competitors || 12,
-    },
-  ];
-
   const handleZoneClick = (zone: MarketZone) => {
     setSelectedMarketZone(zone);
   };
 
   return (
-    <div>
-      <div className="text-center pt-10 mb-40">
-        <h1 className="text-2xl md:text-4xl lg:text-6xl font-medium leading-tight">
-          <span className="font-extrabold text-black dark:text-white">
-            Discover your edge
-          </span>{" "}
-          <br />
-          <span className="text-gray-400">in a competitive landscape</span>{" "}
-          <br />
-          <span className="font-extrabold text-black dark:text-white">
-            across global markets
-          </span>
-        </h1>
+    <div className="max-w-6xl mx-auto px-4 py-12">
+      {/* Main heading section with blue background similar to the image */}
+      <div className="bg-blue-50 rounded-3xl p-8 mb-10 overflow-hidden relative">
+        <div className="flex flex-col md:flex-row items-start gap-8">
+          <div className="flex-1">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
+              We automatically generate reports for each of your customers
+            </h2>
+            <p className="text-slate-600 text-lg">
+              Gain valuable insights into market positioning and competitive
+              landscape
+            </p>
+          </div>
 
-        {/* Colored Chips */}
-        {/* <div className="mt-8 flex justify-center gap-4 flex-wrap">
-          <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-pink-600 bg-pink-100 rounded-2xl border border-pink-300">
-            <span>🧭</span> Efficiency
-          </span>
-          <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-purple-600 bg-purple-100 rounded-2xl border border-purple-300">
-            <span>🔗</span> Streamline
-          </span>
-          <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-green-600 bg-green-100 rounded-2xl border border-green-300">
-            <span>⭐</span> Automation
-          </span>
-        </div> */}
-      </div>
-
-      <div className={` gap-8 items-start ${className}`}>
-        <div className="order-2 md:order-1">
-          {/* Fixed height container to prevent layout shifts */}
-          <div className="flex flex-col space-y-4">
-            {/* Radar Chart with increased height */}
-            <div className="relative h-100 rounded-xl overflow-hidden bg-[#151531] mt-4 pb-4">
-              <RadarChart
-                data={radarData}
-                keys={[
-                  "Your_Product",
-                  "Premium_Market",
-                  "Value_Market",
-                  "Budget_Market",
-                  "Luxury_Market",
-                ]}
-                height={500}
-                colors={[
-                  chartColors.primary,
-                  chartColors.secondary,
-                  chartColors.tertiary,
-                  chartColors.quaternary,
-                  chartColors.accent1,
-                ]}
-                showGrid={true}
-                showTooltip={true}
-                showLegend={true}
-              />
-            </div>
-            {/* List of clickable market zones */}
-            <div className="grid grid-cols-6 gap-6">
-              {marketZones.map((zone) => {
-                const isSelected = selectedMarketZone?.id === zone.id;
-                return (
-                  <div
-                    key={zone.id}
-                    className={`transition-all duration-200 ease-in-out transform cursor-pointer 
-          hover:scale-[1.03] 
-          rounded-full p-2 text-center text-sm
-          ${zone.className}
-          ${isSelected ? "shadow-[0_0_0.2rem] shadow-current" : ""}
-          hover:shadow-[0_0_0.6rem] hover:shadow-current`}
-                    onClick={() => handleZoneClick(zone)}
-                  >
-                    <span
-                      className={`transition-colors duration-200 ${
-                        isSelected ? "" : zone.textColor
-                      }`}
-                    >
-                      {zone.name}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Fixed height container for selected zone info to prevent layout shifts */}
-            {/* Fixed height container for selected zone info to prevent layout shifts */}
-            <div className="w-full h-48 flex justify-center">
-              {selectedMarketZone && (
-                <div
-                  className={`shadow border border-gray-200 p-4 rounded-xl w-full transition-all duration-300 ${selectedMarketZone.className} hover:bg-opacity-15`}
-                  style={{ backdropFilter: "blur(8px)" }}
+          {/* Card with company information - matches the style in the image */}
+          <div className="flex-1 bg-white rounded-2xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+            <div className="flex items-center mb-6">
+              <div className="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center mr-4">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
                 >
-                  <div className="flex justify-between mb-2">
-                    <h4 className="text-lg font-medium flex items-center">
-                      <span
-                        className={`w-2 h-2 rounded-full mr-2 ${selectedMarketZone.className} opacity-80`}
-                      ></span>
-                      {selectedMarketZone.name}
-                    </h4>
-                  </div>
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M7 7v10M12 7v10M17 7v10" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold text-xl">Intercom</h3>
+                <p className="text-gray-500 text-sm">Joined 9 Feb 2023</p>
+              </div>
+              <div className="ml-auto w-3 h-3 bg-green-400 rounded-full"></div>
+            </div>
 
-                  {/* Main content grid with 3 columns */}
-                  <div className="grid grid-cols-3 gap-4 text-sm mb-3">
-                    <div className="p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all">
-                      <p className="text-gray-500 dark:text-gray-300">
-                        Price Point
-                      </p>
-                      <p className="font-medium flex items-center">
-                        {selectedMarketZone.price}
-                        <span className="ml-1 text-xs text-gray-400">USD</span>
-                      </p>
-                    </div>
-                    <div className="p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all">
-                      <p className="text-gray-500 dark:text-gray-300">
-                        Competitors
-                      </p>
-                      <p className="font-medium flex items-center">
-                        {selectedMarketZone.competitors}
-                        <span
-                          className={`ml-2 text-xs ${
-                            selectedMarketZone.competitors > 5
-                              ? "text-red-400"
-                              : "text-green-400"
-                          }`}
-                        >
-                          {selectedMarketZone.competitors > 5 ? "High" : "Low"}
-                        </span>
-                      </p>
-                    </div>
-                    <div className="p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all">
-                      <p className="text-gray-500 dark:text-gray-300">
-                        Opportunity
-                      </p>
-                      <p className="font-medium">
-                        {selectedMarketZone.opportunity}
-                      </p>
-                    </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between transition-all duration-200 hover:bg-gray-50 p-2 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 mr-3 flex items-center justify-center">
+                    <svg
+                      className="w-5 h-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
                   </div>
+                  <span className="text-gray-600">Total seats</span>
+                </div>
+                <span className="font-medium">50</span>
+              </div>
 
-                  {/* Additional content section */}
-                  <div className="mt-2 border-t border-gray-200 border-opacity-20 pt-2">
-                    <div className="flex justify-between items-center">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all cursor-pointer">
-                          <span className="w-1 h-1 rounded-full bg-blue-400 mr-1"></span>
-                          Market Share: {selectedMarketZone.id * 5 + 10}%
-                        </span>
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all cursor-pointer">
-                          <span className="w-1 h-1 rounded-full bg-green-400 mr-1"></span>
-                          Growth: {selectedMarketZone.id * 2 + 5}%
-                        </span>
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all cursor-pointer">
-                          <span className="w-1 h-1 rounded-full bg-purple-400 mr-1"></span>
-                          ROI: {selectedMarketZone.id * 3 + 12}%
-                        </span>
-                      </div>
-                      <button
-                        className={`text-xs px-4 py-1 rounded-lg transition-all duration-300 hover:scale-105 ${selectedMarketZone.className} text-black shadow-sm hover:shadow-md`}
-                      >
-                        View Analysis
-                      </button>
-                    </div>
+              <div className="flex items-center justify-between transition-all duration-200 hover:bg-gray-50 p-2 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 mr-3 flex items-center justify-center">
+                    <svg
+                      className="w-5 h-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                  </div>
+                  <span className="text-gray-600">Active seats</span>
+                </div>
+                <span className="font-medium">22</span>
+              </div>
+
+              <div className="flex items-center justify-between transition-all duration-200 hover:bg-gray-50 p-2 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 mr-3 flex items-center justify-center">
+                    <svg
+                      className="w-5 h-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                  </div>
+                  <span className="text-gray-600">Active last 7 days</span>
+                </div>
+                <span className="font-medium">True</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Add the activation metrics card */}
+          <div className="flex-1 bg-white rounded-2xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+            <h3 className="text-lg text-gray-700 mb-4">Company activation</h3>
+            <div className="text-5xl font-bold mb-6">40%</div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <span className="text-sm text-gray-600">Signed up</span>
+                </div>
+                <div className="w-32">
+                  <div className="h-2 bg-indigo-100 rounded-full">
+                    <div className="h-2 bg-indigo-500 rounded-full w-full"></div>
                   </div>
                 </div>
-              )}
+                <span className="text-xs font-medium text-gray-500">100%</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <span className="text-sm text-gray-600">Setup</span>
+                </div>
+                <div className="w-32">
+                  <div className="h-2 bg-indigo-100 rounded-full">
+                    <div className="h-2 bg-indigo-500 rounded-full w-4/5"></div>
+                  </div>
+                </div>
+                <span className="text-xs font-medium text-gray-500">80%</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <span className="text-sm text-gray-600">Activated</span>
+                </div>
+                <div className="w-32">
+                  <div className="h-2 bg-indigo-100 rounded-full">
+                    <div className="h-2 bg-indigo-500 rounded-full w-2/5"></div>
+                  </div>
+                </div>
+                <span className="text-xs font-medium text-gray-500">40%</span>
+              </div>
             </div>
           </div>
         </div>
-        <div className="order-1 md:order-2">
-          <ul className="space-y-8 mt-10">
-            <FeatureItem
-              icon={<Check className="w-4 h-4 text-blue-500 font-bold" />}
-              title="Track price changes "
-              subtitle="Monitor competitors in real-time"
-              description="Track price changes across multiple marketplaces"
+      </div>
+
+      {/* Market positioning section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <div>
+          <div className="bg-slate-900 rounded-xl p-6 h-96 relative overflow-hidden transition-all duration-300 hover:shadow-lg">
+            <RadarChart
+              data={radarData}
+              keys={[
+                "Your_Product",
+                "Premium_Market",
+                "Value_Market",
+                "Budget_Market",
+                "Luxury_Market",
+              ]}
+              height={350}
+              colors={[
+                chartColors.primary,
+                chartColors.secondary,
+                chartColors.tertiary,
+                chartColors.quaternary,
+                chartColors.accent1,
+              ]}
+              showGrid={true}
+              showTooltip={true}
+              showLegend={true}
             />
-            <FeatureItem
-              icon={<Check className="w-4 h-4 text-blue-500 font-bold" />}
-              title="Analyze pricing trends and patterns"
-              subtitle="Identify market opportunities"
-              description="Analyze pricing trends and patterns"
-            />
-            <FeatureItem
-              icon={<Check className="w-4 h-4 text-blue-500 font-sm" />}
-              title="Receive alerts"
-              subtitle="Stay ahead of market changes"
-              description="Receive alerts for significant market movements"
-            />
-          </ul>
+          </div>
+
+          {/* Grid of market zones */}
+          <div className="grid grid-cols-3 gap-4 mt-8 mb-8">
+            {marketZones.map((zone) => (
+              <div
+                key={zone.id}
+                className={`
+                  transition-all duration-200 ease-in-out transform cursor-pointer 
+                  hover:scale-105 p-2 text-center text-sm rounded-full
+                  ${zone.className}
+                  ${
+                    selectedMarketZone.id === zone.id
+                      ? "shadow-md ring-2 ring-opacity-50 ring-current"
+                      : ""
+                  }
+                `}
+                onClick={() => handleZoneClick(zone)}
+              >
+                <span
+                  className={`transition-colors duration-200 ${zone.textColor}`}
+                >
+                  {zone.name}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Selected market zone info */}
+          <div className="w-full mt-4">
+            <div
+              className={`
+                shadow border border-gray-200 p-4 rounded-xl w-full transition-all duration-300
+                hover:shadow-md ${selectedMarketZone.className.replace(
+                  "hover:bg-blue-200",
+                  ""
+                )} bg-opacity-20
+              `}
+            >
+              <div className="flex justify-between mb-2">
+                <h4 className="text-lg font-medium flex items-center">
+                  <span
+                    className={`w-2 h-2 rounded-full mr-2 ${selectedMarketZone.className} opacity-80`}
+                  ></span>
+                  {selectedMarketZone.name}
+                </h4>
+              </div>
+
+              {/* Main content grid with 3 columns */}
+              <div className="grid grid-cols-3 gap-4 text-sm mb-3">
+                <div className="p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all">
+                  <p className="text-gray-500 dark:text-gray-300">
+                    Price Point
+                  </p>
+                  <p className="font-medium flex items-center">
+                    {selectedMarketZone.price}
+                    <span className="ml-1 text-xs text-gray-400">USD</span>
+                  </p>
+                </div>
+                <div className="p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all">
+                  <p className="text-gray-500 dark:text-gray-300">
+                    Competitors
+                  </p>
+                  <p className="font-medium flex items-center">
+                    {selectedMarketZone.competitors}
+                    <span
+                      className={`ml-2 text-xs ${
+                        selectedMarketZone.competitors > 5
+                          ? "text-red-400"
+                          : "text-green-400"
+                      }`}
+                    >
+                      {selectedMarketZone.competitors > 5 ? "High" : "Low"}
+                    </span>
+                  </p>
+                </div>
+                <div className="p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all">
+                  <p className="text-gray-500 dark:text-gray-300">
+                    Opportunity
+                  </p>
+                  <p className="font-medium">
+                    {selectedMarketZone.opportunity}
+                  </p>
+                </div>
+              </div>
+
+              {/* Additional content section */}
+              <div className="mt-2 border-t border-gray-200 border-opacity-20 pt-2">
+                <div className="flex justify-between items-center">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all cursor-pointer">
+                      <span className="w-1 h-1 rounded-full bg-blue-400 mr-1"></span>
+                      Market Share: {selectedMarketZone.id * 5 + 10}%
+                    </span>
+                    <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all cursor-pointer">
+                      <span className="w-1 h-1 rounded-full bg-green-400 mr-1"></span>
+                      Growth: {selectedMarketZone.id * 2 + 5}%
+                    </span>
+                  </div>
+                  <button
+                    className={`text-xs px-4 py-1 rounded-lg transition-all duration-300 hover:scale-105 ${selectedMarketZone.className} text-black shadow-sm hover:shadow-md`}
+                  >
+                    View Analysis
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Features list */}
+        <div>
+          {/* Purple card similar to the image */}
+          <div className="bg-purple-50 rounded-3xl p-8 mb-6 transition-all duration-300 hover:shadow-md">
+            <h2 className="text-2xl font-bold text-purple-900 mb-4">
+              Celebrate milestones
+            </h2>
+            <p className="text-purple-800">
+              Instant alerts and weekly digests to keep your team aligned and
+              celebrate wins
+            </p>
+          </div>
+
+          {/* Yellow/cream card similar to the image */}
+          <div className="bg-amber-50 rounded-3xl p-8 mb-6 transition-all duration-300 hover:shadow-md">
+            <h2 className="text-2xl font-bold text-amber-900 mb-4">
+              Automatic enrichment
+            </h2>
+            <p className="text-amber-800">
+              Automatically enrich your customers profiles and their users
+              powered by GPT
+            </p>
+          </div>
+
+          {/* Feature list from the original code */}
+          <div className="p-6 rounded-xl bg-white ">
+            <h3 className="text-xl font-semibold mb-6">Key Features</h3>
+            <ul className="space-y-6">
+              <li className="flex items-start transition-all duration-200 hover:bg-gray-50 p-3 rounded-full">
+                <div className="mt-2 ml-2 flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                  <Check className="w-4 h-4 text-blue-500 font-bold" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-slate-800">
+                    Track price changes
+                  </h4>
+                  <p className="text-slate-500 text-sm mt-1">
+                    Monitor competitors in real-time across multiple
+                    marketplaces
+                  </p>
+                </div>
+              </li>
+
+              <li className="flex items-start transition-all duration-200 hover:bg-gray-50 p-3 rounded-full">
+                <div className="mt-2 ml-2 flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                  <Check className="w-4 h-4 text-blue-500 font-bold" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-slate-800">
+                    Analyze pricing trends and patterns
+                  </h4>
+                  <p className="text-slate-500 text-sm mt-1">
+                    Identify market opportunities and optimize your pricing
+                    strategy
+                  </p>
+                </div>
+              </li>
+
+              <li className="flex items-start transition-all duration-200 hover:bg-gray-50 p-3 rounded-full">
+                <div className="mt-2 ml-2 flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                  <Check className="w-4 h-4 text-blue-500 font-bold" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-slate-800">Receive alerts</h4>
+                  <p className="text-slate-500 text-sm mt-1">
+                    Stay ahead of market changes with timely notifications
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

@@ -2,20 +2,7 @@
 
 import { useState } from "react";
 import { Info } from "lucide-react";
-
-interface TimelinePoint {
-  id: number;
-  date: string;
-  description: string;
-  isHighlighted: boolean;
-}
-
-interface CompetitorTimelineProps {
-  points: TimelinePoint[];
-  startDate: string;
-  endDate: string;
-  className?: string;
-}
+import { CompetitorTimelineProps } from "@/types/features";
 
 export default function CompetitorTimeline({
   points = [],

@@ -1,4 +1,5 @@
 import { IndustryCardProps } from "@/types/features";
+import CardContainer from "./ui/CardContainer";
 
 export const IndustryCard = ({
   id,
@@ -7,27 +8,38 @@ export const IndustryCard = ({
   description,
   active,
   onClick,
-}: IndustryCardProps) => (
-  <div
-    className={`p-4 rounded-lg cursor-pointer transition-all border ${
-      active
-        ? "border-primary/70 bg-primary/10"
-        : "border-border/40 hover:border-primary/30 bg-background/20 backdrop-blur-sm"
-    }`}
-    onClick={() => onClick(id)}
-  >
-    <div className="flex items-center">
-      <div
-        className={`mr-3 ${active ? "text-primary" : "text-muted-foreground"}`}
-      >
-        {icon}
+}: IndustryCardProps) => {
+  return (
+    <CardContainer active={active} onClick={() => onClick(id)}>
+      <div className="flex items-center">
+        <div
+          className={`mr-3 ${
+            active
+              ? "text-white"
+              : "text-slate-500 dark:text-slate-400 group-hover:text-white"
+          }`}
+        >
+          {icon}
+        </div>
+        <div>
+          <h4
+            className={`font-medium ${
+              active ? "text-white" : "group-hover:text-white"
+            }`}
+          >
+            {name}
+          </h4>
+          <p
+            className={`text-xs ${
+              active
+                ? "text-white/80"
+                : "text-slate-500 dark:text-slate-400 group-hover:text-white/80"
+            }`}
+          >
+            {description}
+          </p>
+        </div>
       </div>
-      <div>
-        <h4 className={`font-medium ${active ? "text-primary" : ""}`}>
-          {name}
-        </h4>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </div>
-    </div>
-  </div>
-);
+    </CardContainer>
+  );
+};

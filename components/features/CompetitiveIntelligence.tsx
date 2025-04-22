@@ -25,22 +25,8 @@ import {
 import PriceComparisonChart from "./PriceComparisonChart";
 import MarketPositioningMap from "./MarketPositioningMap";
 import CompetitorTimeline from "./CompetitorTimeline";
-
-// Helper function to generate market data
-const generateMarketData = (
-  basePrice: number,
-  range: number = 10,
-  pointCount: number = 10
-) => {
-  return Array.from({ length: pointCount }).map((_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (pointCount - i - 1) * 3);
-    return {
-      date: date.toISOString().split("T")[0],
-      price: basePrice + Math.random() * range - range / 2,
-    };
-  });
-};
+import { marketZones, timelinePoints } from "@/lib/landing";
+import { generateMarketData } from "./generateMarketData";
 
 // Define custom colors for each line in graphs
 const customColors = {
@@ -84,100 +70,6 @@ export default function CompetitiveIntelligence({
   } | null>(null);
 
   // Define market zones for the positioning map
-  const marketZones = [
-    {
-      id: 1,
-      name: "Premium Market",
-      price: "High",
-      competitors: 3,
-      opportunity: "Medium",
-      className: "col-span-2 row-span-1 bg-blue-100",
-      gridPosition: "col-span-2 row-span-1",
-      textColor: "text-blue-800",
-    },
-    {
-      id: 2,
-      name: "Value Market",
-      price: "Medium",
-      competitors: 8,
-      opportunity: "Low",
-      className: "bg-yellow-100",
-      gridPosition: "col-span-2 row-span-1",
-      textColor: "text-yellow-800",
-      indicators: [{ color: "#4F46E5" }, { color: "#4F46E5", opacity: 0.8 }],
-    },
-    {
-      id: 3,
-      name: "Budget Market",
-      price: "Low",
-      competitors: 5,
-      opportunity: "Medium",
-      className: "bg-red-100",
-      gridPosition: "col-span-1 row-span-1",
-      textColor: "text-red-800",
-    },
-    {
-      id: 4,
-      name: "Luxury Market",
-      price: "Very High",
-      competitors: 2,
-      opportunity: "High",
-      className: "bg-green-100",
-      gridPosition: "col-span-2 row-span-2",
-      textColor: "text-green-800",
-      indicators: [{ color: "#22C55E" }],
-    },
-    {
-      id: 5,
-      name: "Mass Market",
-      price: "Medium-Low",
-      competitors: 12,
-      opportunity: "Medium",
-      className: "bg-orange-100",
-      gridPosition: "col-span-1 row-span-1",
-      textColor: "text-orange-800",
-    },
-  ];
-
-  // Define timeline points for competitor timeline
-  const timelinePoints = [
-    {
-      id: 0,
-      date: "Jan 12, 2025",
-      description: "No significant changes",
-      isHighlighted: false,
-    },
-    {
-      id: 1,
-      date: "Feb 03, 2025",
-      description: "No significant changes",
-      isHighlighted: false,
-    },
-    {
-      id: 2,
-      date: "Feb 27, 2025",
-      description: "Competitor A dropped prices by 15%",
-      isHighlighted: true,
-    },
-    {
-      id: 3,
-      date: "Mar 15, 2025",
-      description: "No significant changes",
-      isHighlighted: false,
-    },
-    {
-      id: 4,
-      date: "Apr 02, 2025",
-      description: "Competitor B increased prices by 8%",
-      isHighlighted: true,
-    },
-    {
-      id: 5,
-      date: "Apr 17, 2025",
-      description: "No significant changes",
-      isHighlighted: false,
-    },
-  ];
 
   // Sample competitors price data
   const [competitorData, setCompetitorData] = useState([
@@ -248,7 +140,7 @@ export default function CompetitiveIntelligence({
 
       {/* Market Positioning Map */}
       <div className="mb-16">
-        <MarketPositioningMap marketZones={marketZones} />
+        <MarketPositioningMap />
       </div>
 
       {/* Competitor Timeline */}
@@ -262,73 +154,6 @@ export default function CompetitiveIntelligence({
           endDate="Apr 18"
         />
       </div>
-
-      {/* <h3 className="text-2xl font-bold mb-8">Key Features</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        <div className="bg-slate-50 dark:bg-slate-800/60 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
-          <div className="flex items-start mb-4">
-            <div className="mr-4 p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
-              <Zap className="h-6 w-6 text-blue-500" />
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-2">Price Alerts</h4>
-              <p className="text-slate-600 dark:text-slate-400">
-                Get notified when competitors change their prices beyond your
-                set thresholds.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-slate-50 dark:bg-slate-800/60 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
-          <div className="flex items-start mb-4">
-            <div className="mr-4 p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
-              <TrendingUp className="h-6 w-6 text-blue-500" />
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-2">Trend Analysis</h4>
-              <p className="text-slate-600 dark:text-slate-400">
-                Identify pricing patterns and seasonal trends to stay ahead of
-                the market.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-slate-50 dark:bg-slate-800/60 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
-          <div className="flex items-start mb-4">
-            <div className="mr-4 p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
-              <PieChart className="h-6 w-6 text-blue-500" />
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-2">
-                Market Share Tracking
-              </h4>
-              <p className="text-slate-600 dark:text-slate-400">
-                Monitor how your pricing strategy affects your market position
-                over time.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-slate-50 dark:bg-slate-800/60 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
-          <div className="flex items-start mb-4">
-            <div className="mr-4 p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
-              <LineChartIcon className="h-6 w-6 text-blue-500" />
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-2">
-                Competitor Timeline
-              </h4>
-              <p className="text-slate-600 dark:text-slate-400">
-                View historical pricing data to understand competitor
-                strategies.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }
