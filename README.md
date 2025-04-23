@@ -7,20 +7,20 @@ Malfoy is a Next.js application I built for advanced pricing intelligence and dy
 
 ## Overview
 
-Malfoy provides powerful pricing analytics and visualization tools to help businesses make data-driven pricing decisions. I've designed the application to integrate interactive elements and real-time simulations that demonstrate pricing impact, making complex data actionable for users.
+Malfoy provides powerful pricing analytics and visualization tools to help businesses make data-driven pricing decisions. The application features interactive elements and real-time simulations that demonstrate pricing impact, making complex data actionable for users.
 
 ![Rough Design Sketch](rough_design.png)
 *My initial rough design sketches that guided the final implementation*
 
 ## Design Philosophy
 
-My design approach focuses on clarity and functionality while maintaining visual appeal. I started with extensive research and sketching to ensure that the final product would solve real user problems while being intuitive to navigate.
+My design approach focuses on clarity and functionality while maintaining visual appeal. The development process began with extensive research and sketching to ensure the final product solves real user problems while being intuitive to navigate.
 
 ### Design Inspiration
 
 - **Competitive Analysis**: I studied successful platforms like paddle.com, pricemoov.com, blackcurve.com, and pricefx.com to understand common patterns and identify differentiation opportunities
 - **Dribbble Inspiration**: I sourced modern dashboard designs from Dribbble, particularly [this aviation procurement platform](https://dribbble.com/shots/24127094-Looper-Website-design-for-the-aviation-procurement-platform), which influenced my approach to presenting complex data in digestible formats
-- **Key Design Principles** I established:
+- **Key Design Principles**:
   - Maintain simplicity while adding engaging interactive elements
   - Use vibrant but purposeful colors to highlight important data
   - Implement real-time simulations for immediate feedback
@@ -30,10 +30,10 @@ My design approach focuses on clarity and functionality while maintaining visual
 
 I approached the UX with careful consideration of the user journey:
 
-- **Information Architecture**: I organized around a navbar-based navigation with clearly defined sections to ensure users can quickly find what they need
-- **Interactive Elements**: I added dynamic components that respond to user input for a more engaging experience
-- **Microinteractions**: I implemented subtle animations that provide feedback on user actions
-- **Visual Hierarchy**: I used size, color, and positioning to guide users to the most important information first
+- **Information Architecture**: Organized around a navbar-based navigation with clearly defined sections for intuitive access
+- **Interactive Elements**: Added dynamic components that respond to user input for a more engaging experience
+- **Microinteractions**: Implemented subtle animations that provide feedback on user actions
+- **Visual Hierarchy**: Used size, color, and positioning to guide users to the most important information first
 
 ## Tech Stack & Architecture
 
@@ -41,10 +41,11 @@ I made deliberate technology choices based on scalability, performance, and deve
 
 - **Frontend**: Next.js with React components
 - **Backend**: Node.js API routes with Prisma ORM
-- **Database**: PostgreSQL for reliable data storage
-- **Authentication**: Implemented both Google OAuth and custom email/password signup
-- **Styling**: Tailwind CSS for consistent design language and rapid development
+- **Database**: PostgreSQL (Neon Database) for reliable cloud-native data storage
+- **Authentication**: Implemented both Google OAuth and custom email/password signup with email verification
 - **State Management**: React Context API with hooks for global state
+- **Data Fetching**: TanStack Query for efficient server state management and caching
+- **Styling**: Tailwind CSS for consistent design language and rapid development
 - **Visualization**: Custom chart components for pricing data visualization
 - **UI Components**: Leveraged high-quality components from magicui.design, 21st.dev, and shadcnblocks.com
 - **Scheduling**: Integrated Calendly for meeting scheduling capabilities
@@ -54,9 +55,10 @@ I made deliberate technology choices based on scalability, performance, and deve
 
 I used AI tools strategically to improve my workflow:
 
-- **Claude AI**: Helped me refine my initial design concepts and improve copy
-- **Grok AI**: Assisted with converting my rough sketches to polished V1 designs
-- I believe that thoughtfully integrating AI tools into my design process allowed me to iterate faster while maintaining creative control
+- **Claude AI**: Helped refine initial design concepts and improve copy
+- **Grok AI**: Assisted with converting rough sketches to polished V1 designs
+
+I believe that thoughtfully integrating AI tools into my design process allowed me to iterate faster while maintaining creative control.
 
 ## Docker Setup
 
@@ -70,23 +72,27 @@ This project includes Docker configuration for both production and development e
 ### Running in Production Mode
 
 To run the application in production mode:
+
 ```bash
 # Build and start the container
 docker-compose up -d app
 # View logs
 docker-compose logs -f app
 ```
+
 The application will be available at http://localhost:3000
 
 ### Running in Development Mode
 
 For development with hot-reloading and other development features:
+
 ```bash
 # Build and start the development container
 docker-compose up -d dev
 # View logs
 docker-compose logs -f dev
 ```
+
 The development server will be available at http://localhost:3001
 
 ### Stopping the Containers
@@ -102,6 +108,7 @@ docker-compose stop dev
 ### Rebuilding the Containers
 
 If you make changes to the Dockerfile or dependencies:
+
 ```bash
 # Rebuild a specific service
 docker-compose build app
@@ -131,6 +138,7 @@ I approached this project with a strong focus on product thinking, constantly as
 ### User-Centered Approach
 
 Throughout development, I maintained a focus on creating a product that:
+
 - Solves genuine pain points for pricing strategists and business analysts
 - Presents complex data in an accessible way
 - Guides users toward insights rather than just displaying raw data
@@ -139,11 +147,11 @@ Throughout development, I maintained a focus on creating a product that:
 ### UI Improvements Over Competitors
 
 - **More Engaging Visuals**: I noticed many competitors lacked visual attractiveness and modern design elements, so I prioritized an aesthetically pleasing interface
-- **Interactive Data Visualization**: I added real-time simulations to show pricing impact, allowing users to test scenarios before implementation
+- **Interactive Data Visualization**: Added real-time simulations to show pricing impact, allowing users to test scenarios before implementation
 - **Color Strategy**: 
-  - I used vibrant complementary colors to highlight key metrics
-  - I implemented a consistent color scheme throughout the application
-  - I limited color usage to prevent overwhelming the interface
+  - Used vibrant complementary colors to highlight key metrics
+  - Implemented a consistent color scheme throughout the application
+  - Limited color usage to prevent overwhelming the interface
 
 ### Key Features
 
@@ -152,18 +160,23 @@ Throughout development, I maintained a focus on creating a product that:
 - **Portfolio Section**: Visual representation of pricing models and performance
 - **Educational Components**: "What We Offer" section explaining methodology
 - **Scheduling Integration**: Calendly integration for booking consultations
+- **Secure Authentication**: Complete user authentication flow with Google OAuth and email verification
+- **Account Management**: Password reset and forgot password functionalities
 
 ## Data Model & Backend Architecture
 
 I designed a robust backend system using:
+
 - **Prisma ORM**: For type-safe database queries and migrations
-- **PostgreSQL**: For reliable, relational data storage
+- **Neon Database (PostgreSQL)**: For reliable, serverless, cloud-native relational data storage
+- **TanStack Query**: For efficient data fetching, caching, and state synchronization
 - **API Architecture**: RESTful endpoints with proper error handling and validation
 - **Authentication Flow**: Secure user authentication with JWT tokens, supporting both Google OAuth and email/password
 
 ## Future Enhancements
 
 Based on my product roadmap, I plan to:
+
 - Implement AI-driven pricing recommendations
 - Add more customizable dashboard elements
 - Develop mobile-responsive interfaces for on-the-go analytics

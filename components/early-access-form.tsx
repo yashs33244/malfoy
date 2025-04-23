@@ -31,7 +31,7 @@ export default function EarlyAccessForm() {
     setError(null);
 
     // Check if user is logged in and email is verified
-    if (isLoggedIn && user && !user.emailVerified) {
+    if (isLoggedIn && user && !user.email) {
       setError(
         "Please verify your email address before requesting early access."
       );

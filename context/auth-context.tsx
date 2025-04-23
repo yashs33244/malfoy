@@ -6,7 +6,10 @@ import { LoginData, SignupData, authService } from "@/lib/api-service";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 // Create a partial user type for session data
-type SessionUser = Pick<User, "id" | "name" | "email" | "image" | "role">;
+type SessionUser = Pick<
+  User,
+  "id" | "name" | "email" | "image" | "role" | "emailVerified"
+>;
 
 type AuthContextType = {
   user: SessionUser | null;
@@ -41,6 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email: session.user.email || "",
         image: session.user.image || null,
         role: (session.user.role as "user" | "admin" | undefined) || "user",
+        emailVerified: session.user.emailVerified || null,
       };
 
       setUser(sessionUser);
@@ -68,6 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               email: userData.email,
               image: userData.image,
               role: userData.role,
+              emailVerified: userData.emailVerified || null,
             };
             setUser(sessionUser);
           } else {
@@ -105,6 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             email: session.user.email || "",
             image: session.user.image || null,
             role: (session.user.role as "user" | "admin" | undefined) || "user",
+            emailVerified: session.user.emailVerified || null,
           };
           return sessionUser;
         }
@@ -121,6 +127,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: response.user.email,
           image: response.user.image,
           role: response.user.role,
+          emailVerified: response.user.emailVerified || null,
         };
         setUser(sessionUser);
         return sessionUser;
