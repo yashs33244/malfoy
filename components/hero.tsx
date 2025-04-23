@@ -90,7 +90,7 @@ export default function Hero() {
           <p className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide">
             Save time and money.
             <br />
-            Automated Inventory Management
+            AI-powered pricing optimization
           </p>
           <div className="flex gap-6 pt-4">
             <InteractiveHoverButton

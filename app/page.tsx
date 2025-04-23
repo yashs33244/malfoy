@@ -185,9 +185,9 @@ export default function Home() {
             <span className="font-extrabold text-black dark:text-white">
               Automated
             </span>{" "}
-            <span className="text-gray-400">invoicing for</span>
+            <span className="text-gray-400">pricing optimization</span>
             <br />
-            <span className="text-gray-400">the aviation </span>
+            <span className="text-gray-400">for</span>
             <span className="font-extrabold text-black dark:text-white">
               industry
             </span>
