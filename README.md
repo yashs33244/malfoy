@@ -2,6 +2,11 @@
 
 Malfoy is a Next.js application I built for advanced pricing intelligence and dynamic pricing strategies.
 
+## Demo Video
+
+<iframe src="https://drive.google.com/file/d/1RthMa1fOZTUseWTqpuz6jfmj_Bihntpa/preview" width="640" height="480" allow="autoplay"></iframe>
+
+
 ![Initial Design Thinking](thinking.png)
 *My initial brainstorming and competitive analysis*
 
@@ -20,6 +25,7 @@ My design approach focuses on clarity and functionality while maintaining visual
 
 - **Competitive Analysis**: I studied successful platforms like paddle.com, pricemoov.com, blackcurve.com, and pricefx.com to understand common patterns and identify differentiation opportunities
 - **Dribbble Inspiration**: I sourced modern dashboard designs from Dribbble, particularly [this aviation procurement platform](https://dribbble.com/shots/24127094-Looper-Website-design-for-the-aviation-procurement-platform), which influenced my approach to presenting complex data in digestible formats
+- **Design Process**: I did not create detailed Figma designs, but instead made rough sketches and referenced designs on Dribbble to guide my implementation. This approach allowed for greater flexibility during development while still maintaining design coherence
 - **Key Design Principles**:
   - Maintain simplicity while adding engaging interactive elements
   - Use vibrant but purposeful colors to highlight important data
@@ -50,6 +56,23 @@ I made deliberate technology choices based on scalability, performance, and deve
 - **UI Components**: Leveraged high-quality components from magicui.design, 21st.dev, and shadcnblocks.com
 - **Scheduling**: Integrated Calendly for meeting scheduling capabilities
 - **Deployment**: AWS infrastructure with Docker-optimized setup for both development and production environments
+
+### Tech Decisions
+
+- **PostgreSQL**: I chose PostgreSQL for its reliability, ACID compliance, and extensive feature set. PostgreSQL's advanced capabilities like JSON support, powerful indexing, and complex query functionality make it ideal for a data-intensive application like Malfoy. The Neon Database serverless implementation allows for easy scaling and management.
+- **TanStack Query**: I implemented TanStack Query to handle server state management because it dramatically simplifies data fetching, caching, and synchronization. This improves both performance and user experience by reducing unnecessary network requests and providing useful loading/error states.
+
+## Creative Additions Worth Highlighting
+
+- **Comprehensive Email System**: The application features a robust email system with:
+  - Email verification for new accounts to ensure user authenticity
+  - Welcome emails with personalized onboarding guidance
+  - Password reset functionality with secure, time-limited tokens
+  - Notification emails for important account events and pricing alerts
+  - Styled, responsive email templates that match the application's design language
+- **Interactive Pricing Calculator**: I developed a dynamic pricing calculator that visualizes pricing impact in real-time as users adjust parameters
+- **Custom Chart Components**: I built specialized chart components that present pricing data in intuitive, actionable formats
+- **Comparative Analysis Tools**: The application includes tools to compare pricing strategies against competitors and historical performance
 
 ## AI-Assisted Design Process
 
