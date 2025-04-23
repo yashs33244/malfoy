@@ -26,7 +26,7 @@ interface NavItemsProps {
     link: string;
   }[];
   className?: string;
-  onItemClick?: () => void;
+  onItemClick?: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
 }
 
 interface MobileNavProps {
@@ -73,7 +73,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
     <motion.div
       ref={ref}
       className={cn(
-        "fixed inset-x-0 top-0 z-40 w-full flex justify-center m-3",
+        "fixed inset-x-0 top-0 z-40 w-full flex justify-center mt-3",
         className
       )}
     >
@@ -141,7 +141,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
       {items.map((item, idx) => (
         <a
           onMouseEnter={() => setHovered(idx)}
-          onClick={onItemClick}
+          onClick={(e) => onItemClick && onItemClick(e, item.link)}
           className="relative px-4 py-2 text-neutral-600 hover:text-black transition-colors"
           key={`link-${idx}`}
           href={item.link}
@@ -302,13 +302,19 @@ export const NavbarButton = ({
       "bg-black text-white rounded-full hover:bg-gray-800 transition-colors",
   };
 
+  // If this component is used inside Next.js Link (which is common),
+  // we should render as a div or span instead of an anchor
+  // to avoid nesting <a> tags which causes hydration errors
+  const isInsideLink = !href && props.onClick;
+  const FinalTag = isInsideLink ? "span" : Tag;
+
   return (
-    <Tag
+    <FinalTag
       href={href || undefined}
       className={cn(baseStyles, variantStyles[variant], className)}
       {...props}
     >
       {children}
-    </Tag>
+    </FinalTag>
   );
 };

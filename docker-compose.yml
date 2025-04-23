@@ -19,6 +19,14 @@ services:
       - EMAIL_SERVER_USER=yashs3324@gmail.com
       - EMAIL_SERVER_PASSWORD=avhszmzkkkfqjtwa
       - EMAIL_FROM=yashs3324@gmail.com
+      - GOOGLE_CLIENT_ID=343021709770-j3bv77jmqp5sgostfmf5kooopag4l2gq.apps.googleusercontent.com
+      - GOOGLE_CLIENT_SECRET=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
+      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=343021709770-j3bv77jmqp5sgostfmf5kooopag4l2gq.apps.googleusercontent.com
+      - APPLE_CLIENT_ID=com.malfoy.client
+      - APPLE_TEAM_ID=YOUR_APPLE_TEAM_ID
+      - APPLE_KEY_ID=YOUR_APPLE_KEY_ID
+      - APPLE_PRIVATE_KEY=YOUR_APPLE_PRIVATE_KEY
+      - NEXT_PUBLIC_APPLE_CLIENT_ID=com.malfoy.client
     networks:
       - malfoy-network
 

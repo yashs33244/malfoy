@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-
+import { CalendlyBadgeWidget } from "./calendly-badge-widget";
+import { CalendlyScheduleModal } from "./calendly-schedule-modal";
 type FaqItem = {
   question: string;
   answer: string;
@@ -143,15 +144,12 @@ export default function FaqSection() {
               Still have questions? We're here to help.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button
-                className="px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
-                style={{ backgroundColor: "#03c76e" }}
-              >
-                Contact Support
-              </button>
-              <button className="px-6 py-3 bg-black text-white dark:bg-white dark:text-black rounded-full hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                Schedule a Demo
-              </button>
+              <CalendlyScheduleModal
+                url="https://calendly.com/yashs3324/interview"
+                buttonVariant="default"
+                buttonClassName="px-6 py-4 bg-black text-white dark:bg-white dark:text-black rounded-full hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                buttonText="Contact Support"
+              />
             </div>
           </div>
         </div>

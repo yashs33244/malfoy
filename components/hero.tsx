@@ -3,9 +3,13 @@
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { IconUsers } from "@tabler/icons-react";
+import { useAuth } from "@/context/auth-context";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 import { Globe } from "@/components/ui/globe";
+import { CalendlyScheduleModal } from "@/components/calendly-schedule-modal";
 
 const avatars = [
   {
@@ -37,6 +41,39 @@ const avatars = [
 export default function Hero() {
   const { resolvedTheme } = useTheme();
   const isLight = resolvedTheme === "light";
+  const { isLoggedIn } = useAuth();
+  const router = useRouter();
+
+  // Smooth scroll function for buttons
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      window.scrollTo({
+        top: element.offsetTop - 80, // Offset for navbar height
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Handle direct Calendly schedule button click
+  const handleScheduleClick = () => {
+    if (isLoggedIn) {
+      // If signed in, open Calendly directly in a new tab
+      window.open("https://calendly.com/yashs3324/interview", "_blank");
+    } else {
+      // If not signed in, show authentication message
+      toast.error("Authentication required", {
+        description: "You need to sign in before scheduling",
+        action: {
+          label: "Sign In",
+          onClick: () => {
+            router.push("/login");
+          },
+        },
+        duration: 5000,
+      });
+    }
+  };
 
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden">
@@ -56,11 +93,17 @@ export default function Hero() {
             Automated Inventory Management
           </p>
           <div className="flex gap-6 pt-4">
-            <InteractiveHoverButton className="px-8 py-4 text-base font-medium bg-black text-white rounded-full transition-colors duration-200 hover:bg-[#03c76e] hover:text-black">
+            <InteractiveHoverButton
+              className="px-8 py-4 text-base font-medium bg-black text-white rounded-full transition-colors duration-200 hover:bg-[#03c76e] hover:text-black"
+              onClick={() => scrollToSection("how-it-works")}
+            >
               View Demo
             </InteractiveHoverButton>
-            <InteractiveHoverButton className="px-8 py-4 text-base font-medium bg-white text-black border border-slate-300 dark:border-slate-600 rounded-full transition-colors duration-200 hover:bg-[#03c76e] hover:text-white">
-              Learn More
+            <InteractiveHoverButton
+              className="px-8 py-4 text-base font-medium bg-white text-black border border-slate-300 dark:border-slate-600 rounded-full transition-colors duration-200 hover:bg-[#03c76e] hover:text-white"
+              onClick={handleScheduleClick}
+            >
+              Schedule a Call
             </InteractiveHoverButton>
           </div>
 

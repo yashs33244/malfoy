@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { hashPassword, generateVerificationToken } from '@/lib/auth';
-import { sendVerificationEmail } from '@/lib/email';
+import { sendVerificationEmail, sendWelcomeEmail } from '@/lib/email';
 
 export async function POST(req: NextRequest) {
   try {
@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
     // Generate verification token and send email
     const verificationToken = await generateVerificationToken(email);
     await sendVerificationEmail(email, verificationToken, name);
+    await sendWelcomeEmail(email, name);
 
     // Return success but exclude password
     const { password: _, ...userWithoutPassword } = user;
