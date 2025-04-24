@@ -6,37 +6,74 @@ import { IconUsers } from "@tabler/icons-react";
 import { useAuth } from "@/context/auth-context";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
-import { Globe } from "@/components/ui/globe";
-import { CalendlyScheduleModal } from "@/components/calendly-schedule-modal";
+import WorldMap from "@/components/ui/world-map";
 
-const avatars = [
-  {
-    imageUrl: "https://avatars.githubusercontent.com/u/16860528",
-    profileUrl: "https://github.com/dillionverma",
-  },
-  {
-    imageUrl: "https://avatars.githubusercontent.com/u/20110627",
-    profileUrl: "https://github.com/tomonarifeehan",
-  },
-  {
-    imageUrl: "https://avatars.githubusercontent.com/u/106103625",
-    profileUrl: "https://github.com/BankkRoll",
-  },
-  {
-    imageUrl: "https://avatars.githubusercontent.com/u/59228569",
-    profileUrl: "https://github.com/safethecode",
-  },
-  {
-    imageUrl: "https://avatars.githubusercontent.com/u/59442788",
-    profileUrl: "https://github.com/sanjay-mali",
-  },
-  {
-    imageUrl: "https://avatars.githubusercontent.com/u/89768406",
-    profileUrl: "https://github.com/itsarghyadas",
-  },
-];
+export function WorldMapDemo() {
+  return (
+    <div className="py-10 w-full h-full">
+      <div className="max-w-7xl mx-auto text-center">
+        <p className="font-bold text-xl md:text-4xl dark:text-white text-black">
+          Remote{" "}
+          <span className="text-neutral-400">
+            {"Connectivity".split("").map((word, idx) => (
+              <motion.span
+                key={idx}
+                className="inline-block"
+                initial={{ x: -10, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: idx * 0.04 }}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </span>
+        </p>
+        <p className="text-sm md:text-lg text-neutral-500 max-w-2xl mx-auto py-4">
+          Break free from traditional boundaries. Work from anywhere, at the
+          comfort of your own studio apartment. Perfect for Nomads and
+          Travellers.
+        </p>
+      </div>
+      <WorldMap
+        dots={[
+          {
+            start: {
+              lat: 64.2008,
+              lng: -149.4937,
+            }, // Alaska (Fairbanks)
+            end: {
+              lat: 34.0522,
+              lng: -118.2437,
+            }, // Los Angeles
+          },
+          {
+            start: { lat: 64.2008, lng: -149.4937 }, // Alaska (Fairbanks)
+            end: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
+          },
+          {
+            start: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
+            end: { lat: 38.7223, lng: -9.1393 }, // Lisbon
+          },
+          {
+            start: { lat: 51.5074, lng: -0.1278 }, // London
+            end: { lat: 28.6139, lng: 77.209 }, // New Delhi
+          },
+          {
+            start: { lat: 28.6139, lng: 77.209 }, // New Delhi
+            end: { lat: 43.1332, lng: 131.9113 }, // Vladivostok
+          },
+          {
+            start: { lat: 28.6139, lng: 77.209 }, // New Delhi
+            end: { lat: -1.2921, lng: 36.8219 }, // Nairobi
+          },
+        ]}
+      />
+    </div>
+  );
+}
 
 export default function Hero() {
   const { resolvedTheme } = useTheme();
@@ -118,16 +155,16 @@ export default function Hero() {
           </h1>
         </div>
 
-        {/* Right Column: Globe Visualization */}
+        {/* Right Column: WorldMap Visualization */}
         <div className="w-full md:w-1/2 relative h-[400px] md:h-[600px] flex items-center justify-center">
           <div className="absolute inset-0 w-full h-full flex items-center justify-center flex-col ">
             <div className="text-sm text-center mt-5 mr-5">
               Our customers are all over the world
             </div>
-            {/* Colored background with rounded borders for the globe */}
-            {/* Globe component positioned to fill the container */}
+            {/* Colored background with rounded borders for the world map */}
+            {/* WorldMap component positioned to fill the container */}
             <div className="relative w-full h-full">
-              <Globe />
+              <WorldMapDemo />
             </div>
           </div>
         </div>
