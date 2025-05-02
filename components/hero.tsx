@@ -13,18 +13,18 @@ import WorldMap from "@/components/ui/world-map";
 
 export function WorldMapDemo() {
   return (
-    <div className="py-10 w-full h-full">
+    <div className="py-6 w-full h-full">
       <div className="max-w-7xl mx-auto text-center">
         <p className="font-bold text-xl md:text-4xl dark:text-white text-black">
-          Remote{" "}
+          Smarter{" "}
           <span className="text-neutral-400">
-            {"Connectivity".split("").map((word, idx) => (
+            {"Pricing  Intelligence".split(" ").map((word, idx) => (
               <motion.span
                 key={idx}
-                className="inline-block"
+                className="inline-block mr-1"
                 initial={{ x: -10, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: idx * 0.04 }}
+                transition={{ duration: 0.5, delay: idx * 0.2 }}
               >
                 {word}
               </motion.span>
@@ -32,45 +32,47 @@ export function WorldMapDemo() {
           </span>
         </p>
         <p className="text-sm md:text-lg text-neutral-500 max-w-2xl mx-auto py-4">
-          Break free from traditional boundaries. Work from anywhere, at the
-          comfort of your own studio apartment. Perfect for Nomads and
-          Travellers.
+          AI-powered tools enabling e-commerce brands to <br />{" "}
+          <span className="font-bold">price intelligently</span> and scale
+          swiftly.
         </p>
       </div>
-      <WorldMap
-        dots={[
-          {
-            start: {
-              lat: 64.2008,
-              lng: -149.4937,
-            }, // Alaska (Fairbanks)
-            end: {
-              lat: 34.0522,
-              lng: -118.2437,
-            }, // Los Angeles
-          },
-          {
-            start: { lat: 64.2008, lng: -149.4937 }, // Alaska (Fairbanks)
-            end: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
-          },
-          {
-            start: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
-            end: { lat: 38.7223, lng: -9.1393 }, // Lisbon
-          },
-          {
-            start: { lat: 51.5074, lng: -0.1278 }, // London
-            end: { lat: 28.6139, lng: 77.209 }, // New Delhi
-          },
-          {
-            start: { lat: 28.6139, lng: 77.209 }, // New Delhi
-            end: { lat: 43.1332, lng: 131.9113 }, // Vladivostok
-          },
-          {
-            start: { lat: 28.6139, lng: 77.209 }, // New Delhi
-            end: { lat: -1.2921, lng: 36.8219 }, // Nairobi
-          },
-        ]}
-      />
+      <div className="mt-6 md:mt-10 w-full h-[500px] md:h-[600px] lg:h-[700px]">
+        <WorldMap
+          dots={[
+            {
+              start: {
+                lat: 64.2008,
+                lng: -149.4937,
+              }, // Alaska (Fairbanks)
+              end: {
+                lat: 34.0522,
+                lng: -118.2437,
+              }, // Los Angeles
+            },
+            {
+              start: { lat: 64.2008, lng: -149.4937 }, // Alaska (Fairbanks)
+              end: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
+            },
+            {
+              start: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
+              end: { lat: 38.7223, lng: -9.1393 }, // Lisbon
+            },
+            {
+              start: { lat: 51.5074, lng: -0.1278 }, // London
+              end: { lat: 28.6139, lng: 77.209 }, // New Delhi
+            },
+            {
+              start: { lat: 28.6139, lng: 77.209 }, // New Delhi
+              end: { lat: 43.1332, lng: 131.9113 }, // Vladivostok
+            },
+            {
+              start: { lat: 28.6139, lng: 77.209 }, // New Delhi
+              end: { lat: -1.2921, lng: 36.8219 }, // Nairobi
+            },
+          ]}
+        />
+      </div>
     </div>
   );
 }
@@ -156,10 +158,10 @@ export default function Hero() {
         </div>
 
         {/* Right Column: WorldMap Visualization */}
-        <div className="w-full md:w-1/2 relative h-[400px] md:h-[600px] flex items-center justify-center">
+        <div className="w-full md:w-1/2 relative h-[600px] md:h-[600px] flex items-center justify-center">
           <div className="absolute inset-0 w-full h-full flex items-center justify-center flex-col ">
-            <div className="text-sm text-center mt-5 mr-5">
-              Our customers are all over the world
+            <div className="text-base md:text-lg font-medium text-center text-neutral-600 dark:text-neutral-300 mt-40 mr-5 mb-10">
+              Trusted by teams and individuals across the globe
             </div>
             {/* Colored background with rounded borders for the world map */}
             {/* WorldMap component positioned to fill the container */}

@@ -46,7 +46,7 @@ I approached the UX with careful consideration of the user journey:
 I made deliberate technology choices based on scalability, performance, and developer experience:
 
 - **Frontend**: Next.js with React components
-- **Backend**: Node.js API routes with Prisma ORM
+- **Backend**: Next.js API routes with Prisma ORM
 - **Database**: PostgreSQL (Neon Database) for reliable cloud-native data storage
 - **Authentication**: Implemented both Google OAuth and custom email/password signup with email verification
 - **State Management**: React Context API with hooks for global state
